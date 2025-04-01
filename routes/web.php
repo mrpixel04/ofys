@@ -92,6 +92,9 @@ Route::middleware(['auth', 'role:provider'])->group(function () {
 
     // Activities management
     Route::get('/provider/activities', [ProviderController::class, 'showActivities'])->name('provider.activities');
+    Route::get('/provider/activities/create', [ProviderController::class, 'createActivity'])->name('provider.activities.create');
+    Route::get('/provider/activities/{id}', [ProviderController::class, 'viewActivity'])->name('provider.activities.view');
+    Route::get('/provider/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('provider.activities.edit');
 
     // Pricing management
     Route::get('/provider/pricing', [ProviderController::class, 'showPricing'])->name('provider.pricing');

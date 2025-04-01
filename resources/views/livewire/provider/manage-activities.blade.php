@@ -16,13 +16,13 @@
             <h1 class="text-2xl font-bold text-gray-800">Manage Activities</h1>
             <p class="text-gray-600">Create and manage activities your business offers to customers.</p>
         </div>
-        <button wire:click="toggleCreateModal"
+        <a href="{{ route('provider.activities.create') }}"
             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
             <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             Add New Activity
-        </button>
+        </a>
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6">
@@ -112,12 +112,12 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button type="button" wire:click="viewActivity({{ $activity->id }})" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <a href="{{ route('provider.activities.view', $activity->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">
                                 View
-                            </button>
-                            <button type="button" wire:click="editActivity({{ $activity->id }})" class="text-teal-600 hover:text-teal-900 mr-3">
+                            </a>
+                            <a href="{{ route('provider.activities.edit', $activity->id) }}" class="text-teal-600 hover:text-teal-900 mr-3">
                                 Edit
-                            </button>
+                            </a>
                             <button type="button" wire:click="confirmDelete({{ $activity->id }})"
                                 class="text-red-600 hover:text-red-900">
                                 Delete
@@ -139,266 +139,6 @@
             {{ $activitiesList->links() }}
         </div>
     </div>
-
-    @if($showCreateModal)
-    <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <!-- Background overlay -->
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <!-- Modal panel -->
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-                <form wire:submit.prevent="saveActivity">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="mb-5 flex justify-between items-center">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                {{ $activityId ? 'Edit Activity' : 'Create New Activity' }}
-                            </h3>
-                            <button type="button" wire:click="toggleCreateModal" class="text-gray-400 hover:text-gray-500">
-                                <span class="sr-only">Close</span>
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="space-y-6">
-                            <!-- Activity Type & Name -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="activityType" class="block text-sm font-medium text-gray-700">Activity Type</label>
-                                    <select id="activityType" wire:model="activityType"
-                                        class="mt-1 block w-full border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 rounded-md px-4 py-3 text-base">
-                                        <option value="">Select Type</option>
-                                        @foreach($activityTypes as $value => $label)
-                                            <option value="{{ $value }}">{{ $label }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('activityType')<span class="text-red-500 text-xs">{{ $message ?? 'This field is required' }}</span>@enderror
-                                </div>
-
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Activity Name</label>
-                                    <input type="text" id="name" wire:model="name"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-                                    @error('name')<span class="text-red-500 text-xs">{{ $message ?? 'This field is required' }}</span>@enderror
-                                </div>
-                            </div>
-
-                            <!-- Description & Location -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea id="description" wire:model="description" rows="4"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base"></textarea>
-                                </div>
-
-                                <div>
-                                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                                    <input type="text" id="location" wire:model="location"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-
-                                    <label for="requirements" class="block text-sm font-medium text-gray-700 mt-4">Requirements</label>
-                                    <textarea id="requirements" wire:model="requirements" rows="2"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base"></textarea>
-                                </div>
-                            </div>
-
-                            <!-- Participants & Duration -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label for="minParticipants" class="block text-sm font-medium text-gray-700">Min Participants</label>
-                                    <input type="number" id="minParticipants" wire:model="minParticipants" min="1"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-                                    @error('minParticipants')<span class="text-red-500 text-xs">{{ $message ?? 'This field is required' }}</span>@enderror
-                                </div>
-
-                                <div>
-                                    <label for="maxParticipants" class="block text-sm font-medium text-gray-700">Max Participants</label>
-                                    <input type="number" id="maxParticipants" wire:model="maxParticipants" min="1"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-                                </div>
-
-                                <div>
-                                    <label for="durationMinutes" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
-                                    <input type="number" id="durationMinutes" wire:model="durationMinutes" min="0"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-                                </div>
-                            </div>
-
-                            <!-- Pricing -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label for="price" class="block text-sm font-medium text-gray-700">Price (RM)</label>
-                                    <input type="number" id="price" wire:model="price" min="0" step="0.01"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base">
-                                    @error('price')<span class="text-red-500 text-xs">{{ $message ?? 'This field is required' }}</span>@enderror
-                                </div>
-
-                                <div>
-                                    <label for="priceType" class="block text-sm font-medium text-gray-700">Price Type</label>
-                                    <select id="priceType" wire:model="priceType"
-                                        class="mt-1 block w-full border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 rounded-md px-4 py-3 text-base">
-                                        @foreach($priceTypes as $value => $label)
-                                            <option value="{{ $value }}">{{ $label }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('priceType')<span class="text-red-500 text-xs">{{ $message ?? 'This field is required' }}</span>@enderror
-                                </div>
-
-                                <div class="flex items-center mt-7">
-                                    <input id="includesGear" wire:model="includesGear" type="checkbox"
-                                        class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
-                                    <label for="includesGear" class="ml-2 block text-sm text-gray-700">
-                                        Includes Gear/Equipment
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Included & Excluded Items -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Included Items</label>
-                                    <div class="flex">
-                                        <input type="text" wire:model="newIncludedItem" wire:keydown.enter="addIncludedItem"
-                                            class="flex-1 focus:ring-teal-500 focus:border-teal-500 block shadow-sm border-gray-300 rounded-l-md px-4 py-3 text-base">
-                                        <button type="button" wire:click="addIncludedItem"
-                                            class="inline-flex items-center px-4 py-3 border border-l-0 border-gray-300 text-base font-medium rounded-r-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <div class="mt-2">
-                                        @forelse($includedItems as $index => $item)
-                                            <div class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded my-1">
-                                                <span>{{ $item }}</span>
-                                                <button type="button" wire:click="removeIncludedItem({{ $index }})" class="text-red-500 hover:text-red-700">
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        @empty
-                                            <p class="text-sm text-gray-500 mt-2">No included items added yet.</p>
-                                        @endforelse
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Excluded Items</label>
-                                    <div class="flex">
-                                        <input type="text" wire:model="newExcludedItem" wire:keydown.enter="addExcludedItem"
-                                            class="flex-1 focus:ring-teal-500 focus:border-teal-500 block shadow-sm border-gray-300 rounded-l-md px-4 py-3 text-base">
-                                        <button type="button" wire:click="addExcludedItem"
-                                            class="inline-flex items-center px-4 py-3 border border-l-0 border-gray-300 text-base font-medium rounded-r-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <div class="mt-2">
-                                        @forelse($excludedItems as $index => $item)
-                                            <div class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded my-1">
-                                                <span>{{ $item }}</span>
-                                                <button type="button" wire:click="removeExcludedItem({{ $index }})" class="text-red-500 hover:text-red-700">
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        @empty
-                                            <p class="text-sm text-gray-500 mt-2">No excluded items added yet.</p>
-                                        @endforelse
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Rules & Amenities -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rules</label>
-                                    <div class="flex">
-                                        <input type="text" wire:model="newRule" wire:keydown.enter="addRule"
-                                            class="flex-1 focus:ring-teal-500 focus:border-teal-500 block shadow-sm border-gray-300 rounded-l-md px-4 py-3 text-base">
-                                        <button type="button" wire:click="addRule"
-                                            class="inline-flex items-center px-4 py-3 border border-l-0 border-gray-300 text-base font-medium rounded-r-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <div class="mt-2">
-                                        @forelse($rules as $index => $rule)
-                                            <div class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded my-1">
-                                                <span>{{ $rule }}</span>
-                                                <button type="button" wire:click="removeRule({{ $index }})" class="text-red-500 hover:text-red-700">
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        @empty
-                                            <p class="text-sm text-gray-500 mt-2">No rules added yet.</p>
-                                        @endforelse
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
-                                    <div class="flex">
-                                        <input type="text" wire:model="newAmenity" wire:keydown.enter="addAmenity"
-                                            class="flex-1 focus:ring-teal-500 focus:border-teal-500 block shadow-sm border-gray-300 rounded-l-md px-4 py-3 text-base">
-                                        <button type="button" wire:click="addAmenity"
-                                            class="inline-flex items-center px-4 py-3 border border-l-0 border-gray-300 text-base font-medium rounded-r-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                            Add
-                                        </button>
-                                    </div>
-                                    <div class="mt-2">
-                                        @forelse($amenities as $index => $amenity)
-                                            <div class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded my-1">
-                                                <span>{{ $amenity }}</span>
-                                                <button type="button" wire:click="removeAmenity({{ $index }})" class="text-red-500 hover:text-red-700">
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        @empty
-                                            <p class="text-sm text-gray-500 mt-2">No amenities added yet.</p>
-                                        @endforelse
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Cancelation Policy & Status -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="cancelationPolicy" class="block text-sm font-medium text-gray-700">Cancelation Policy</label>
-                                    <textarea id="cancelationPolicy" wire:model="cancelationPolicy" rows="3"
-                                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm border-gray-300 rounded-md px-4 py-3 text-base"></textarea>
-                                </div>
-
-                                <div class="flex items-center">
-                                    <input id="isActive" wire:model="isActive" type="checkbox"
-                                        class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
-                                    <label for="isActive" class="ml-2 block text-sm text-gray-700">
-                                        Activity is Active (visible to customers)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-3 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:ml-3 sm:w-auto">
-                            {{ $activityId ? 'Update Activity' : 'Create Activity' }}
-                        </button>
-                        <button type="button" wire:click="toggleCreateModal"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    @endif
 
     @if($showViewModal)
     <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">

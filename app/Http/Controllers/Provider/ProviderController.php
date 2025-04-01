@@ -521,4 +521,102 @@ class ProviderController extends Controller
             ]);
         }
     }
+
+    /**
+     * Show the activities creation page
+     *
+     * @param Request $request The incoming request
+     * @return \Illuminate\View\View
+     */
+    public function createActivity(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            return view('provider.create-activity', [
+                'user' => $user,
+                'activityId' => null
+            ]);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error' => 'An error occurred while loading the activity creation page. Please try again.'
+            ]);
+        }
+    }
+
+    /**
+     * Show the activities edit page
+     *
+     * @param Request $request The incoming request
+     * @param int $id The activity ID to edit
+     * @return \Illuminate\View\View
+     */
+    public function editActivity(Request $request, $id)
+    {
+        try {
+            $user = Auth::user();
+            $shopInfo = $user->shopInfo;
+
+            if (!$shopInfo) {
+                return redirect()->route('provider.activities')->with('error', 'You need to set up your shop information first.');
+            }
+
+            // Check if the activity exists and belongs to this provider
+            $activity = Activity::where('id', $id)
+                ->where('shop_info_id', $shopInfo->id)
+                ->first();
+
+            if (!$activity) {
+                return redirect()->route('provider.activities')->with('error', 'Activity not found or does not belong to you.');
+            }
+
+            return view('provider.create-activity', [
+                'user' => $user,
+                'activityId' => $id
+            ]);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error' => 'An error occurred while loading the activity edit page. Please try again.'
+            ]);
+        }
+    }
+
+    /**
+     * Show the activity details page
+     *
+     * @param Request $request The incoming request
+     * @param int $id The activity ID to view
+     * @return \Illuminate\View\View
+     */
+    public function viewActivity(Request $request, $id)
+    {
+        try {
+            $user = Auth::user();
+            $shopInfo = $user->shopInfo;
+
+            if (!$shopInfo) {
+                return redirect()->route('provider.activities')->with('error', 'You need to set up your shop information first.');
+            }
+
+            // Check if the activity exists and belongs to this provider
+            $activity = Activity::where('id', $id)
+                ->where('shop_info_id', $shopInfo->id)
+                ->first();
+
+            if (!$activity) {
+                return redirect()->route('provider.activities')->with('error', 'Activity not found or does not belong to you.');
+            }
+
+            return view('provider.view-activity', [
+                'user' => $user,
+                'activity' => $activity,
+                'activityTypes' => Activity::getActivityTypes(),
+                'priceTypes' => Activity::getPriceTypes()
+            ]);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error' => 'An error occurred while loading the activity details. Please try again.'
+            ]);
+        }
+    }
 }
