@@ -1,14 +1,4 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /ofys/
-    RewriteCond %{REQUEST_URI} !^/ofys/public/
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
-
-# Prevent direct access to files
-<FilesMatch "(?i:^.*\.(env|sqlite|log|ini|json|lock|cache|tpl|txt|sql|xml))$">
-    Order deny,allow
-    Deny from all
-</FilesMatch>
