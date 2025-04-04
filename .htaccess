@@ -1,0 +1,56 @@
+# Try to route all requests through index.php
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Direct access to actual files
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Direct access to actual directories
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Simple test files should be directly accessible
+    RewriteRule ^(simple-test|test|error-checker|index|info)\.php$ - [L]
+
+    # For Laravel in the public directory
+    RewriteRule ^$ public/index.php [L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+</IfModule>
+
+# Set directory index
+DirectoryIndex index.php index.html
+
+# PHP settings - might help with some hosts
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+
+# Protect .env file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Allow PHP files to be executed
+<Files *.php>
+    Order allow,deny
+    Allow from all
+</Files>
+
+# Disable directory browsing
+Options -Indexes
+
+# Enable PHP execution
+AddHandler application/x-httpd-php .php
+
+# Protect sensitive files
+<FilesMatch "^\.env|composer\.json|composer\.lock|package\.json|webpack\.mix\.js|artisan$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
