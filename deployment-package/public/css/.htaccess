@@ -1,0 +1,16 @@
+# Ensure CSS files are served with the correct MIME type
+AddType text/css .css
+<IfModule mod_mime.c>
+    AddType text/css .css
+</IfModule>
+
+# Force CSS mime type regardless of what the server thinks
+<FilesMatch "\.css$">
+    ForceType text/css
+    Header set Content-Type "text/css"
+</FilesMatch>
+
+# Allow direct access to CSS files
+<IfModule mod_rewrite.c>
+    RewriteEngine Off
+</IfModule>
