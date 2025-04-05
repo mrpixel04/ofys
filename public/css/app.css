@@ -4,3 +4,6 @@
 }
 
 /* Add any other custom styles your app needs */
+
+/* Redirect to real CSS file */
+@import url('../build/assets/app-CFTAco04.css');

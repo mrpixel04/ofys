@@ -25,8 +25,13 @@ use App\Livewire\HomeActivities;
 |
 */
 
-// Home page
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Home page - using the simple jQuery version
+Route::get('/', function () {
+    return view('simple-welcome');
+})->name('home');
+
+// Original Livewire home
+Route::get('/livewire-home', [HomeController::class, 'index'])->name('livewire.home');
 
 // Keeping this route for reference
 Route::get('/welcome', function () {
@@ -152,3 +157,8 @@ Route::middleware(['auth'])->group(function () {
     // Booking confirmation
     Route::get('/booking/confirmation/{id}', [CustomerBookingController::class, 'confirmation'])->name('customer.bookings.confirmation');
 });
+
+// Add route for simple welcome page (no Livewire or Alpine)
+Route::get('/simple', function () {
+    return view('simple-welcome');
+})->name('simple.welcome');

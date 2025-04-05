@@ -58,7 +58,8 @@ class AdminController extends Controller
                 ]);
             }
 
-            return view('admin.dashboard', [
+            // Return the new simple-dashboard view without Livewire/Alpine
+            return view('admin.simple-dashboard', [
                 'stats' => $stats,
                 'recentActivities' => $recentActivities,
                 'recentBookings' => $recentBookings
@@ -73,7 +74,7 @@ class AdminController extends Controller
                 ], 500);
             }
 
-            return view('admin.dashboard', [
+            return view('admin.simple-dashboard', [
                 'error' => 'An error occurred while loading the dashboard. Please try again.'
             ]);
         }

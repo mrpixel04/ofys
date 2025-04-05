@@ -5,17 +5,40 @@
 
     RewriteEngine On
 
+    # Redirect www to non-www version
+    RewriteCond %{HTTP_HOST} ^www\.eastbizz\.com [NC]
+    RewriteRule ^(.*)$ https://eastbizz.com/$1 [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # FORCE ASSETS THROUGH PUBLIC PATH: Redirect asset requests without /public/ to include it
+    RewriteCond %{REQUEST_URI} ^/build/assets/
+    RewriteRule ^build/(.*)$ /public/build/$1 [L,R=301]
+
+    # Add public prefix to css and js requests
+    RewriteCond %{REQUEST_URI} ^/css/
+    RewriteRule ^css/(.*)$ /public/css/$1 [L,R=301]
+
+    RewriteCond %{REQUEST_URI} ^/js/
+    RewriteRule ^js/(.*)$ /public/js/$1 [L,R=301]
+
+    # Fix for js/app.js and css/app.css - use asset proxy
+    RewriteRule ^public/js/app\.js$ /asset-proxy.php [L]
+    RewriteRule ^public/css/app\.css$ /asset-proxy.php [L]
+
+    # Fix for storage URLs - make them work properly
+    RewriteRule ^storage/(.*)$ /public/storage/$1 [L,R=301]
+    RewriteRule ^public/storage/(.*)$ /asset-proxy.php?storage=$1 [L]
+
+    # Direct access to test files
+    RewriteRule ^(simple-test|path-test|asset-proxy)\.php$ - [L]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
-
-    # Direct access to test files
-    RewriteRule ^(simple-test)\.php$ - [L]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -88,6 +111,12 @@ Options -Indexes
 <IfModule mod_mime.c>
     AddType text/css .css
     AddType application/javascript .js
+    AddType image/svg+xml .svg
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+    AddType font/woff .woff
+    AddType font/woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
 </IfModule>
 
 # Force MIME types
@@ -104,3 +133,17 @@ Options -Indexes
         Header set Content-Type "application/javascript"
     </IfModule>
 </FilesMatch>
+
+# Special handling for Vite assets
+<IfModule mod_rewrite.c>
+    # Set the correct content type for Vite assets
+    RewriteRule ^build/assets/(.*)\.css$ - [T=text/css,L]
+    RewriteRule ^build/assets/(.*)\.js$ - [T=application/javascript,L]
+</IfModule>
+
+# Allow direct access to build directory
+<Directory "public/build">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>

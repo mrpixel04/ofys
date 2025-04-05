@@ -33,13 +33,30 @@ class BookingController extends Controller
         try {
             $query = Booking::query();
 
+            // Apply search if provided
+            if ($request->has('search') && !empty($request->search)) {
+                $search = $request->search;
+                $query->whereHas('user', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+
             // Apply filters if provided
-            if ($request->has('status')) {
+            if ($request->has('status') && !empty($request->status)) {
                 $query->where('status', $request->status);
             }
 
-            if ($request->has('payment_status')) {
+            if ($request->has('payment_status') && !empty($request->payment_status)) {
                 $query->where('payment_status', $request->payment_status);
+            }
+
+            if ($request->has('date_from') && !empty($request->date_from)) {
+                $query->whereDate('booking_date', '>=', $request->date_from);
+            }
+
+            if ($request->has('date_to') && !empty($request->date_to)) {
+                $query->whereDate('booking_date', '<=', $request->date_to);
             }
 
             if ($request->has('provider_id')) {
@@ -63,15 +80,26 @@ class BookingController extends Controller
             // Get paginated results
             $bookings = $query->paginate(15);
 
+            // Get statistics for the dashboard
+            $stats = [
+                'total_bookings' => Booking::count(),
+                'confirmed_bookings' => Booking::where('status', 'CONFIRMED')->count(),
+                'pending_bookings' => Booking::where('status', 'PENDING')->count(),
+                'total_revenue' => Booking::where('payment_status', 'PAID')->sum('total_price'),
+            ];
+
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => true,
-                    'bookings' => $bookings
+                    'bookings' => $bookings,
+                    'stats' => $stats
                 ]);
             }
 
-            return view('admin.bookings', [
-                'bookings' => $bookings
+            // Return the new simple-bookings view without Livewire
+            return view('admin.simple-bookings', [
+                'bookings' => $bookings,
+                'stats' => $stats
             ]);
         } catch (\Exception $e) {
             // Error handling
@@ -83,9 +111,9 @@ class BookingController extends Controller
                 ], 500);
             }
 
-            return view('admin.bookings', [
-                'bookings' => [],
-                'error' => 'An error occurred while retrieving bookings.'
+            return view('admin.simple-bookings', [
+                'bookings' => Booking::with(['user', 'activity.shopInfo.user'])->paginate(15),
+                'error' => 'An error occurred while retrieving bookings: ' . $e->getMessage()
             ]);
         }
     }

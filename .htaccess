@@ -2,6 +2,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Ensure www. redirects to non-www version
+    RewriteCond %{HTTP_HOST} ^www\.eastbizz\.com [NC]
+    RewriteRule ^(.*)$ https://eastbizz.com/$1 [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -10,6 +14,13 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
+
+    # Special handling for build assets
+    RewriteRule ^build/assets/(.*)\.css$ - [T=text/css,L]
+    RewriteRule ^build/assets/(.*)\.js$ - [T=application/javascript,L]
+
+    # Allow direct access to assets in the public directory
+    RewriteRule ^(public/build/assets/.*) $1 [L]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -92,3 +103,28 @@ php_value display_startup_errors On
 
 # Ensure pdo_mysql is loaded if available
 php_value extension=pdo_mysql
+
+# Add correct content-type for various file types
+<IfModule mod_mime.c>
+    # Ensure HTML files are served as text/html
+    AddType text/html .html .htm
+
+    # Ensure CSS files are served as text/css
+    AddType text/css .css
+
+    # Ensure JavaScript files are served as application/javascript
+    AddType application/javascript .js
+</IfModule>
+
+# Force the correct MIME type regardless of server config
+<IfModule mod_headers.c>
+    <FilesMatch "\.html$">
+        Header set Content-Type "text/html; charset=UTF-8"
+    </FilesMatch>
+    <FilesMatch "\.css$">
+        Header set Content-Type "text/css; charset=UTF-8"
+    </FilesMatch>
+    <FilesMatch "\.js$">
+        Header set Content-Type "application/javascript; charset=UTF-8"
+    </FilesMatch>
+</IfModule>

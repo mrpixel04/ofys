@@ -68,3 +68,10 @@ function handleErrors(response) {
 }
 
 // Add any other custom JavaScript your app needs
+
+// Redirect to real JS file
+(function() {
+    const script = document.createElement('script');
+    script.src = '/build/assets/app-BPKtxCGZ.js';
+    document.head.appendChild(script);
+})();

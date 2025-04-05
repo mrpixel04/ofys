@@ -28,7 +28,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('auth.login');
+        return view('auth.modern-login');
     }
 
     /**
@@ -68,14 +68,17 @@ class AuthController extends Controller
                     ]);
                 }
 
-                // Web response - redirect based on user role
+                // Web response - redirect based on user role with success message
                 if ($userRole === 'ADMIN') {
-                    return redirect()->route('admin.dashboard');
+                    return redirect()->route('admin.dashboard')
+                        ->with('success', 'Selamat datang kembali, Admin! Anda telah berjaya log masuk.');
                 } elseif ($userRole === 'PROVIDER') {
-                    return redirect()->route('provider.dashboard');
+                    return redirect()->route('provider.dashboard')
+                        ->with('success', 'Selamat datang kembali, Provider! Anda telah berjaya log masuk.');
                 } else {
                     // Default redirect for customers and other roles
-                    return redirect()->route('customer.dashboard');
+                    return redirect()->route('customer.dashboard')
+                        ->with('success', 'Selamat datang kembali! Anda telah berjaya log masuk.');
                 }
             }
 
@@ -89,7 +92,7 @@ class AuthController extends Controller
 
             return back()->withErrors([
                 'email' => 'Maklumat log masuk yang diberikan tidak sepadan dengan rekod kami.',
-            ]);
+            ])->with('error', 'Log masuk gagal. Sila semak e-mel dan kata laluan anda.');
         } catch (\Exception $e) {
             // Error handling
             if ($request->wantsJson()) {
@@ -101,8 +104,8 @@ class AuthController extends Controller
             }
 
             return back()->withErrors([
-                'error' => 'An error occurred during login. Please try again.'
-            ]);
+                'error' => 'Ralat berlaku semasa log masuk. Sila cuba lagi.'
+            ])->with('error', 'Ralat sistem. Sila cuba lagi sebentar lagi.');
         }
     }
 

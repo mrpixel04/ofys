@@ -42,7 +42,7 @@ touch $DEPLOY_DIR/storage/logs/laravel.log
 
 # Create a zip file
 echo "Creating deployment zip file..."
-ZIP_FILE="ofys-deployment-$(date +%Y%m%d-%H%M%S).zip"
+ZIP_FILE="eastbizz-deployment-$(date +%Y%m%d-%H%M%S).zip"
 (cd $DEPLOY_DIR && zip -r ../$ZIP_FILE .)
 
 echo -e "${GREEN}Deployment package created: $ZIP_FILE${NC}"
