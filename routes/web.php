@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Livewire\HomeActivities;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,14 +80,24 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
 
     // Providers management
     Route::get('/admin/providers', [AdminController::class, 'showProviders'])->name('admin.providers');
+    Route::get('/admin/simple-providers', [AdminController::class, 'showSimpleProviders'])->name('admin.simple-providers');
+    Route::get('/admin/simple-providers-basic', [AdminController::class, 'showSimpleProvidersBasic'])->name('admin.simple-providers-basic');
     Route::get('/admin/providers/activities', [AdminController::class, 'showActivities'])->name('admin.providers.activities');
+    Route::get('/admin/providers/activities/create', [AdminController::class, 'createActivity'])->name('admin.providers.activities.create');
+    Route::post('/admin/providers/activities/store', [AdminController::class, 'storeActivity'])->name('admin.providers.activities.store');
     Route::get('/admin/providers/activities/{id}', [AdminController::class, 'showActivityDetails'])->name('admin.providers.activities.show');
+    Route::get('/admin/providers/activities/{id}/edit', [AdminController::class, 'editActivity'])->name('admin.providers.activities.edit');
+    Route::put('/admin/providers/activities/{id}/update', [AdminController::class, 'updateActivity'])->name('admin.providers.activities.update');
+    Route::post('/admin/providers/activities/{id}/toggle-status', [AdminController::class, 'toggleActivityStatus'])->name('admin.providers.activities.toggle-status');
+    Route::delete('/admin/providers/activities/{id}', [AdminController::class, 'deleteActivity'])->name('admin.providers.activities.delete');
     Route::get('/admin/providers/{id}', [AdminController::class, 'showProviderDetails'])->name('admin.providers.view');
     Route::get('/admin/providers/{id}/edit', [AdminController::class, 'editProvider'])->name('admin.providers.edit');
     Route::put('/admin/providers/{id}', [AdminController::class, 'updateProvider'])->name('admin.providers.update');
 
     // Customers management
-    Route::get('/admin/customers', [AdminController::class, 'showCustomers'])->name('admin.customers');
+    Route::get('/admin/customers', [AdminCustomerController::class, 'index'])->name('admin.customers');
+    Route::get('/admin/customers/{id}', [AdminCustomerController::class, 'show'])->name('admin.customers.show');
+    Route::delete('/admin/customers/{id}', [AdminCustomerController::class, 'destroy'])->name('admin.customers.destroy');
 
     // Settings
     Route::get('/admin/settings', [AdminController::class, 'showSettings'])->name('admin.settings');
@@ -94,7 +105,7 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::post('/admin/settings/language', [AdminController::class, 'updateLanguage'])->name('admin.settings.language');
 
     // Admin Profile
-    Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile');
+    Route::get('/admin/profile', [AdminController::class, 'showSimpleProfile'])->name('admin.profile');
     Route::put('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     Route::put('/admin/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
 });

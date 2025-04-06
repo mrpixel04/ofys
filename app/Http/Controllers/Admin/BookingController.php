@@ -140,7 +140,7 @@ class BookingController extends Controller
                 ]);
             }
 
-            return view('admin.bookings.view', [
+            return view('admin.bookings.simple-view', [
                 'booking' => $booking
             ]);
         } catch (\Exception $e) {
@@ -199,7 +199,7 @@ class BookingController extends Controller
                 ]);
             }
 
-            return view('admin.bookings.edit', [
+            return view('admin.bookings.simple-edit', [
                 'booking' => $booking,
                 'statuses' => $statuses,
                 'paymentStatuses' => $paymentStatuses

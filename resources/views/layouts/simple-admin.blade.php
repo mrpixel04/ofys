@@ -1,3 +1,4 @@
+@if(!isset($headless) || !$headless)
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -11,8 +12,17 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS Play CDN -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <!-- Tailwind CSS - Updated to proper usage -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            plugins: [
+                function({ addVariant }) {
+                    addVariant('hocus', ['&:hover', '&:focus'])
+                }
+            ]
+        }
+    </script>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -75,7 +85,7 @@
         <div id="sidebar" class="sidebar fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-purple-800 to-purple-900 text-white lg:translate-x-0 lg:static lg:inset-0 shadow-xl">
             <div class="flex items-center justify-center h-16 bg-gradient-to-r from-purple-900 to-purple-800">
                 <h2 class="text-xl font-bold">Admin Panel</h2>
-            </div>
+             </div>
             <nav class="mt-5 px-2 space-y-1">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'menu-active' : '' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -95,7 +105,7 @@
                         <svg class="w-4 h-4 ml-auto transition-transform duration-200 dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="submenu pl-4 pr-2 mt-2 space-y-1 rounded-md {{ request()->routeIs('admin.providers*') ? 'active' : '' }}">
-                        <a href="{{ route('admin.providers') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers') && !request()->routeIs('admin.providers.activities') ? 'menu-active' : '' }}">
+                        <a href="{{ route('admin.simple-providers-basic') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.simple-providers-basic') ? 'menu-active' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             {{ __('Providers List') }}
                         </a>
@@ -119,10 +129,6 @@
                         <svg class="w-4 h-4 ml-auto transition-transform duration-200 dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="submenu pl-4 pr-2 mt-2 space-y-1 rounded-md {{ request()->routeIs('admin.settings*') || request()->routeIs('admin.profile') ? 'active' : '' }}">
-                        <a href="{{ route('admin.settings') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.settings') && !request()->routeIs('admin.profile') ? 'menu-active' : '' }}">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065"></path></svg>
-                            {{ __('System Settings') }}
-                        </a>
                         <a href="{{ route('admin.profile') ?? '#' }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.profile') ? 'menu-active' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             {{ __('Profile') }}
@@ -176,7 +182,6 @@
                                 <span class="ml-2 text-xl font-bold text-purple-800">Admin Panel</span>
                             </div>
                         </div>
-                    </div>
                 </div>
             </nav>
 
@@ -223,6 +228,9 @@
                     @yield('content')
                 </div>
             </main>
+
+            <!-- Modals Section -->
+            @yield('modals')
         </div>
     </div>
 
@@ -276,5 +284,11 @@
             });
         });
     </script>
+
+    <!-- Page-specific scripts -->
+    @yield('scripts')
 </body>
 </html>
+@else
+@yield('content')
+@endif

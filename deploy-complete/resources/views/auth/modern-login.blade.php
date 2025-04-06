@@ -1,0 +1,449 @@
+@extends('layouts.simple-app')
+
+@section('content')
+<style>
+    /* Base animations */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInRight {
+        0% {
+            transform: translateX(50px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInLeft {
+        0% {
+            transform: translateX(-50px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInUp {
+        0% {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -100% 0;
+        }
+        100% {
+            background-position: 100% 0;
+        }
+    }
+
+    /* Apply animations to elements */
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    .animate-slide-right {
+        animation: slideInRight 0.8s ease forwards;
+    }
+
+    .animate-slide-left {
+        animation: slideInLeft 0.8s ease forwards;
+    }
+
+    .animate-slide-up {
+        animation: slideInUp 0.8s ease forwards;
+    }
+
+    .animate-pulse {
+        animation: pulse 2s infinite;
+    }
+
+    /* Animation delays */
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-700 { animation-delay: 0.7s; }
+    .delay-800 { animation-delay: 0.8s; }
+
+    /* Special animations */
+    .shimmer-bg {
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+    }
+
+    .login-card {
+        transition: all 0.3s ease;
+        opacity: 0;
+        animation: fadeIn 0.8s ease forwards 0.3s;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .login-image-overlay {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-image-overlay::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 3s infinite;
+        z-index: 1;
+    }
+
+    .feature-icon {
+        transition: all 0.3s ease;
+    }
+
+    .feature-row:hover .feature-icon {
+        transform: scale(1.2);
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .input-field {
+        transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+        transform: translateY(-2px);
+    }
+
+    .login-button {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .login-button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: all 0.6s ease;
+    }
+
+    .login-button:hover::after {
+        left: 100%;
+    }
+
+    .form-title {
+        background: linear-gradient(90deg, #f59e0b, #d97706, #f59e0b);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient 3s linear infinite;
+    }
+
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
+
+<div class="min-h-screen bg-gray-50 animate-fade-in">
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden login-card">
+            <div class="flex flex-col md:flex-row">
+                <!-- Left side - Image with text overlay -->
+                <div class="md:w-1/2 relative login-image-overlay">
+                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-yellow-600 opacity-90"></div>
+                    <img
+                        src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+                        alt="OFYS Adventure"
+                        class="h-full w-full object-cover"
+                    >
+                    <div class="absolute inset-0 flex items-center justify-center p-10">
+                        <div class="text-white text-center">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-4 animate-slide-left">Selamat Datang Kembali!</h2>
+                            <div class="w-16 h-1 bg-white mx-auto mb-6 animate-slide-right delay-200"></div>
+                            <p class="text-lg md:text-xl mb-8 animate-slide-left delay-300">Terokai lebih banyak pengembaraan luar yang menakjubkan di Malaysia bersama kami.</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center feature-row animate-slide-left delay-400">
+                                    <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-white text-lg">Aktiviti Terjamin Kualiti</span>
+                                </div>
+                                <div class="flex items-center feature-row animate-slide-left delay-500">
+                                    <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-white text-lg">Tempahan Selamat & Mudah</span>
+                                </div>
+                                <div class="flex items-center feature-row animate-slide-left delay-600">
+                                    <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-white text-lg">Komuniti Peminat Aktiviti Luar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side - Login Form -->
+                <div class="md:w-1/2 p-8 md:p-12">
+                    <div class="max-w-md mx-auto">
+                        <div class="text-center mb-8 animate-slide-up">
+                            <a href="{{ url('/') }}" class="inline-block mb-4">
+                                <span class="text-yellow-500 font-bold text-4xl form-title animate-pulse">OFYS</span>
+                            </a>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2 animate-slide-up delay-200">Log Masuk ke Akaun Anda</h2>
+                            <p class="text-gray-600 animate-slide-up delay-300">Masukkan maklumat anda untuk akses akaun</p>
+                        </div>
+
+                        @if(session('success'))
+                            <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md animate-slide-up delay-200" role="alert">
+                                <p class="font-medium">{{ session('success') }}</p>
+                            </div>
+                        @endif
+
+                        @if($errors->any())
+                            <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md animate-slide-up delay-200" role="alert">
+                                <p class="font-medium">Terdapat ralat pada log masuk anda:</p>
+                                <ul class="mt-2 list-disc list-inside">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('login') }}" method="POST" id="login-form" class="space-y-6">
+                            @csrf
+                            <div class="animate-slide-up delay-300">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Alamat E-mel</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        autocomplete="email"
+                                        required
+                                        class="pl-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 transition input-field"
+                                        placeholder="contoh@email.com"
+                                        value="{{ old('email') }}"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="animate-slide-up delay-400">
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Kata Laluan</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="current-password"
+                                        required
+                                        class="pl-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 transition input-field"
+                                        placeholder="••••••••"
+                                    >
+                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        <button type="button" id="toggle-password" class="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition">
+                                            <svg id="eye-show" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg id="eye-hide" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" />
+                                                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between animate-slide-up delay-500">
+                                <div class="flex items-center">
+                                    <input
+                                        id="remember_me"
+                                        name="remember"
+                                        type="checkbox"
+                                        class="h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded transition"
+                                    >
+                                    <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+                                        Ingat saya
+                                    </label>
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-yellow-600 hover:text-yellow-500 transition">
+                                        Lupa kata laluan?
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="animate-slide-up delay-600">
+                                <button type="submit" id="login-button" class="login-button group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200">
+                                    <span id="login-text" class="flex items-center">
+                                        <svg class="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        Log Masuk
+                                    </span>
+                                    <span id="login-loading" class="hidden items-center">
+                                        <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Sedang Masuk...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="mt-8 animate-slide-up delay-700">
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-gray-300"></div>
+                                </div>
+                                <div class="relative flex justify-center text-sm">
+                                    <span class="px-2 bg-white text-gray-500">
+                                        Atau masuk dengan
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 grid grid-cols-2 gap-3">
+                                <a href="#" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-700">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+
+                                <a href="#" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-800">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center animate-slide-up delay-800">
+                            <p class="text-gray-600">
+                                Belum mempunyai akaun?
+                                <a href="{{ route('register') }}" class="font-medium text-yellow-600 hover:text-yellow-500 ml-1 transition">
+                                    Daftar sekarang
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add JavaScript for login form enhancements -->
+<script>
+    $(document).ready(function() {
+        // Reveal animations when page loads
+        setTimeout(function() {
+            $('.login-card').css('opacity', '1');
+        }, 100);
+
+        // Password toggle functionality
+        $('#toggle-password').click(function() {
+            const passwordField = $('#password');
+            const eyeShow = $('#eye-show');
+            const eyeHide = $('#eye-hide');
+
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                eyeShow.addClass('hidden');
+                eyeHide.removeClass('hidden');
+            } else {
+                passwordField.attr('type', 'password');
+                eyeShow.removeClass('hidden');
+                eyeHide.addClass('hidden');
+            }
+        });
+
+        // Form submission with loading state
+        $('#login-form').submit(function() {
+            $('#login-text').addClass('hidden');
+            $('#login-loading').removeClass('hidden').css('display', 'flex');
+            $('#login-button').prop('disabled', true).addClass('opacity-75');
+
+            // Continue with form submission
+            return true;
+        });
+
+        // Focus on email field on page load
+        $('#email').focus();
+
+        // Add hover effects to form inputs
+        $('.input-field').hover(
+            function() {
+                $(this).addClass('shadow-md');
+            },
+            function() {
+                $(this).removeClass('shadow-md');
+            }
+        );
+    });
+</script>
+@endsection

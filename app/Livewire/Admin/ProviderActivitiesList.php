@@ -21,6 +21,9 @@ class ProviderActivitiesList extends Component
 
     public $showViewModal = false;
     public $viewingActivity = null;
+    public $currentActivity = null;
+    public $showDeleteModal = false;
+    public $activityToDelete = null;
 
     public function mount()
     {
@@ -96,6 +99,46 @@ class ProviderActivitiesList extends Component
         return $isActive
             ? 'bg-green-100 text-green-800'
             : 'bg-red-100 text-red-800';
+    }
+
+    public function confirmDelete($activityId)
+    {
+        $this->activityToDelete = $activityId;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteActivity()
+    {
+        try {
+            $activity = Activity::findOrFail($this->activityToDelete);
+            $activity->delete();
+
+            $this->showDeleteModal = false;
+            $this->activityToDelete = null;
+            session()->flash('success', 'Activity has been deleted successfully.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to delete activity: ' . $e->getMessage());
+        }
+    }
+
+    public function cancelDelete()
+    {
+        $this->showDeleteModal = false;
+        $this->activityToDelete = null;
+    }
+
+    public function toggleStatus($activityId)
+    {
+        try {
+            $activity = Activity::findOrFail($activityId);
+            $activity->is_active = !$activity->is_active;
+            $activity->save();
+
+            $status = $activity->is_active ? 'activated' : 'deactivated';
+            session()->flash('success', "Activity has been {$status} successfully.");
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to update activity status: ' . $e->getMessage());
+        }
     }
 
     public function render()

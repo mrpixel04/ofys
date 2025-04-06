@@ -181,10 +181,19 @@
                                     {{ $activity->created_at->format('d M Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex justify-end space-x-2">
-                                        <a href="{{ route('admin.providers.activities.show', $activity->id) }}" class="text-blue-600 hover:text-blue-900 border border-blue-600 rounded px-2 py-1 transition duration-150 ease-in-out">
-                                            View Details
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <a href="{{ route('admin.providers.activities.show', $activity->id) }}" class="text-purple-600 hover:text-purple-900" title="View Details">
+                                            <i class="fas fa-eye"></i>
                                         </a>
+                                        <a href="{{ route('admin.providers.activities.edit', $activity->id) }}" class="text-blue-600 hover:text-blue-900" title="Edit Activity">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button wire:click="confirmDelete({{ $activity->id }})" class="text-red-600 hover:text-red-900" title="Delete Activity">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button wire:click="toggleStatus({{ $activity->id }})" class="{{ $activity->is_active ? 'text-green-600 hover:text-green-900' : 'text-gray-600 hover:text-gray-900' }}" title="{{ $activity->is_active ? 'Deactivate' : 'Activate' }}">
+                                            <i class="fas fa-power-off"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -451,4 +460,52 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" x-show="$wire.showDeleteModal" x-cloak>
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Delete Activity</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">
+                        Are you sure you want to delete this activity? This action cannot be undone.
+                    </p>
+                </div>
+                <div class="flex justify-center mt-4 space-x-4">
+                    <button wire:click="cancelDelete" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Cancel
+                    </button>
+                    <button wire:click="deleteActivity" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if(session()->has('success'))
+    <div class="fixed bottom-4 right-4 z-50">
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md" x-data="{show: true}" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                <p>{{ session('success') }}</p>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(session()->has('error'))
+    <div class="fixed bottom-4 right-4 z-50">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-md" x-data="{show: true}" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                <p>{{ session('error') }}</p>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
