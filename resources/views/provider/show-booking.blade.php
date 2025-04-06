@@ -1,4 +1,4 @@
-@extends('layouts.provider.app')
+@extends('layouts.provider.simple-app')
 
 @section('title', 'Booking Details - ' . ($booking->booking_reference ?? $booking->id))
 

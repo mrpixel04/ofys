@@ -1,4 +1,4 @@
-@extends('layouts.provider.app')
+@extends('layouts.provider.simple-app')
 
 @section('header', 'Shop Information')
 

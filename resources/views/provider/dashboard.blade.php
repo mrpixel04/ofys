@@ -1,4 +1,4 @@
-@extends('layouts.provider.app')
+@extends('layouts.provider.simple-app')
 
 @section('header', 'Dashboard Overview')
 
@@ -62,7 +62,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-teal-100 text-sm">Total Bookings</p>
-                    <h3 class="text-2xl font-bold mt-1">42</h3>
+                    <h3 class="text-2xl font-bold mt-1">{{ $stats['total_bookings'] ?? 0 }}</h3>
                 </div>
                 <div class="p-3 bg-white bg-opacity-30 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +72,7 @@
             </div>
             <div class="mt-4">
                 <span class="text-sm text-teal-100">
-                    <span class="text-teal-50 font-medium">↑ 12%</span> from last month
+                    Total lifetime bookings
                 </span>
             </div>
         </div>
@@ -81,7 +81,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-gray-500 text-sm">Pending Bookings</p>
-                    <h3 class="text-2xl font-bold mt-1 text-gray-800">8</h3>
+                    <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $stats['pending_bookings'] ?? 0 }}</h3>
                 </div>
                 <div class="p-3 bg-yellow-100 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,7 +100,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-gray-500 text-sm">Active Services</p>
-                    <h3 class="text-2xl font-bold mt-1 text-gray-800">5</h3>
+                    <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $stats['activities_count'] ?? 0 }}</h3>
                 </div>
                 <div class="p-3 bg-teal-100 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,7 +119,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-gray-500 text-sm">Total Revenue</p>
-                    <h3 class="text-2xl font-bold mt-1 text-gray-800">RM 8,542</h3>
+                    <h3 class="text-2xl font-bold mt-1 text-gray-800">RM --</h3>
                 </div>
                 <div class="p-3 bg-emerald-100 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,7 +129,7 @@
             </div>
             <div class="mt-4">
                 <span class="text-sm text-gray-500">
-                    <span class="text-emerald-600 font-medium">↑ 18%</span> from last month
+                    Coming soon
                 </span>
             </div>
         </div>
@@ -152,73 +152,44 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <!-- Example booking records -->
+                    @forelse($recentBookings ?? [] as $booking)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">Hiking Tour</div>
-                            <div class="text-sm text-gray-500">Mount Kinabalu</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $booking->activity->name ?? 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $booking->activity->location ?? 'Unknown location' }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">John Doe</div>
-                            <div class="text-sm text-gray-500">john@example.com</div>
+                            <div class="text-sm text-gray-900">{{ $booking->user->name ?? 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $booking->user->email ?? 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">June 15, 2023</div>
-                            <div class="text-sm text-gray-500">09:30 AM</div>
+                            <div class="text-sm text-gray-900">{{ $booking->date ? date('M d, Y', strtotime($booking->date)) : 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $booking->time ?? 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Confirmed
+                            @php
+                                $statusClass = [
+                                    'pending' => 'bg-yellow-100 text-yellow-800',
+                                    'confirmed' => 'bg-green-100 text-green-800',
+                                    'cancelled' => 'bg-red-100 text-red-800',
+                                    'completed' => 'bg-blue-100 text-blue-800',
+                                ][$booking->status ?? 'pending'] ?? 'bg-gray-100 text-gray-800';
+                            @endphp
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                {{ ucfirst($booking->status ?? 'Pending') }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <a href="#" class="text-teal-600 hover:text-teal-900 mr-3">View</a>
+                            <a href="{{ route('provider.bookings.show', $booking->id) }}" class="text-teal-600 hover:text-teal-900 mr-3">View</a>
                         </td>
                     </tr>
+                    @empty
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">Camping Trip</div>
-                            <div class="text-sm text-gray-500">Taman Negara</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">Jane Smith</div>
-                            <div class="text-sm text-gray-500">jane@example.com</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">June 20, 2023</div>
-                            <div class="text-sm text-gray-500">08:00 AM</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                Pending
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <a href="#" class="text-teal-600 hover:text-teal-900 mr-3">View</a>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                            No bookings found. When you receive bookings, they will appear here.
                         </td>
                     </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">Fishing Tour</div>
-                            <div class="text-sm text-gray-500">Kuala Selangor</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">Mike Johnson</div>
-                            <div class="text-sm text-gray-500">mike@example.com</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">June 22, 2023</div>
-                            <div class="text-sm text-gray-500">14:00 PM</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Confirmed
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <a href="#" class="text-teal-600 hover:text-teal-900 mr-3">View</a>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
