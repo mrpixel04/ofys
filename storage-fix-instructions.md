@@ -8,12 +8,12 @@ Images uploaded through the application are saved in `storage/app/public` but ar
 
 Current URLs are pointing to:
 ```
-https://ofys.eastbizz.com/storage/activity_images/...
+https://eastbizz.com/storage/activity_images/...
 ```
 
 But the actual location of the files on the server is:
 ```
-https://ofys.eastbizz.com/public/storage/activity_images/...
+https://eastbizz.com/public/storage/activity_images/...
 ```
 
 ## Solution 1: Use the Helper Function (Already Implemented)

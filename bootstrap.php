@@ -3,7 +3,7 @@
  * Laravel Shared Hosting Helper
  *
  * This script helps Laravel run correctly on shared hosting environments.
- * Run this file via: https://ofys.eastbizz.com/bootstrap.php?key=12345
+ * Run this file via: https://eastbizz.com/bootstrap.php?key=12345
  */
 
 // Simple security check
@@ -104,7 +104,7 @@ $storageHelperPath = __DIR__ . '/storage-sync.php';
 $storageHelperContent = <<<'EOD'
 <?php
 // Simple script to sync storage/app/public to public/storage
-// Access via: https://ofys.eastbizz.com/storage-sync.php?key=12345
+// Access via: https://eastbizz.com/storage-sync.php?key=12345
 
 $key = isset($_GET['key']) ? $_GET['key'] : '';
 if ($key !== '12345') {
@@ -172,6 +172,6 @@ foreach ($cacheFiles as $file) {
 
 echo "\nBootstrap process completed!\n";
 echo "Your Laravel application should now work correctly on shared hosting.\n";
-echo "Access your site at: https://ofys.eastbizz.com\n";
+echo "Access your site at: https://eastbizz.com\n";
 echo "\nIf you still encounter issues, check the Laravel log file at:\n";
 echo "storage/logs/laravel.log\n";
