@@ -129,6 +129,11 @@ Route::middleware(['auth', 'role:provider'])->prefix('provider')->name('provider
     Route::get('/bookings/{booking}', [App\Http\Controllers\ProviderController::class, 'showBooking'])->name('bookings.show');
     Route::post('/bookings/{booking}/status', [App\Http\Controllers\ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
 
+    // Manually add a redirect to ensure we're handling this properly
+    Route::get('/bookings/{booking}/details', function($booking) {
+        return redirect()->route('provider.bookings.show', $booking);
+    })->name('bookings.details');
+
     // Activities management
     Route::get('/activities', [App\Http\Controllers\ProviderController::class, 'activities'])->name('activities');
     Route::get('/activities/create', [App\Http\Controllers\ProviderController::class, 'createActivity'])->name('activities.create');

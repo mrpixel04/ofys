@@ -6,6 +6,7 @@
 
 @section('content')
 <div class="container mx-auto">
+
     {{-- Header Banner --}}
     <div class="bg-gradient-to-r from-blue-500 to-teal-500 text-white p-6 rounded-lg shadow-lg mb-6">
         <div class="flex flex-col md:flex-row justify-between items-center">
@@ -32,7 +33,7 @@
                 </a>
             </div>
         </div>
-        <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
             <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-white/20 text-white">
                 @if($booking->status == 'pending')
                     <svg class="h-5 w-5 mr-1.5 text-yellow-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,6 +89,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Left Column (Main Details) --}}
         <div class="lg:col-span-2 space-y-6">
+
             {{-- Activity Card --}}
             <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="px-6 py-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
@@ -117,22 +119,28 @@
                                 Type
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900">
-                                <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    @php
-                                        $activityType = $booking->activity && isset($booking->activity->activity_type) ?
-                                                        $booking->activity->activity_type :
-                                                        ($booking->activity && isset($booking->activity->type) ?
-                                                         $booking->activity->type : '');
-                                    @endphp
-                                    @if($activityType === 'camping') bg-green-100 text-green-800
-                                    @elseif($activityType === 'glamping') bg-purple-100 text-purple-800
-                                    @elseif($activityType === 'hiking') bg-blue-100 text-blue-800
-                                    @elseif($activityType === 'water_rafting') bg-cyan-100 text-cyan-800
-                                    @elseif($activityType === 'houseboat') bg-orange-100 text-orange-800
-                                    @else bg-gray-100 text-gray-800
-                                    @endif">
-                                    {{ $booking->activity ? ucfirst(str_replace('_', ' ', $activityType ?? 'Unknown')) : 'Unknown' }}
-                                </span>
+                                @php
+                                    $activityType = $booking->activity && isset($booking->activity->activity_type) ?
+                                                    $booking->activity->activity_type :
+                                                    ($booking->activity && isset($booking->activity->type) ?
+                                                     $booking->activity->type : '');
+                                @endphp
+                                @if($activityType)
+                                    <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        @if($activityType === 'camping') bg-green-100 text-green-800
+                                        @elseif($activityType === 'glamping') bg-purple-100 text-purple-800
+                                        @elseif($activityType === 'hiking') bg-blue-100 text-blue-800
+                                        @elseif($activityType === 'water_rafting') bg-cyan-100 text-cyan-800
+                                        @elseif($activityType === 'houseboat') bg-orange-100 text-orange-800
+                                        @else bg-gray-100 text-gray-800
+                                        @endif">
+                                        {{ ucfirst(str_replace('_', ' ', $activityType)) }}
+                                    </span>
+                                @else
+                                    <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Unknown
+                                    </span>
+                                @endif
                             </dd>
                         </div>
                         <div>
@@ -191,6 +199,7 @@
                 </div>
             </div>
             @endif
+
         </div>
 
         {{-- Right Column (Customer & Booking Timing/Price) --}}
@@ -217,7 +226,7 @@
                             <dd class="text-sm text-gray-900 font-medium text-right">
                                 {{ $booking->formatted_date ?? date('M d, Y', strtotime($booking->date ?? $booking->created_at)) }}
                                 @if($booking->formatted_time ?? $booking->time)
-                                <br><span class="text-gray-700">at {{ $booking->formatted_time ?? $booking->time }}</span>
+                                 at <span class="font-medium">{{ $booking->formatted_time ?? $booking->time }}</span>
                                 @endif
                             </dd>
                         </div>
@@ -289,39 +298,6 @@
                             <dd class="text-sm text-gray-900 font-medium text-right">{{ $booking->user->phone ?? 'N/A' }}</dd>
                         </div>
                     </dl>
-                </div>
-            </div>
-
-            {{-- Status Update Card --}}
-            <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-                <div class="px-6 py-4 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold leading-6 text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Update Status
-                    </h3>
-                </div>
-                <div class="px-6 py-5">
-                    <form id="status-update-form" action="{{ route('provider.bookings.updateStatus', $booking->id) }}" method="POST">
-                        @csrf
-                        <div class="space-y-4">
-                            <div>
-                                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Booking Status</label>
-                                <select id="status" name="status" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                    <option value="completed" {{ $booking->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                    <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                </select>
-                            </div>
-                            <div>
-                                <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Update Status
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

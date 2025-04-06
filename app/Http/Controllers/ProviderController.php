@@ -94,7 +94,35 @@ class ProviderController extends Controller
      */
     public function bookings()
     {
-        return view('provider.bookings');
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        if (!$shopInfo) {
+            return redirect()->route('provider.shop-info')
+                ->with('error', 'Please complete your shop information before managing bookings.');
+        }
+
+        // Get all bookings for this provider
+        $bookings = Booking::whereHas('activity', function($query) use ($shopInfo) {
+                $query->where('shop_info_id', $shopInfo->id);
+            })
+            ->with(['user', 'activity', 'lot'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Count bookings by status
+        $pendingBookings = $bookings->where('status', 'pending')->count();
+        $confirmedBookings = $bookings->where('status', 'confirmed')->count();
+        $completedBookings = $bookings->where('status', 'completed')->count();
+        $totalBookings = $bookings->count();
+
+        return view('provider.bookings', [
+            'bookings' => $bookings,
+            'pendingBookings' => $pendingBookings,
+            'confirmedBookings' => $confirmedBookings,
+            'completedBookings' => $completedBookings,
+            'totalBookings' => $totalBookings
+        ]);
     }
 
     /**
@@ -105,7 +133,7 @@ class ProviderController extends Controller
      */
     public function showBooking(Booking $booking)
     {
-        return view('provider.booking-details', compact('booking'));
+        return view('provider.simple-booking-details', compact('booking'));
     }
 
     /**
@@ -117,8 +145,38 @@ class ProviderController extends Controller
      */
     public function updateBookingStatus(Request $request, Booking $booking)
     {
-        // To be implemented
-        return redirect()->route('provider.bookings.show', $booking->id)->with('success', 'Booking status updated successfully.');
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        // Check if booking belongs to this provider
+        $isBookingValid = $booking->activity && $booking->activity->shop_info_id == $shopInfo->id;
+
+        if (!$isBookingValid) {
+            return redirect()->route('provider.bookings')->with('error', 'You do not have permission to update this booking.');
+        }
+
+        // Validate requested status
+        $request->validate([
+            'status' => ['required', 'string', 'in:pending,confirmed,cancelled,completed']
+        ]);
+
+        $newStatus = $request->status;
+        $oldStatus = $booking->status;
+
+        // Update booking status
+        $booking->status = $newStatus;
+        $booking->save();
+
+        // Format messages based on status change
+        $statusMessages = [
+            'pending' => 'Booking has been marked as pending.',
+            'confirmed' => 'Booking has been confirmed successfully.',
+            'cancelled' => 'Booking has been cancelled.',
+            'completed' => 'Booking has been marked as completed.'
+        ];
+
+        return redirect()->route('provider.bookings.show', $booking->id)
+            ->with('success', $statusMessages[$newStatus] ?? 'Booking status updated successfully.');
     }
 
     /**
