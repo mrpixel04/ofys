@@ -111,38 +111,37 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
 });
 
 // Provider Routes
-Route::middleware(['auth', 'role:provider'])->prefix('provider')->name('provider.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:provider'])->name('provider.')->prefix('provider')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [App\Http\Controllers\ProviderController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', [ProviderController::class, 'dashboard'])->name('dashboard');
 
     // Profile
-    Route::get('/profile', [App\Http\Controllers\ProviderController::class, 'profile'])->name('profile');
-    Route::post('/profile/update', [App\Http\Controllers\ProviderController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/password', [App\Http\Controllers\ProviderController::class, 'updatePassword'])->name('password.update');
+    Route::get('/profile', [ProviderController::class, 'showProfile'])->name('profile');
+    Route::get('/simple-profile', [ProviderController::class, 'showProfile'])->name('simple-profile');
+    Route::post('/profile/update', [ProviderController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/password', [ProviderController::class, 'updatePassword'])->name('password.update');
 
     // Shop Info
-    Route::get('/shop-info', [App\Http\Controllers\ProviderController::class, 'shopInfo'])->name('shop-info');
-    Route::put('/shop-info', [App\Http\Controllers\ProviderController::class, 'updateShopInfo'])->name('shop-info.update');
+    Route::get('/shop-info', [ProviderController::class, 'showShopInfo'])->name('shop-info');
+    Route::post('/shop-info', [ProviderController::class, 'updateShopInfo'])->name('shop-info.update');
 
-    // Bookings management
-    Route::get('/bookings', [App\Http\Controllers\ProviderController::class, 'bookings'])->name('bookings');
-    Route::get('/bookings/{booking}', [App\Http\Controllers\ProviderController::class, 'showBooking'])->name('bookings.show');
-    Route::post('/bookings/{booking}/status', [App\Http\Controllers\ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
+    // Activities
+    Route::get('/activities', [ProviderController::class, 'showActivities'])->name('activities');
+    Route::get('/simple-activities', [ProviderController::class, 'showActivities'])->name('simple-activities');
+    Route::get('/activities/create', [ProviderController::class, 'createActivity'])->name('activities.create');
+    Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
+    Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
+    Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
+
+    // Bookings
+    Route::get('/bookings', [ProviderController::class, 'showBookings'])->name('bookings');
+    Route::get('/bookings/{booking}', [ProviderController::class, 'showBooking'])->name('bookings.show');
+    Route::post('/bookings/{booking}/status', [ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
 
     // Manually add a redirect to ensure we're handling this properly
     Route::get('/bookings/{booking}/details', function($booking) {
         return redirect()->route('provider.bookings.show', $booking);
     })->name('bookings.details');
-
-    // Activities management
-    Route::get('/activities', [App\Http\Controllers\ProviderController::class, 'activities'])->name('activities');
-    Route::get('/activities/create', [App\Http\Controllers\ProviderController::class, 'createActivity'])->name('activities.create');
-    Route::get('/activities/{id}', [App\Http\Controllers\ProviderController::class, 'viewActivity'])->name('activities.view');
-    Route::get('/activities/{id}/edit', [App\Http\Controllers\ProviderController::class, 'editActivity'])->name('activities.edit');
-    Route::delete('/activities/{id}', [App\Http\Controllers\ProviderController::class, 'deleteActivity'])->name('activities.delete');
-
-    // Pricing management
-    Route::get('/pricing', [App\Http\Controllers\ProviderController::class, 'showPricing'])->name('pricing');
 });
 
 // Customer Routes

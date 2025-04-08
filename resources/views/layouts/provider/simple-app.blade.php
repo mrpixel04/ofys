@@ -88,15 +88,15 @@
                             Bookings
                         </a>
 
-                        <a href="{{ route('provider.activities') }}" class="{{ request()->routeIs('provider.activities') ? 'bg-teal-700 bg-opacity-60 text-white' : 'text-teal-100 hover:bg-teal-600 hover:bg-opacity-50' }} group flex items-center px-4 py-3 text-sm font-medium rounded-md nav-item">
+                        <a href="{{ route('provider.simple-activities') }}" class="{{ request()->routeIs('provider.simple-activities') || request()->routeIs('provider.activities') ? 'bg-teal-700 bg-opacity-60 text-white' : 'text-teal-100 hover:bg-teal-600 hover:bg-opacity-50' }} group flex items-center px-4 py-3 text-sm font-medium rounded-md nav-item">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-5 w-5 flex-shrink-0 text-teal-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                             </svg>
                             Activities
                         </a>
 
                         <div class="pt-6 mt-6 border-t border-teal-400 border-opacity-30">
-                            <a href="{{ route('provider.profile') }}" class="{{ request()->routeIs('provider.profile') ? 'bg-teal-700 bg-opacity-60 text-white' : 'text-teal-100 hover:bg-teal-600 hover:bg-opacity-50' }} group flex items-center px-4 py-3 text-sm font-medium rounded-md nav-item">
+                            <a href="{{ route('provider.simple-profile') }}" class="{{ request()->routeIs('provider.simple-profile') ? 'bg-teal-700 bg-opacity-60 text-white' : 'text-teal-100 hover:bg-teal-600 hover:bg-opacity-50' }} group flex items-center px-4 py-3 text-sm font-medium rounded-md nav-item">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-5 w-5 flex-shrink-0 text-teal-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
@@ -151,10 +151,10 @@
                     <a href="{{ route('provider.bookings') }}" class="{{ request()->routeIs('provider.bookings') ? 'bg-teal-600 text-white' : 'text-teal-800 hover:bg-teal-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">
                         Bookings
                     </a>
-                    <a href="{{ route('provider.activities') }}" class="{{ request()->routeIs('provider.activities') ? 'bg-teal-600 text-white' : 'text-teal-800 hover:bg-teal-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">
+                    <a href="{{ route('provider.simple-activities') }}" class="{{ request()->routeIs('provider.simple-activities') || request()->routeIs('provider.activities') ? 'bg-teal-600 text-white' : 'text-teal-800 hover:bg-teal-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">
                         Activities
                     </a>
-                    <a href="{{ route('provider.profile') }}" class="{{ request()->routeIs('provider.profile') ? 'bg-teal-600 text-white' : 'text-teal-800 hover:bg-teal-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">
+                    <a href="{{ route('provider.simple-profile') }}" class="{{ request()->routeIs('provider.simple-profile') ? 'bg-teal-600 text-white' : 'text-teal-800 hover:bg-teal-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">
                         My Profile
                     </a>
                     <form method="POST" action="{{ route('logout') }}">

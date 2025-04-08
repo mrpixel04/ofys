@@ -110,7 +110,7 @@ class ProviderController extends Controller
                 ]);
             }
 
-            return view('provider.profile', [
+            return view('provider.simple-profile', [
                 'user' => $user,
                 'shopInfo' => $shopInfo
             ]);
@@ -124,7 +124,7 @@ class ProviderController extends Controller
                 ], 500);
             }
 
-            return view('provider.profile', [
+            return view('provider.simple-profile', [
                 'error' => 'An error occurred while loading your profile. Please try again.'
             ]);
         }
@@ -380,7 +380,7 @@ class ProviderController extends Controller
                     ]);
                 }
 
-                return view('provider.activities', [
+                return view('provider.simple-activities', [
                     'user' => $user,
                     'activities' => []
                 ]);
@@ -389,7 +389,7 @@ class ProviderController extends Controller
             // Get activities for this provider
             $activities = Activity::where('shop_info_id', $shopInfo->id)
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->paginate(10);
 
             if ($request->wantsJson()) {
                 return response()->json([
@@ -400,7 +400,7 @@ class ProviderController extends Controller
                 ]);
             }
 
-            return view('provider.activities', [
+            return view('provider.simple-activities', [
                 'user' => $user,
                 'activities' => $activities,
                 'activityTypes' => Activity::getActivityTypes(),
@@ -416,7 +416,7 @@ class ProviderController extends Controller
                 ], 500);
             }
 
-            return view('provider.activities', [
+            return view('provider.simple-activities', [
                 'user' => Auth::user(),
                 'activities' => [],
                 'error' => 'An error occurred while retrieving activities.'
@@ -641,6 +641,63 @@ class ProviderController extends Controller
             // Log the error
             logger()->error('Error updating booking status: ' . $e->getMessage(), ['booking_id' => $booking->id]);
             return back()->with('error', 'An error occurred while updating the booking status.');
+        }
+    }
+
+    /**
+     * Delete an activity
+     *
+     * @param int $id The activity ID to delete
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    public function deleteActivity($id)
+    {
+        try {
+            $user = Auth::user();
+            $shopInfo = $user->shopInfo;
+
+            if (!$shopInfo) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Shop information not found'
+                ], 404);
+            }
+
+            // Check if activity exists and belongs to this provider
+            $activity = Activity::where('id', $id)
+                ->where('shop_info_id', $shopInfo->id)
+                ->first();
+
+            if (!$activity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Activity not found or does not belong to you'
+                ], 404);
+            }
+
+            // Check if bookings exist for this activity
+            $hasBookings = Booking::where('activity_id', $id)->exists();
+            if ($hasBookings) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete activity with existing bookings'
+                ], 400);
+            }
+
+            // Delete activity
+            $activity->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Activity deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete activity',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

@@ -195,7 +195,7 @@ class ProviderController extends Controller
 
         $activityTypes = Activity::getActivityTypes();
 
-        return view('provider.activities', [
+        return view('provider.simple-activities', [
             'activities' => $activities,
             'activityTypes' => $activityTypes
         ]);
@@ -285,7 +285,8 @@ class ProviderController extends Controller
      */
     public function profile()
     {
-        return view('provider.profile', ['user' => Auth::user()]);
+        $user = Auth::user();
+        return view('provider.profile', compact('user'));
     }
 
     /**
@@ -300,37 +301,16 @@ class ProviderController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:1024'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone' => ['required', 'string', 'max:20'],
         ]);
 
-        $dataToUpdate = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-        ];
-
-        // Handle profile image upload
-        if ($request->hasFile('profile_image')) {
-            // Delete old image if exists
-            if ($user->profile_image) {
-                Storage::delete($user->profile_image);
-            }
-
-            // Store new image
-            $path = $request->file('profile_image')->store('profile-images', 'public');
-            $dataToUpdate['profile_image'] = $path;
-        }
-
-        // Handle profile image removal
-        if ($request->has('remove_profile_image') && $request->remove_profile_image && $user->profile_image) {
-            Storage::delete($user->profile_image);
-            $dataToUpdate['profile_image'] = null;
-        }
-
         // Update the user record
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update($dataToUpdate);
+        User::where('id', $user->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
 
         return redirect()->route('provider.profile')->with('success', 'Profile updated successfully.');
     }
@@ -344,24 +324,40 @@ class ProviderController extends Controller
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password' => ['required', 'string'],
+            'current_password' => ['required', function ($attribute, $value, $fail) {
+                if (!Hash::check($value, Auth::user()->password)) {
+                    $fail('The current password is incorrect.');
+                }
+            }],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = Auth::user();
-
-        // Check if current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'The current password is incorrect.']);
-        }
-
-        // Update the password
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update([
-                'password' => Hash::make($request->password)
-            ]);
+        User::where('id', Auth::id())->update([
+            'password' => Hash::make($request->password)
+        ]);
 
         return redirect()->route('provider.profile')->with('success', 'Password updated successfully.');
+    }
+
+    /**
+     * Display the simplified activities page with a modern UI.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function simpleActivities()
+    {
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', Auth::id())->first();
+
+        $activities = Activity::where('shop_info_id', $shopInfo->id ?? 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        $activityTypes = Activity::getActivityTypes();
+
+        return view('provider.simple-activities', [
+            'activities' => $activities,
+            'activityTypes' => $activityTypes
+        ]);
     }
 }
