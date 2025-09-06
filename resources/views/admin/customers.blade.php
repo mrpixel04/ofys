@@ -105,7 +105,7 @@
                 <div class="text-sm text-gray-500">Total: <span class="font-semibold">{{ $total ?? '0' }}</span> customers</div>
             </div>
             <div class="p-6">
-                @livewire('admin.customers-list')
+                @include('admin.customers-list_livewire_removed')
             </div>
         </div>
     </div>

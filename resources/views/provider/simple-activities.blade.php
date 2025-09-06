@@ -356,7 +356,7 @@
         deleteButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const activityId = this.getAttribute('data-activity-id');
-                deleteForm.action = "{{ url('provider/activities') }}/" + activityId;
+                deleteForm.action = "{{ route('provider.activities.delete', '') }}/" + activityId;
                 showModal();
             });
         });

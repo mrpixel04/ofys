@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\Guest\ActivityController;
+use App\Http\Controllers\Guest\AuthController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Provider\ProviderController;
@@ -12,7 +12,6 @@ use App\Http\Controllers\Customer\BookingController as CustomerBookingController
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
-use App\Livewire\HomeActivities;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 
 /*
@@ -28,7 +27,7 @@ use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 
 // Home page - using the simple jQuery version
 Route::get('/', function () {
-    return view('simple-welcome');
+    return view('guest.simple-welcome');
 })->name('home');
 
 // Original Livewire home
@@ -36,7 +35,7 @@ Route::get('/livewire-home', [HomeController::class, 'index'])->name('livewire.h
 
 // Keeping this route for reference
 Route::get('/welcome', function () {
-    return view('welcome');
+    return view('guest.welcome');
 });
 
 // Activities routes (these don't require authentication)
@@ -44,10 +43,14 @@ Route::get('/activities', [ActivityController::class, 'index'])->name('activitie
 Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
 
 // About page
-Route::view('/about', 'about')->name('about');
+Route::view('/about', 'guest.about')->name('about');
 
 // Contact page
-Route::view('/contact', 'contact')->name('contact');
+Route::view('/contact', 'guest.contact')->name('contact');
+
+// Legal pages (dummy content to be customized later)
+Route::view('/terms', 'guest.legal.terms')->name('legal.terms');
+Route::view('/privacy', 'guest.legal.privacy')->name('legal.privacy');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

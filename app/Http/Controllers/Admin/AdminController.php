@@ -403,6 +403,7 @@ class AdminController extends Controller
      * Show the customers management page
      *
      * Displays and manages all customers in the system.
+     * Enhanced to match Livewire CustomersList component functionality.
      *
      * @param Request $request The incoming request
      * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
@@ -410,20 +411,59 @@ class AdminController extends Controller
     public function showCustomers(Request $request)
     {
         try {
-            // Get all customers
-            $customers = User::where('role', 'customer')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $query = User::where('role', 'CUSTOMER');
+
+            // Apply search filter (matches Livewire search)
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhere('username', 'like', "%{$search}%")
+                      ->orWhere('phone', 'like', "%{$search}%");
+                });
+            }
+
+            // Apply status filter (matches Livewire statusFilter)
+            if ($request->filled('statusFilter')) {
+                $query->where('status', $request->statusFilter);
+            }
+
+            // Apply date filter (matches Livewire dateFilter)
+            if ($request->filled('dateFilter')) {
+                $dateFilter = $request->dateFilter;
+                $now = now();
+                switch ($dateFilter) {
+                    case 'today':
+                        $query->whereDate('created_at', $now->toDateString());
+                        break;
+                    case 'week':
+                        $query->whereBetween('created_at', [$now->startOfWeek()->toDateString(), $now->endOfWeek()->toDateString()]);
+                        break;
+                    case 'month':
+                        $query->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year);
+                        break;
+                    case 'year':
+                        $query->whereYear('created_at', $now->year);
+                        break;
+                }
+            }
+
+            // Get customers with pagination (matches Livewire pagination)
+            $customers = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+            $total = $customers->total();
 
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => true,
-                    'customers' => $customers
+                    'customers' => $customers,
+                    'total' => $total
                 ]);
             }
 
             return view('admin.customers', [
-                'customers' => $customers
+                'customers' => $customers,
+                'total' => $total
             ]);
         } catch (\Exception $e) {
             // Error handling
@@ -436,7 +476,8 @@ class AdminController extends Controller
             }
 
             return view('admin.customers', [
-                'customers' => [],
+                'customers' => collect([]),
+                'total' => 0,
                 'error' => 'An error occurred while retrieving customers.'
             ]);
         }

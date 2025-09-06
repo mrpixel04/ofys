@@ -1,3 +1,3 @@
 <x-admin-layout>
-    <livewire:admin.providers-list />
+    @include('admin.simple-providers-basic')
 </x-admin-layout>
