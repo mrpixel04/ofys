@@ -40,7 +40,6 @@
             <!-- Custom JS -->
             <script defer src="{{ asset('js/app.js') }}"></script>
         @endif
-        @livewireStyles
     </head>
     <body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
         <!-- Header -->

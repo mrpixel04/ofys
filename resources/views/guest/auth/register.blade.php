@@ -80,7 +80,7 @@
                     <p class="mt-2 text-gray-600">Atau <a href="{{ route('login') }}" class="text-yellow-500 hover:text-yellow-600 font-medium">log masuk ke akaun sedia ada</a></p>
                 </div>
 
-                @include('auth.register-form_livewire_removed')
+                @include('guest.auth.register-form_livewire_removed')
             </div>
         </div>
     </div>

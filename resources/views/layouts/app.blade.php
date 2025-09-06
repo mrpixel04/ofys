@@ -35,7 +35,6 @@
             <link href="{{ vite_asset('resources/css/app.css') }}" rel="stylesheet">
             <script src="{{ vite_asset('resources/js/app.js') }}" defer></script>
         @endif
-        @livewireStyles
     </head>
     <body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
         <!-- Header -->
