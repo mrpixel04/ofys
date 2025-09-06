@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Provider;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Activity;
 use App\Models\Booking;
@@ -72,7 +73,10 @@ class ProviderController extends Controller
      */
     public function shopInfo()
     {
-        return view('provider.shop-info');
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        return view('provider.shop-info', compact('shopInfo'));
     }
 
     /**
@@ -83,7 +87,71 @@ class ProviderController extends Controller
      */
     public function updateShopInfo(Request $request)
     {
-        // To be implemented
+        $user = Auth::user();
+
+        $request->validate([
+            'company_name' => 'required|string|max:255',
+            'company_email' => 'required|email|max:255',
+            'description' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'website' => 'nullable|url|max:255',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:100',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'shop_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Get existing shop info to preserve images if not updated
+        $existingShopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        // Prepare data for update
+        $updateData = [
+            'company_name' => $request->company_name,
+            'company_email' => $request->company_email,
+            'description' => $request->description,
+            'phone' => $request->phone,
+            'website' => $request->website,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'postal_code' => $request->postal_code,
+            'country' => $request->country ?? 'Malaysia',
+        ];
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            // Delete old logo if exists
+            if ($existingShopInfo && $existingShopInfo->logo) {
+                Storage::disk('public')->delete($existingShopInfo->logo);
+            }
+
+            $logoFile = $request->file('logo');
+            $logoName = time() . '_' . $user->id . '_logo.' . $logoFile->getClientOriginalExtension();
+            $logoPath = $logoFile->storeAs('logos', $logoName, 'public');
+            $updateData['logo'] = $logoPath;
+        }
+
+        // Handle shop image upload
+        if ($request->hasFile('shop_image')) {
+            // Delete old shop image if exists
+            if ($existingShopInfo && $existingShopInfo->shop_image) {
+                Storage::disk('public')->delete($existingShopInfo->shop_image);
+            }
+
+            $shopImageFile = $request->file('shop_image');
+            $shopImageName = time() . '_' . $user->id . '_shop.' . $shopImageFile->getClientOriginalExtension();
+            $shopImagePath = $shopImageFile->storeAs('shop_images', $shopImageName, 'public');
+            $updateData['shop_image'] = $shopImagePath;
+        }
+
+        $shopInfo = ShopInfo::updateOrCreate(
+            ['user_id' => $user->id],
+            $updateData
+        );
+
         return redirect()->route('provider.shop-info')->with('success', 'Shop information updated successfully.');
     }
 

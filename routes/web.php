@@ -114,30 +114,30 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
 });
 
 // Provider Routes
-Route::middleware(['auth', 'verified', 'role:provider'])->name('provider.')->prefix('provider')->group(function () {
+Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->prefix('provider')->group(function () {
     // Dashboard
     Route::get('/', [ProviderController::class, 'dashboard'])->name('dashboard');
 
     // Profile
-    Route::get('/profile', [ProviderController::class, 'showProfile'])->name('profile');
-    Route::get('/simple-profile', [ProviderController::class, 'showProfile'])->name('simple-profile');
+    Route::get('/profile', [ProviderController::class, 'profile'])->name('profile');
+    Route::get('/simple-profile', [ProviderController::class, 'profile'])->name('simple-profile');
     Route::post('/profile/update', [ProviderController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/password', [ProviderController::class, 'updatePassword'])->name('password.update');
 
     // Shop Info
-    Route::get('/shop-info', [ProviderController::class, 'showShopInfo'])->name('shop-info');
+    Route::get('/shop-info', [ProviderController::class, 'shopInfo'])->name('shop-info');
     Route::post('/shop-info', [ProviderController::class, 'updateShopInfo'])->name('shop-info.update');
 
     // Activities
-    Route::get('/activities', [ProviderController::class, 'showActivities'])->name('activities');
-    Route::get('/simple-activities', [ProviderController::class, 'showActivities'])->name('simple-activities');
+    Route::get('/activities', [ProviderController::class, 'activities'])->name('activities');
+    Route::get('/simple-activities', [ProviderController::class, 'simpleActivities'])->name('simple-activities');
     Route::get('/activities/create', [ProviderController::class, 'createActivity'])->name('activities.create');
     Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
     Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
     Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
 
     // Bookings
-    Route::get('/bookings', [ProviderController::class, 'showBookings'])->name('bookings');
+    Route::get('/bookings', [ProviderController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [ProviderController::class, 'showBooking'])->name('bookings.show');
     Route::post('/bookings/{booking}/status', [ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
 
