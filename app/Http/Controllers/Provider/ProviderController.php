@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Provider;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Activity;
+use App\Models\ActivityLot;
 use App\Models\Booking;
 use App\Models\ShopInfo;
 use Illuminate\Http\Request;
@@ -276,7 +277,10 @@ class ProviderController extends Controller
      */
     public function createActivity()
     {
-        return view('provider.activities.create');
+        $activityTypes = Activity::getActivityTypes();
+        $priceTypes = Activity::getPriceTypes();
+        $states = Activity::getMalaysianStates();
+        return view('provider.activities.create', compact('activityTypes','priceTypes','states'));
     }
 
     /**
@@ -302,6 +306,95 @@ class ProviderController extends Controller
     {
         $activity = Activity::findOrFail($id);
         return view('provider.activities.edit', compact('activity'));
+    }
+
+    /**
+     * Store a newly created activity.
+     */
+    public function storeActivity(Request $request)
+    {
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->firstOrFail();
+
+        $validated = $request->validate([
+            'activity_type' => ['required','string'],
+            'name' => ['required','string','max:255'],
+            'description' => ['nullable','string'],
+            'location' => ['nullable','string','max:255'],
+            'state' => ['nullable','string','max:255'],
+            'requirements' => ['nullable','string'],
+            'min_participants' => ['required','integer','min:1'],
+            'max_participants' => ['nullable','integer','gte:min_participants'],
+            'duration_days' => ['nullable','integer','min:0','max:365'],
+            'duration_hours' => ['nullable','integer','min:0','max:23'],
+            'price' => ['required','numeric','min:0'],
+            'price_type' => ['required','string'],
+            'includes_gear' => ['nullable','boolean'],
+            'included_items' => ['nullable','array'],
+            'excluded_items' => ['nullable','array'],
+            'amenities' => ['nullable','array'],
+            'rules' => ['nullable','array'],
+            'images.*' => ['nullable','image','mimes:jpeg,png,jpg','max:4096'],
+            // Lots
+            'lots' => ['nullable','array'],
+            'lots.*.name' => ['required_with:lots','string','max:255'],
+            'lots.*.capacity' => ['required_with:lots','integer','min:1'],
+        ]);
+
+        // Upload images
+        $imagePaths = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $safeName = time() . '_' . $user->id . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $imagePaths[] = $image->storeAs('activity_images', $safeName, 'public');
+            }
+        }
+
+        // Convert days and hours to minutes
+        $durationMinutes = null;
+        if (isset($validated['duration_days']) || isset($validated['duration_hours'])) {
+            $days = (int)($validated['duration_days'] ?? 0);
+            $hours = (int)($validated['duration_hours'] ?? 0);
+            $durationMinutes = ($days * 24 * 60) + ($hours * 60);
+        }
+
+        $activity = Activity::create([
+            'shop_info_id' => $shopInfo->id,
+            'activity_type' => $validated['activity_type'],
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'state' => $validated['state'] ?? null,
+            'requirements' => $validated['requirements'] ?? null,
+            'min_participants' => $validated['min_participants'],
+            'max_participants' => $validated['max_participants'] ?? null,
+            'duration_minutes' => $durationMinutes,
+            'price' => $validated['price'],
+            'price_type' => $validated['price_type'],
+            'includes_gear' => (bool)($validated['includes_gear'] ?? false),
+            'included_items' => $validated['included_items'] ?? [],
+            'excluded_items' => $validated['excluded_items'] ?? [],
+            'amenities' => $validated['amenities'] ?? [],
+            'rules' => $validated['rules'] ?? [],
+            'images' => $imagePaths,
+            'is_active' => true,
+        ]);
+
+        // Create lots if provided and type requires
+        if (!empty($validated['lots']) && in_array($validated['activity_type'], ['camping','glamping'])) {
+            foreach ($validated['lots'] as $lot) {
+                ActivityLot::create([
+                    'activity_id' => $activity->id,
+                    'provider_id' => $user->id,
+                    'name' => $lot['name'],
+                    'description' => $lot['description'] ?? null,
+                    'capacity' => $lot['capacity'],
+                    'is_available' => true,
+                ]);
+            }
+        }
+
+        return redirect()->route('provider.activities')->with('success', 'Activity created successfully');
     }
 
     /**

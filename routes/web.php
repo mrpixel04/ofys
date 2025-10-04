@@ -132,6 +132,7 @@ Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->pre
     Route::get('/activities', [ProviderController::class, 'activities'])->name('activities');
     Route::get('/simple-activities', [ProviderController::class, 'simpleActivities'])->name('simple-activities');
     Route::get('/activities/create', [ProviderController::class, 'createActivity'])->name('activities.create');
+    Route::post('/activities', [ProviderController::class, 'storeActivity'])->name('activities.store');
     Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
     Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
     Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
