@@ -13,6 +13,12 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # IMPORTANT: Fix for provider URLs - add this above other rules
+    RewriteCond %{REQUEST_URI} ^/provider/
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
     # FORCE ASSETS THROUGH PUBLIC PATH: Redirect asset requests without /public/ to include it
     RewriteCond %{REQUEST_URI} ^/build/assets/
     RewriteRule ^build/(.*)$ /public/build/$1 [L,R=301]
@@ -24,6 +30,16 @@
     RewriteCond %{REQUEST_URI} ^/js/
     RewriteRule ^js/(.*)$ /public/js/$1 [L,R=301]
 
+    # Fix for provider section asset URLs
+    RewriteCond %{REQUEST_URI} ^/provider/css/
+    RewriteRule ^provider/css/(.*)$ /public/provider/css/$1 [L,R=301]
+
+    RewriteCond %{REQUEST_URI} ^/provider/js/
+    RewriteRule ^provider/js/(.*)$ /public/provider/js/$1 [L,R=301]
+
+    RewriteCond %{REQUEST_URI} ^/provider/images/
+    RewriteRule ^provider/images/(.*)$ /public/provider/images/$1 [L,R=301]
+
     # Fix for js/app.js and css/app.css - use asset proxy
     RewriteRule ^public/js/app\.js$ /asset-proxy.php [L]
     RewriteRule ^public/css/app\.css$ /asset-proxy.php [L]
@@ -32,8 +48,8 @@
     RewriteRule ^storage/(.*)$ /public/storage/$1 [L,R=301]
     RewriteRule ^public/storage/(.*)$ /asset-proxy.php?storage=$1 [L]
 
-    # Direct access to test files
-    RewriteRule ^(simple-test|path-test|asset-proxy)\.php$ - [L]
+    # Direct access to diagnostic files
+    RewriteRule ^(simple-test|path-test|asset-proxy|server-diagnostic)\.php$ - [L]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d

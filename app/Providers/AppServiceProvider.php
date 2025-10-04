@@ -3,9 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
-use App\Livewire\Provider\Profile;
-use App\Livewire\Provider\EditProfile;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 
@@ -24,9 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Register Livewire Components
-        Livewire::component('provider.profile', Profile::class);
-        Livewire::component('provider.edit-profile', EditProfile::class);
 
         // Force HTTPS in production
         if (config('app.env') === 'production') {

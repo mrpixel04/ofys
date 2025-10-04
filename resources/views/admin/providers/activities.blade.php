@@ -216,7 +216,7 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
+        </div>
 
             <!-- Pagination -->
             <div class="mt-6">

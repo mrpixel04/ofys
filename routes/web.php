@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\Guest\ActivityController;
+use App\Http\Controllers\Guest\AuthController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Provider\ProviderController;
@@ -12,7 +12,6 @@ use App\Http\Controllers\Customer\BookingController as CustomerBookingController
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
-use App\Livewire\HomeActivities;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 
 /*
@@ -28,7 +27,7 @@ use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 
 // Home page - using the simple jQuery version
 Route::get('/', function () {
-    return view('simple-welcome');
+    return view('guest.simple-welcome');
 })->name('home');
 
 // Original Livewire home
@@ -36,7 +35,7 @@ Route::get('/livewire-home', [HomeController::class, 'index'])->name('livewire.h
 
 // Keeping this route for reference
 Route::get('/welcome', function () {
-    return view('welcome');
+    return view('guest.welcome');
 });
 
 // Activities routes (these don't require authentication)
@@ -44,10 +43,14 @@ Route::get('/activities', [ActivityController::class, 'index'])->name('activitie
 Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
 
 // About page
-Route::view('/about', 'about')->name('about');
+Route::view('/about', 'guest.about')->name('about');
 
 // Contact page
-Route::view('/contact', 'contact')->name('contact');
+Route::view('/contact', 'guest.contact')->name('contact');
+
+// Legal pages (dummy content to be customized later)
+Route::view('/terms', 'guest.legal.terms')->name('legal.terms');
+Route::view('/privacy', 'guest.legal.privacy')->name('legal.privacy');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -111,31 +114,38 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
 });
 
 // Provider Routes
-Route::middleware(['auth', 'role:provider'])->prefix('provider')->name('provider.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->prefix('provider')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [ProviderController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', [ProviderController::class, 'dashboard'])->name('dashboard');
 
     // Profile
-    Route::get('/profile', [ProviderController::class, 'showProfile'])->name('profile');
-    Route::put('/profile', [ProviderController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/profile', [ProviderController::class, 'profile'])->name('profile');
+    Route::get('/simple-profile', [ProviderController::class, 'profile'])->name('simple-profile');
+    Route::post('/profile/update', [ProviderController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/password', [ProviderController::class, 'updatePassword'])->name('password.update');
 
     // Shop Info
-    Route::get('/shop-info', [ProviderController::class, 'showShopInfo'])->name('shop-info');
-    Route::put('/shop-info', [ProviderController::class, 'updateShopInfo'])->name('shop-info.update');
+    Route::get('/shop-info', [ProviderController::class, 'shopInfo'])->name('shop-info');
+    Route::post('/shop-info', [ProviderController::class, 'updateShopInfo'])->name('shop-info.update');
 
-    // Bookings management
-    Route::get('/bookings', [ProviderController::class, 'showBookings'])->name('bookings');
+    // Activities
+    Route::get('/activities', [ProviderController::class, 'activities'])->name('activities');
+    Route::get('/simple-activities', [ProviderController::class, 'simpleActivities'])->name('simple-activities');
+    Route::get('/activities/create', [ProviderController::class, 'createActivity'])->name('activities.create');
+    Route::post('/activities', [ProviderController::class, 'storeActivity'])->name('activities.store');
+    Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
+    Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
+    Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
+
+    // Bookings
+    Route::get('/bookings', [ProviderController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [ProviderController::class, 'showBooking'])->name('bookings.show');
     Route::post('/bookings/{booking}/status', [ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
 
-    // Activities management
-    Route::get('/activities', [ProviderController::class, 'showActivities'])->name('activities');
-    Route::get('/activities/create', [ProviderController::class, 'createActivity'])->name('activities.create');
-    Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
-    Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
-
-    // Pricing management
-    Route::get('/pricing', [ProviderController::class, 'showPricing'])->name('pricing');
+    // Manually add a redirect to ensure we're handling this properly
+    Route::get('/bookings/{booking}/details', function($booking) {
+        return redirect()->route('provider.bookings.show', $booking);
+    })->name('bookings.details');
 });
 
 // Customer Routes

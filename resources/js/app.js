@@ -1,73 +1,6 @@
 // Bootstrap
 import './bootstrap';
 
-// Make sure Alpine is disabled first
-window.Alpine = {
-    // Empty placeholder to prevent Livewire from initializing Alpine
-    version: 'disabled',
-    start: function() {
-        console.log('Alpine initialization prevented (app.js)');
-        return this;
-    },
-    plugin: function() {
-        console.log('Alpine plugin loading prevented (app.js)');
-        return this;
-    },
-    directive: function() {
-        console.log('Alpine directive prevented (app.js)');
-        return this;
-    },
-    store: function() {
-        console.log('Alpine store prevented (app.js)');
-        return this;
-    },
-    data: function() {
-        console.log('Alpine data prevented (app.js)');
-        return function() {};
-    },
-    // Prevent findClosest
-    findClosest: function() {
-        console.log('Alpine findClosest prevented (app.js)');
-        return null;
-    }
-};
-
-// Initialize Livewire from Laravel with Alpine disabled
-import { Livewire } from '../../vendor/livewire/livewire/dist/livewire.esm';
-
-// Make Livewire available globally
-window.Livewire = Livewire;
-
-// Disable Alpine integration in Livewire
-if (Livewire.hook) {
-    Livewire.hook('request', ({ options }) => {
-        if (options.updateQueue) {
-            options.updateQueue = options.updateQueue.filter(update => {
-                // Filter out any Alpine-related updates
-                if (update.type && update.type.includes('alpine')) {
-                    console.log('Filtered out Alpine update:', update);
-                    return false;
-                }
-                return true;
-            });
-        }
-    });
-
-    // Hook to prevent Alpine initialization
-    Livewire.hook('element.initialized', (el) => {
-        // Make sure Alpine is disabled
-        window.Alpine = window.Alpine || {
-            version: 'disabled',
-            start: function() { return this; },
-            plugin: function() { return this; }
-        };
-    });
-}
-
-// Start Livewire
-console.log('Starting Livewire without Alpine');
-Livewire.start();
-
 // Ensure jQuery is defined globally
 if (typeof jQuery === 'undefined') {
     console.error('jQuery is not loaded! Attempting to use vanilla JS instead.');
@@ -152,6 +85,57 @@ if (typeof jQuery === 'undefined') {
                         return this;
                     }
                 };
+            },
+            prop: function(property, value) {
+                if (value === undefined) {
+                    return elements.length > 0 ? elements[0][property] : null;
+                }
+                elements.forEach(el => el[property] = value);
+                return this;
+            },
+            html: function(value) {
+                if (value === undefined) {
+                    return elements.length > 0 ? elements[0].innerHTML : '';
+                }
+                elements.forEach(el => el.innerHTML = value);
+                return this;
+            },
+            find: function(selector) {
+                const found = [];
+                elements.forEach(el => {
+                    const matches = el.querySelectorAll(selector);
+                    found.push(...matches);
+                });
+                return window.$(found);
+            },
+            submit: function() {
+                elements.forEach(el => {
+                    if (el.tagName === 'FORM') {
+                        el.submit();
+                    }
+                });
+                return this;
+            },
+            fadeOut: function(duration = 500) {
+                elements.forEach(el => {
+                    el.style.transition = `opacity ${duration}ms`;
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.style.display = 'none';
+                    }, duration);
+                });
+                return this;
+            },
+            fadeIn: function(duration = 500) {
+                elements.forEach(el => {
+                    el.style.display = '';
+                    el.style.opacity = '0';
+                    el.style.transition = `opacity ${duration}ms`;
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                    }, 10);
+                });
+                return this;
             }
         };
     };
@@ -170,7 +154,7 @@ if (typeof jQuery === 'undefined') {
 
 // jQuery Implementation for common interactions
 $(document).ready(function() {
-    console.log('Document ready - initializing jQuery functions');
+    console.log('Document ready - initializing jQuery functions (Livewire/Alpine removed)');
 
     // Initialize any dropdowns
     $('.dropdown-toggle').on('click', function(e) {
@@ -230,5 +214,42 @@ $(document).ready(function() {
         $('.mobile-menu').toggleClass('hidden');
         $('.mobile-menu-icon-open').toggleClass('hidden');
         $('.mobile-menu-icon-close').toggleClass('hidden');
+    });
+
+    // Form validation and submission helpers
+    $('form').on('submit', function(e) {
+        const $form = $(this);
+        const $submitBtn = $form.find('button[type="submit"]');
+
+        // Show loading state
+        if ($submitBtn.length) {
+            const originalText = $submitBtn.html();
+            $submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Processing...').prop('disabled', true);
+
+            // Re-enable after 5 seconds (in case of errors)
+            setTimeout(() => {
+                $submitBtn.html(originalText).prop('disabled', false);
+            }, 5000);
+        }
+    });
+
+    // Flash message auto-hide
+    setTimeout(function() {
+        $('.alert, .flash-message').fadeOut(500);
+    }, 5000);
+
+    // Modal helpers
+    $('.modal-trigger').on('click', function() {
+        const modalId = $(this).data('modal');
+        $('#' + modalId).removeClass('hidden');
+    });
+
+    $('.modal-close, .modal-backdrop').on('click', function() {
+        $(this).closest('.modal').addClass('hidden');
+    });
+
+    // Prevent modal from closing when clicking inside
+    $('.modal-content').on('click', function(e) {
+        e.stopPropagation();
     });
 });

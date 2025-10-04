@@ -20,6 +20,15 @@
                     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                         Tentang Kami
                     </a>
+                    @auth
+                        @php($role = Auth::user()->role)
+                        @if(!in_array($role, ['admin','provider','ADMIN','PROVIDER']))
+                            <a href="{{ route('customer.dashboard') }}" class="{{ request()->routeIs('customer.dashboard') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Customer Dashboard
+                            </a>
+                        @endif
+                    @endauth
+
                     <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                         Hubungi
                     </a>
@@ -78,13 +87,11 @@
                                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Admin Dashboard</a>
                             @elseif(Auth::user()->role === 'provider')
                                 <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Provider Dashboard</a>
-                            @else
-                                <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">My Dashboard</a>
                             @endif
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                 @csrf
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Log Out</button>
+                                <button type="button" onclick="confirmLogout('logout-form-desktop')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Log Out</button>
                             </form>
                         </div>
                     </div>
@@ -122,6 +129,15 @@
             <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
                 Tentang Kami
             </a>
+            @auth
+                @php($role = Auth::user()->role)
+                @if(!in_array($role, ['admin','provider','ADMIN','PROVIDER']))
+                    <a href="{{ route('customer.dashboard') }}" class="{{ request()->routeIs('customer.dashboard') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                        Customer Dashboard
+                    </a>
+                @endif
+            @endauth
+
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
                 Hubungi
             </a>
@@ -153,16 +169,69 @@
                         <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Admin Dashboard</a>
                     @elseif(Auth::user()->role === 'provider')
                         <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Provider Dashboard</a>
-                    @else
-                        <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">My Dashboard</a>
                     @endif
                     <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Settings</a>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                         @csrf
-                        <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Log Out</button>
+                        <button type="button" onclick="confirmLogout('logout-form-mobile')" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Log Out</button>
                     </form>
                 </div>
             @endguest
         </div>
     </div>
 </header>
+
+<!-- Logout Confirmation Modal -->
+<div id="logout-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mt-2">Confirm Logout</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">
+                    Are you sure you want to log out? You will need to sign in again to access your account.
+                </p>
+            </div>
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="cancel-logout" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Cancel
+                </button>
+                <button id="confirm-logout" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Yes, Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentLogoutForm = null;
+
+    function confirmLogout(formId) {
+        currentLogoutForm = document.getElementById(formId);
+        document.getElementById('logout-modal').classList.remove('hidden');
+    }
+
+    document.getElementById('confirm-logout').addEventListener('click', function() {
+        if (currentLogoutForm) {
+            currentLogoutForm.submit();
+        }
+    });
+
+    document.getElementById('cancel-logout').addEventListener('click', function() {
+        document.getElementById('logout-modal').classList.add('hidden');
+        currentLogoutForm = null;
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('logout-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.add('hidden');
+            currentLogoutForm = null;
+        }
+    });
+</script>

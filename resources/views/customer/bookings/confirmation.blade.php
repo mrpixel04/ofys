@@ -1,19 +1,5 @@
 <x-app-layout>
-    <!-- Add Alpine.js script for accordion -->
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
 
-    <script>
-        window.paymentAccordion = function() {
-            return {
-                activePanel: null,
-                setActivePanel(panel) {
-                    this.activePanel = this.activePanel === panel ? null : panel;
-                }
-            }
-        }
-    </script>
 
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -129,7 +115,7 @@
 
                             <!-- Payment Options -->
                             @if($booking->payment_status !== 'paid' && $booking->status !== 'cancelled')
-                            <div x-data="paymentAccordion()">
+                            <div class="js-accordion">
                                 <h3 class="text-base font-medium text-gray-900 mb-3">Payment Options</h3>
 
                                 <!-- Payment Method Selection -->
@@ -137,14 +123,14 @@
                                     <!-- Option 1: Online Transfer -->
                                     <div class="payment-option border-b border-gray-200">
                                         <button type="button"
-                                                @click="setActivePanel('transfer')"
-                                                class="w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none">
+                                                class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
+                                                data-target="transfer">
                                             <span class="font-medium text-gray-800">Bank Transfer</span>
-                                            <svg :class="{'rotate-180': activePanel === 'transfer'}" class="h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                        <div x-show="activePanel === 'transfer'" x-cloak class="px-4 pb-4">
+                                        <div class="js-accordion-panel hidden px-4 pb-4" data-panel="transfer">
                                             <div class="bg-gray-50 p-3 rounded-md mb-3">
                                                 <p class="text-sm text-gray-600 mb-1"><strong>Bank:</strong> Maybank</p>
                                                 <p class="text-sm text-gray-600 mb-1"><strong>Account Number:</strong> 1234 5678 9012</p>
@@ -170,14 +156,14 @@
                                     <!-- Option 2: Payment Gateway -->
                                     <div class="payment-option border-b border-gray-200">
                                         <button type="button"
-                                                @click="setActivePanel('online')"
-                                                class="w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none">
+                                                class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
+                                                data-target="online">
                                             <span class="font-medium text-gray-800">Online Payment</span>
-                                            <svg :class="{'rotate-180': activePanel === 'online'}" class="h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                        <div x-show="activePanel === 'online'" x-cloak class="px-4 pb-4">
+                                        <div class="js-accordion-panel hidden px-4 pb-4" data-panel="online">
                                             <p class="text-sm text-gray-600 mb-3">Pay securely using our online payment gateway.</p>
                                             <a href="{{ route('customer.bookings.payment.online', $booking->id) }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                                 Proceed to Payment
@@ -188,14 +174,14 @@
                                     <!-- Option 3: Pay at Venue -->
                                     <div class="payment-option">
                                         <button type="button"
-                                                @click="setActivePanel('cash')"
-                                                class="w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none">
+                                                class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
+                                                data-target="cash">
                                             <span class="font-medium text-gray-800">Manual Payment (Cash)</span>
-                                            <svg :class="{'rotate-180': activePanel === 'cash'}" class="h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                        <div x-show="activePanel === 'cash'" x-cloak class="px-4 pb-4">
+                                        <div class="js-accordion-panel hidden px-4 pb-4" data-panel="cash">
                                             <p class="text-sm text-gray-600 mb-3">Pay with cash at the venue before your activity starts.</p>
                                             <form action="{{ route('customer.bookings.payment.cash', $booking->id) }}" method="POST">
                                                 @csrf
@@ -234,4 +220,18 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.js-accordion').each(function() {
+                const $container = $(this);
+                $container.on('click', '.js-accordion-toggle', function() {
+                    const target = $(this).data('target');
+                    $container.find('.js-accordion-panel').addClass('hidden');
+                    $container.find('.js-accordion-arrow').removeClass('transform rotate-180');
+                    $container.find(`.js-accordion-panel[data-panel="${target}"]`).toggleClass('hidden');
+                    $(this).find('.js-accordion-arrow').toggleClass('transform rotate-180');
+                });
+            });
+        });
+    </script>
 </x-app-layout>

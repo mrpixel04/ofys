@@ -15,7 +15,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Livewire Styles -->
-    @livewireStyles
 </head>
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen flex">
@@ -36,13 +35,13 @@
                 </a>
 
                 <!-- Providers Dropdown -->
-                <div x-data="{ open: {{ request()->routeIs('admin.providers*') ? 'true' : 'false' }} }">
-                    <button @click="open = !open" class="flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers*') ? 'bg-purple-700/50 shadow-md' : '' }}">
+                <div class="providers-dropdown">
+                    <button class="providers-dropdown-toggle flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers*') ? 'bg-purple-700/50 shadow-md' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         {{ __('admin.providers') }}
-                        <svg class="w-4 h-4 ml-auto transition-transform duration-200" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="w-4 h-4 ml-auto transition-transform duration-200 providers-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" class="pl-4 pr-2 mt-2 space-y-1 rounded-md">
+                    <div class="providers-dropdown-content pl-4 pr-2 mt-2 space-y-1 rounded-md {{ request()->routeIs('admin.providers*') ? '' : 'hidden' }}">
                         <a href="{{ route('admin.providers') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers') && !request()->routeIs('admin.providers.activities') ? 'bg-purple-600/50 shadow-sm' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             {{ __('admin.providers') }}
@@ -60,13 +59,13 @@
                 </a>
 
                 <!-- Settings Dropdown -->
-                <div x-data="{ open: {{ request()->routeIs('admin.settings*') || request()->routeIs('admin.profile') ? 'true' : 'false' }} }">
-                    <button @click="open = !open" class="flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.settings*') || request()->routeIs('admin.profile') ? 'bg-purple-700/50 shadow-md' : '' }}">
+                <div class="settings-dropdown">
+                    <button class="settings-dropdown-toggle flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.settings*') || request()->routeIs('admin.profile') ? 'bg-purple-700/50 shadow-md' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         {{ __('admin.settings') }}
-                        <svg class="w-4 h-4 ml-auto transition-transform duration-200" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="w-4 h-4 ml-auto transition-transform duration-200 settings-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" class="pl-4 pr-2 mt-2 space-y-1 rounded-md">
+                    <div class="settings-dropdown-content pl-4 pr-2 mt-2 space-y-1 rounded-md {{ request()->routeIs('admin.settings*') || request()->routeIs('admin.profile') ? '' : 'hidden' }}">
                         <a href="{{ route('admin.settings') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.settings') && !request()->routeIs('admin.profile') ? 'bg-purple-600/50 shadow-sm' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065"></path></svg>
                             {{ __('admin.system_settings') }}
@@ -118,10 +117,35 @@
         </div>
     </div>
 
-    <!-- Livewire Scripts -->
-    @livewireScripts
+    @stack('scripts')
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Admin dropdown functionality
+            $('.providers-dropdown-toggle').on('click', function(e) {
+                e.preventDefault();
+                $('.providers-dropdown-content').toggleClass('hidden');
+                $('.providers-dropdown-arrow').toggleClass('transform rotate-180');
+            });
+
+            $('.settings-dropdown-toggle').on('click', function(e) {
+                e.preventDefault();
+                $('.settings-dropdown-content').toggleClass('hidden');
+                $('.settings-dropdown-arrow').toggleClass('transform rotate-180');
+            });
+
+            // Close dropdowns when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.providers-dropdown').length) {
+                    $('.providers-dropdown-content').addClass('hidden');
+                    $('.providers-dropdown-arrow').removeClass('transform rotate-180');
+                }
+                if (!$(e.target).closest('.settings-dropdown').length) {
+                    $('.settings-dropdown-content').addClass('hidden');
+                    $('.settings-dropdown-arrow').removeClass('transform rotate-180');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
