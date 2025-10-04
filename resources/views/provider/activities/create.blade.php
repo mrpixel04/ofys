@@ -90,7 +90,7 @@
                 <div class="mt-8">
                     <label for="description" class="block text-sm font-semibold text-gray-700 mb-3">Description</label>
                     <textarea name="description" id="description" rows="5"
-                              class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 text-gray-900 resize-none"
+                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-teal-100 focus:border-teal-500 transition-all duration-200 text-gray-900 resize-none"
                               placeholder="Describe your amazing activity in detail...">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-red-500 text-sm mt-2 font-medium">{{ $message }}</p>
@@ -468,10 +468,10 @@ $(document).ready(function() {
             reader.onload = function(e) {
                 const imageDiv = $(`
                     <div class="relative group">
-                        <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 group-hover:border-blue-400 transition-colors">
+                        <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 group-hover:border-teal-400 transition-colors">
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-lg"></div>
                         <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded">${file.name.substring(0, 10)}...</span>
+                            <span class="bg-teal-500 text-white text-xs px-2 py-1 rounded">${file.name.substring(0, 10)}...</span>
                         </div>
                     </div>
                 `);

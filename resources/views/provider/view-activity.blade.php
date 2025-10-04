@@ -4,7 +4,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Page Header -->
-        <div class="bg-gradient-to-r from-teal-600 to-blue-500 px-6 py-4">
+        <div class="bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-4">
             <div class="flex items-center justify-between">
                 <h1 class="text-xl font-bold text-white">
                     Activity Details
@@ -20,7 +20,7 @@
 
         <div class="p-6">
             <!-- Activity Header -->
-            <div class="bg-gradient-to-r from-teal-500 to-blue-500 p-4 rounded-lg text-white mb-6">
+            <div class="bg-gradient-to-r from-teal-500 to-emerald-600 p-4 rounded-lg text-white mb-6">
                 <h2 class="text-2xl font-bold mb-1">{{ $activity->name }}</h2>
                 <div class="flex items-center text-teal-100">
                     <span class="px-2 py-1 bg-teal-800 bg-opacity-50 rounded-full text-xs font-semibold mr-2">

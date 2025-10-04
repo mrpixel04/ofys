@@ -2,8 +2,21 @@
 
 @section('header', 'Shop Information')
 
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+            ['label' => 'Shop Information'],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Keep your provider profile polished so customers know exactly who they are booking.
+@endsection
+
 @section('content')
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Header Section -->
         <div class="bg-gradient-to-r from-teal-500 to-emerald-600 rounded-t-xl p-8 text-white">
             <div class="flex items-center">

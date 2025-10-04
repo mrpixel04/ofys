@@ -2,8 +2,21 @@
 
 @section('header', 'Bookings Management')
 
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+            ['label' => 'Bookings'],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Track reservations, update booking statuses, and keep customers informed in real time.
+@endsection
+
 @section('content')
-    <div class="p-6">
+    <div class="space-y-8">
         @if(session('success'))
         <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
             <div class="flex items-center">
@@ -35,8 +48,8 @@
                         <p class="text-gray-500 text-sm font-medium">Total Paid Bookings</p>
                         <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $totalBookings ?? 0 }}</h3>
                     </div>
-                    <div class="p-3 bg-indigo-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="p-3 bg-teal-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
@@ -55,8 +68,8 @@
                         <p class="text-gray-500 text-sm font-medium">Pending</p>
                         <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $pendingBookings ?? 0 }}</h3>
                     </div>
-                    <div class="p-3 bg-yellow-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="p-3 bg-amber-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
@@ -75,8 +88,8 @@
                         <p class="text-gray-500 text-sm font-medium">Confirmed</p>
                         <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $confirmedBookings ?? 0 }}</h3>
                     </div>
-                    <div class="p-3 bg-green-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="p-3 bg-emerald-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
@@ -95,8 +108,8 @@
                         <p class="text-gray-500 text-sm font-medium">Completed</p>
                         <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ $completedBookings ?? 0 }}</h3>
                     </div>
-                    <div class="p-3 bg-blue-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="p-3 bg-teal-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
@@ -115,7 +128,7 @@
                 <h2 class="text-lg font-medium text-gray-900 mb-2 md:mb-0">Bookings</h2>
                 <div class="flex flex-col sm:flex-row gap-2">
                     <div class="relative">
-                        <input id="search-bookings" type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Search bookings...">
+                        <input id="search-bookings" type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Search bookings...">
                         <div class="absolute left-3 top-2.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -123,7 +136,7 @@
                         </div>
                     </div>
                     <div class="relative">
-                        <select id="status-filter" class="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <select id="status-filter" class="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500">
                             <option value="">All Status</option>
                             <option value="pending">Pending</option>
                             <option value="confirmed">Confirmed</option>
@@ -195,8 +208,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $booking->booking_reference ?? ('BK-' . str_pad($booking->id, 4, '0', STR_PAD_LEFT)) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="h-8 w-8 rounded-full bg-indigo-100 flex-shrink-0 mr-3 flex items-center justify-center">
-                                        <span class="text-indigo-800 font-medium text-sm">{{ substr($booking->user->name ?? 'U', 0, 1) }}</span>
+                                    <div class="h-8 w-8 rounded-full bg-teal-100 flex-shrink-0 mr-3 flex items-center justify-center">
+                                        <span class="text-teal-800 font-medium text-sm">{{ substr($booking->user->name ?? 'U', 0, 1) }}</span>
                                     </div>
                                     <div>
                                         <div class="text-sm font-medium text-gray-900">{{ $booking->user->name ?? 'Unknown User' }}</div>
@@ -222,8 +235,8 @@
                                 @endphp
 
                                 @if($booking->activity && in_array($activityType, ['camping', 'glamping']) && $booking->lot)
-                                <div class="text-sm text-blue-600 flex items-center mt-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="text-sm text-teal-600 flex items-center mt-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
                                     {{ $booking->lot->name ?? ('Lot #' . $booking->lot_id) }}
@@ -248,7 +261,7 @@
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                     @if($booking->status === 'pending') bg-yellow-100 text-yellow-800
                                     @elseif($booking->status === 'confirmed') bg-green-100 text-green-800
-                                    @elseif($booking->status === 'completed') bg-blue-100 text-blue-800
+                                    @elseif($booking->status === 'completed') bg-teal-100 text-teal-700
                                     @elseif($booking->status === 'cancelled') bg-red-100 text-red-800
                                     @else bg-gray-100 text-gray-800
                                     @endif">
@@ -257,7 +270,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">RM {{ number_format($booking->total_price ?? 0, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('provider.bookings.show', $booking->id) }}" class="text-blue-600 hover:text-blue-900 flex items-center justify-end">
+                                <a href="{{ route('provider.bookings.show', $booking->id) }}" class="text-teal-600 hover:text-teal-900 flex items-center justify-end">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

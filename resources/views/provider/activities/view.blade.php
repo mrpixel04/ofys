@@ -94,6 +94,34 @@
                     </dd>
                 </div>
 
+                @if($activity->requiresLots() && $activity->lots->count())
+                <div class="bg-gray-50 px-4 py-5 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500 mb-3">Available Lots</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                        <div class="overflow-hidden border border-gray-200 rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Lot</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Capacity</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($activity->lots as $lot)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $lot->name }}</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">{{ $lot->capacity }}</td>
+                                            <td class="px-4 py-3 text-sm text-gray-600">{{ $lot->description ?? '—' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </dd>
+                </div>
+                @endif
+
                 @if($activity->images && count($activity->images) > 0)
                 <div class="bg-gray-50 px-4 py-5 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500 mb-3">Images</dt>

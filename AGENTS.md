@@ -51,6 +51,11 @@ Removed:
 
 ## 📂 PROJECT STRUCTURE
 
+### Provider UI Pattern (New)
+- Provider views extend `layouts.provider.simple-app`, which exposes `breadcrumbs`, `header_subtitle`, and `header_actions` sections so every surface renders with the same header shell.
+- Use the shared breadcrumb include at `resources/views/layouts/partials/breadcrumbs.blade.php` whenever adding provider navigation trails.
+- Keep provider-facing components on the teal/emerald palette introduced in this refactor (cards, badges, CTAs) for visual consistency.
+
 ### Directory Organization (Role-Based)
 
 **Controllers** (`app/Http/Controllers/`)
@@ -516,5 +521,4 @@ git branch                      # List branches
 
 *This is a living document. Update as the project evolves!*
 
-**Last Updated**: October 4, 2025
-
+**Last Updated**: October 5, 2025

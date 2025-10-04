@@ -67,7 +67,7 @@
                             <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
                                 @if($activityType === 'camping') bg-green-100 text-green-800
                                 @elseif($activityType === 'glamping') bg-purple-100 text-purple-800
-                                @elseif($activityType === 'hiking') bg-blue-100 text-blue-800
+                                @elseif($activityType === 'hiking') bg-emerald-100 text-emerald-700
                                 @elseif($activityType === 'water_rafting') bg-cyan-100 text-cyan-800
                                 @elseif($activityType === 'houseboat') bg-orange-100 text-orange-800
                                 @else bg-gray-100 text-gray-800
@@ -146,7 +146,7 @@
                             <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
                                 @if($booking->status === 'pending') bg-yellow-100 text-yellow-800
                                 @elseif($booking->status === 'confirmed') bg-green-100 text-green-800
-                                @elseif($booking->status === 'completed') bg-blue-100 text-blue-800
+                                @elseif($booking->status === 'completed') bg-teal-100 text-teal-700
                                 @elseif($booking->status === 'cancelled') bg-red-100 text-red-800
                                 @else bg-gray-100 text-gray-800
                                 @endif">
@@ -162,9 +162,9 @@
             </div>
 
             <div class="bg-white shadow rounded-lg overflow-hidden mt-6">
-                <div class="p-4 border-b border-gray-200 bg-blue-50">
+                <div class="p-4 border-b border-gray-200 bg-teal-50">
                     <h3 class="text-lg font-medium text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         Customer Information
@@ -172,7 +172,7 @@
                 </div>
                 <div class="p-4">
                     <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 rounded-full h-10 w-10 flex items-center justify-center text-blue-500 mr-3">
+                        <div class="bg-teal-100 rounded-full h-10 w-10 flex items-center justify-center text-teal-500 mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
@@ -197,9 +197,9 @@
         {{-- Update Status --}}
         <div class="md:col-span-1">
             <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="p-4 border-b border-gray-200 bg-indigo-50">
+                <div class="p-4 border-b border-gray-200 bg-teal-50">
                     <h3 class="text-lg font-medium text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Update Status
@@ -210,14 +210,14 @@
                         @csrf
                         <div class="mb-4">
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Booking Status</label>
-                            <select id="status" name="status" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <select id="status" name="status" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                                 <option value="completed" {{ $booking->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                 <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                             </select>
                         </div>
-                        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
                             Update Status
                         </button>
                     </form>

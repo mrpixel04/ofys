@@ -165,4 +165,76 @@ class Activity extends Model
             'wp_putrajaya' => 'Wilayah Persekutuan Putrajaya',
         ];
     }
+
+    public static function getIncludedItemOptions()
+    {
+        return [
+            'tent' => '⛺ Tent',
+            'sleeping_bag' => '🛌 Sleeping Bag',
+            'backpack' => '🎒 Backpack',
+            'hiking_boots' => '🥾 Hiking Boots',
+            'helmet' => '⛑️ Safety Helmet',
+            'life_jacket' => '🦺 Life Jacket',
+            'rope' => '🪢 Climbing Rope',
+            'harness' => '🔗 Safety Harness',
+            'flashlight' => '🔦 Flashlight',
+            'first_aid' => '🏥 First Aid Kit',
+            'water_bottle' => '💧 Water Bottle',
+            'map_compass' => '🧭 Map & Compass',
+            'fishing_gear' => '🎣 Fishing Gear',
+            'camping_chair' => '🪑 Camping Chair',
+            'portable_stove' => '🔥 Portable Stove',
+            'cooler' => '🧊 Cooler Box',
+        ];
+    }
+
+    public static function getExcludedItemOptions()
+    {
+        return [
+            'food' => '🍽️ Food & Meals',
+            'transport' => '🚗 Transportation',
+            'insurance' => '🛡️ Travel Insurance',
+            'personal_items' => '🧳 Personal Items',
+            'alcohol' => '🍺 Alcoholic Drinks',
+            'souvenirs' => '🎁 Souvenirs',
+            'laundry' => '🧺 Laundry Service',
+            'wifi' => '📶 WiFi Access',
+            'tips' => '💰 Tips & Gratuities',
+            'parking' => '🅿️ Parking Fees',
+            'entrance_fees' => '🎫 Entrance Fees',
+            'medical' => '💊 Medical Expenses',
+        ];
+    }
+
+    public static function getAmenityOptions()
+    {
+        return [
+            'wifi' => '📶 WiFi',
+            'parking' => '🅿️ Free Parking',
+            'restroom' => '🚻 Clean Restrooms',
+            'shower' => '🚿 Hot Showers',
+            'restaurant' => '🍴 On-site Restaurant',
+            'shop' => '🛒 Convenience Store',
+            'laundry' => '🧺 Laundry Facilities',
+            'bbq' => '🔥 BBQ Area',
+            'playground' => '🛝 Kids Playground',
+            'pool' => '🏊 Swimming Pool',
+            'gym' => '💪 Fitness Center',
+            'spa' => '🧘 Spa Services',
+        ];
+    }
+
+    public static function getRuleOptions()
+    {
+        return [
+            'no_smoking' => '🚭 No Smoking',
+            'no_pets' => '🐕‍🦺 No Pets Allowed',
+            'no_alcohol' => '🚫 No Alcohol',
+            'quiet_hours' => '🤫 Quiet Hours (10 PM - 6 AM)',
+            'age_restriction' => '🔞 Age Restrictions Apply',
+            'fitness_required' => '💪 Good Physical Fitness Required',
+            'weather_dependent' => '🌤️ Weather Dependent Activity',
+            'advance_booking' => '📅 Advance Booking Required',
+        ];
+    }
 }

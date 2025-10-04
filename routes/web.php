@@ -135,6 +135,7 @@ Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->pre
     Route::post('/activities', [ProviderController::class, 'storeActivity'])->name('activities.store');
     Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
     Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
+    Route::put('/activities/{id}', [ProviderController::class, 'updateActivity'])->name('activities.update');
     Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
 
     // Bookings

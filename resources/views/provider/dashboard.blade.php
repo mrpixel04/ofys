@@ -1,18 +1,43 @@
 @extends('layouts.provider.simple-app')
 
-@section('header', 'Dashboard Overview')
+@section('header', 'Dashboard')
+
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Monitor bookings, services, and growth insights for your outdoor business.
+@endsection
 
 @section('content')
     <!-- Welcome Banner -->
     <div class="bg-gradient-to-r from-teal-500 to-emerald-600 rounded-lg shadow-lg mb-8 overflow-hidden">
         <div class="px-6 py-5 sm:px-8 sm:py-7">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div class="mb-4 md:mb-0">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
                     <h2 class="text-2xl font-bold text-white">Welcome back, {{ $user->name }}!</h2>
                     <p class="mt-1 text-teal-100">Here's an overview of your business performance</p>
                 </div>
 
-
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('provider.shop-info') }}" class="inline-flex items-center gap-2 rounded-md bg-white/90 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4-9 4-9-4zm0 8l9 4 9-4m-9-4v4" />
+                        </svg>
+                        Manage Shop Info
+                    </a>
+                    <a href="{{ route('provider.activities.create') }}" class="inline-flex items-center gap-2 rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Create Activity
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -25,14 +50,14 @@
                     <p class="text-gray-500 text-sm font-medium">Total Bookings</p>
                     <h3 class="text-2xl font-bold mt-2 text-gray-800">{{ $stats['total_bookings'] ?? 0 }}</h3>
                 </div>
-                <div class="p-3 bg-blue-100 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="p-3 bg-teal-100 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
                 </div>
             </div>
             <div class="mt-4">
-                <a href="{{ route('provider.bookings') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                <a href="{{ route('provider.bookings') }}" class="text-sm text-teal-600 hover:text-teal-800 font-medium flex items-center">
                     View all bookings
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -188,10 +213,10 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             @php
                                 $statusClass = [
-                                    'pending' => 'bg-yellow-100 text-yellow-800',
-                                    'confirmed' => 'bg-green-100 text-green-800',
+                                    'pending' => 'bg-amber-100 text-amber-800',
+                                    'confirmed' => 'bg-emerald-100 text-emerald-700',
                                     'cancelled' => 'bg-red-100 text-red-800',
-                                    'completed' => 'bg-blue-100 text-blue-800',
+                                    'completed' => 'bg-teal-100 text-teal-700',
                                 ][$booking->status ?? 'pending'] ?? 'bg-gray-100 text-gray-800';
 
                                 $statusIcon = [
