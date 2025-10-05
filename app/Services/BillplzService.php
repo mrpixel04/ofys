@@ -313,7 +313,7 @@ class BillplzService
     {
         $activity = $booking->activity;
         $description = "Booking for {$activity->name}";
-        
+
         if ($booking->participants > 1) {
             $description .= " ({$booking->participants} participants)";
         }

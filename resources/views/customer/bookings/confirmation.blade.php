@@ -126,7 +126,7 @@
                                         </svg>
                                     </button>
                                 </a>
-                                
+
                                 <div class="bg-white rounded-lg p-4 shadow-sm">
                                     <p class="text-xs text-center text-gray-600 mb-2 font-semibold">Secure Payment Methods Available:</p>
                                     <div class="flex items-center justify-center space-x-4 text-xs text-gray-500">
