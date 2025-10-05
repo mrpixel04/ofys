@@ -29,6 +29,17 @@
    - Removed 20+ test files from `public/` directory
    - Removed temporary directories and SSH keys
    - Project is now clean and production-ready
+8. ✅ **Activities Page Bug Fixes**
+   - Changed button color from blue to yellow (brand consistency)
+   - Fixed view toggle bug (grid/list switching with filters)
+   - Filters now respect current view mode
+   - Fixed results counter to show correct count in both views
+9. ✅ **Home Page Popular Locations Carousel**
+   - Auto-scrolling carousel with 8 Malaysia destinations
+   - Beautiful Unsplash images with gradient overlays
+   - Smooth 40-second animation loop
+   - Parallax hover effects and scale animations
+   - Pause on hover, fade edges, navigation dots
 
 **Color Scheme Standardization:**
 - ✅ Guest pages: Yellow/Blue theme (consistent branding)

@@ -204,7 +204,7 @@
                                         <p class="text-2xl font-bold text-yellow-600">RM {{ number_format($activity->price, 2) }}</p>
                                     </div>
                                     <a href="{{ route('activities.show', $activity->id) }}"
-                                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
+                                       class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
                                         View Details
                                         <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -265,7 +265,7 @@
                                             <p class="text-3xl font-bold text-yellow-600">RM {{ number_format($activity->price, 2) }}</p>
                                         </div>
                                         <a href="{{ route('activities.show', $activity->id) }}"
-                                           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
+                                           class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
                                             View Details
                                             <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -395,6 +395,9 @@
                 $(this).addClass('active');
 
                 $('#activities-container').removeClass('grid-view list-view').addClass(view + '-view');
+
+                // Reapply filters to the new view
+                filterActivities();
             });
 
             // Apply Filters
@@ -409,7 +412,15 @@
                 $('#type-filter').val('');
                 $('#min-price').val('');
                 $('#max-price').val('');
-                $('.activity-card').show();
+
+                // Show all cards for current view only
+                const isGridView = $('#activities-container').hasClass('grid-view');
+                if (isGridView) {
+                    $('.activity-card.grid-card').show();
+                } else {
+                    $('.activity-card.list-card').show();
+                }
+
                 updateResultsCount();
             });
 
@@ -435,7 +446,12 @@
                 const minPrice = parseFloat($('#min-price').val()) || 0;
                 const maxPrice = parseFloat($('#max-price').val()) || Infinity;
 
-                $('.activity-card').each(function() {
+                // Determine current view mode
+                const isGridView = $('#activities-container').hasClass('grid-view');
+                const cardSelector = isGridView ? '.activity-card.grid-card' : '.activity-card.list-card';
+
+                // Filter only the cards for the current view
+                $(cardSelector).each(function() {
                     const $card = $(this);
                     const name = $card.data('name');
                     const cardLocation = $card.data('location');
@@ -486,7 +502,11 @@
             }
 
             function updateResultsCount() {
-                const visibleCount = $('.activity-card.grid-card:visible').length;
+                // Count visible cards based on current view
+                const isGridView = $('#activities-container').hasClass('grid-view');
+                const visibleCount = isGridView
+                    ? $('.activity-card.grid-card:visible').length
+                    : $('.activity-card.list-card:visible').length;
                 $('#results-count').text(visibleCount);
             }
         });

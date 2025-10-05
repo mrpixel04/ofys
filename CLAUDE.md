@@ -37,6 +37,21 @@
    - Removed temporary directories (`temp/`, `css/`, `js/`)
    - Removed root-level test files and SSH keys
    - Project is now clean and production-ready
+9. ✅ **Fixed Activities Page Issues**
+   - Changed "View Details" button from blue to yellow (brand consistency)
+   - Fixed view toggle bug where both grid and list cards showed when filtering
+   - Filter now respects current view mode (grid or list)
+   - View switching now reapplies active filters correctly
+   - Fixed results counter to show correct count in both grid and list views
+10. ✅ **Home Page Popular Locations Redesign** - Stunning auto-scrolling carousel
+   - Beautiful Malaysia destination images from Unsplash
+   - Auto-scrolling animation (40s smooth loop)
+   - Parallax hover effects on cards
+   - Gradient overlays with location names
+   - Pause on hover functionality
+   - 8 popular Malaysian destinations featured
+   - Seamless infinite loop with duplicated cards
+   - Fade gradient edges for professional look
 
 ### Previous Session (October 5, 2025 - Earlier)
 1. ✅ **Unified provider layout framing** – added breadcrumb and subtitle support to `layouts.provider.simple-app` and introduced a shared breadcrumb partial.
@@ -77,7 +92,7 @@ untracked:  database/seeders/ResetPasswordSeeder.php (pre-existing; untouched th
 ```
 
 ### 🔴 STOPPED HERE - CURRENT STATUS (October 4, 2025 - Evening)
-**Last Action**: Project cleanup - Removed all unnecessary deployment and test files
+**Last Action**: Redesigned home page Popular Locations with auto-scrolling carousel
 
 **What Was Just Completed:**
 1. ✅ **Stunning Hero Section** - Gradient yellow background with centered title

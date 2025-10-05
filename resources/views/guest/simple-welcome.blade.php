@@ -183,40 +183,167 @@
         </div>
     </div>
 
-    <!-- Popular Locations Section -->
-    <div class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-extrabold text-gray-900">Popular Locations</h2>
-                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Explore activities in these popular destinations</p>
+    <!-- Popular Locations Section with Auto-Scrolling Carousel -->
+    <div class="py-16 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="text-center">
+                <h2 class="text-base text-yellow-500 font-semibold tracking-wide uppercase">Discover Malaysia</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Popular Destinations
+                </p>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                    Explore breathtaking activities in Malaysia's most stunning locations
+                </p>
             </div>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <!-- Auto-Scrolling Carousel Container -->
+        <div class="relative">
+            <!-- Gradient Overlays for fade effect -->
+            <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+
+            <!-- Scrolling Container -->
+            <div class="locations-carousel flex gap-6 py-4" id="locations-carousel">
                 @php
-                    $popularLocations = DB::table('activities')
-                        ->select('location', DB::raw('count(*) as total'))
-                        ->where('is_active', true)
-                        ->whereNotNull('location')
-                        ->groupBy('location')
-                        ->orderBy('total', 'desc')
-                        ->take(6)
-                        ->pluck('location')
-                        ->toArray();
+                    $destinations = [
+                        [
+                            'name' => 'Langkawi',
+                            'image' => 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Tropical Paradise'
+                        ],
+                        [
+                            'name' => 'Penang',
+                            'image' => 'https://images.unsplash.com/photo-1598963757243-e8d52e8c6f2d?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Heritage & Culture'
+                        ],
+                        [
+                            'name' => 'Cameron Highlands',
+                            'image' => 'https://images.unsplash.com/photo-1563789031959-4c02bcb41319?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Tea Plantations'
+                        ],
+                        [
+                            'name' => 'Kuala Lumpur',
+                            'image' => 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Urban Adventures'
+                        ],
+                        [
+                            'name' => 'Sabah',
+                            'image' => 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Mount Kinabalu'
+                        ],
+                        [
+                            'name' => 'Melaka',
+                            'image' => 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Historic City'
+                        ],
+                        [
+                            'name' => 'Perhentian Islands',
+                            'image' => 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Crystal Clear Waters'
+                        ],
+                        [
+                            'name' => 'Taman Negara',
+                            'image' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&q=80',
+                            'description' => 'Rainforest Trek'
+                        ]
+                    ];
                 @endphp
 
-                @foreach($popularLocations as $location)
-                    <a href="{{ route('activities.index', ['location' => $location]) }}"
-                       class="group bg-gray-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
-                        <div class="aspect-w-1 w-full bg-gray-200 relative">
-                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-all duration-300">
-                                <span class="text-white font-bold text-center px-2">{{ $location }}</span>
+                @foreach($destinations as $destination)
+                    <a href="{{ route('activities.index', ['location' => $destination['name']]) }}"
+                       class="location-card flex-shrink-0 w-80 h-96 relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 group">
+                        <!-- Background Image with Parallax -->
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                             style="background-image: url('{{ $destination['image'] }}');">
+                        </div>
+
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-70 group-hover:opacity-80 transition-opacity duration-300"></div>
+
+                        <!-- Content -->
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <div class="transform transition-transform duration-300 group-hover:translate-y-0 translate-y-2">
+                                <p class="text-sm font-medium text-yellow-400 mb-2">{{ $destination['description'] }}</p>
+                                <h3 class="text-3xl font-bold mb-2">{{ $destination['name'] }}</h3>
+                                <div class="flex items-center text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="mr-2">Explore Activities</span>
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Corner Accent -->
+                        <div class="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                @endforeach
+
+                <!-- Duplicate cards for seamless loop -->
+                @foreach($destinations as $destination)
+                    <a href="{{ route('activities.index', ['location' => $destination['name']]) }}"
+                       class="location-card flex-shrink-0 w-80 h-96 relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 group">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                             style="background-image: url('{{ $destination['image'] }}');">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-70 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <div class="transform transition-transform duration-300 group-hover:translate-y-0 translate-y-2">
+                                <p class="text-sm font-medium text-yellow-400 mb-2">{{ $destination['description'] }}</p>
+                                <h3 class="text-3xl font-bold mb-2">{{ $destination['name'] }}</h3>
+                                <div class="flex items-center text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="mr-2">Explore Activities</span>
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </a>
                 @endforeach
             </div>
         </div>
+
+        <!-- Navigation Dots (Optional) -->
+        <div class="flex justify-center mt-8 gap-2">
+            @for($i = 0; $i < 8; $i++)
+                <div class="w-2 h-2 rounded-full bg-gray-300 hover:bg-yellow-500 transition-colors duration-300 cursor-pointer location-dot" data-index="{{ $i }}"></div>
+            @endfor
+        </div>
     </div>
+
+    <style>
+        .locations-carousel {
+            animation: scroll 40s linear infinite;
+            will-change: transform;
+        }
+
+        .locations-carousel:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-384px * 8 - 1.5rem * 8));
+            }
+        }
+
+        .location-card {
+            cursor: pointer;
+        }
+
+        /* Smooth parallax effect on scroll */
+        @media (prefers-reduced-motion: no-preference) {
+            .location-card {
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        }
+    </style>
 
     <!-- Add JavaScript for search form enhancement -->
     <!-- Ensure jQuery is available on this page for the search/filter UX -->
