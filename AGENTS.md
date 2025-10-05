@@ -40,6 +40,22 @@
    - Smooth 40-second animation loop
    - Parallax hover effects and scale animations
    - Pause on hover, fade edges, navigation dots
+10. ✅ **Hero Section SaaS-Style Animations**
+   - Animated text with slide-up and fade effects
+   - Counter animations for stats (destinations, activities, customers)
+   - Auto-rotating images (5 activities, 10s intervals)
+   - Different animation styles per image (fade, zoom, slide, rotate, scale)
+   - Navigation dots and activity labels
+11. ✅ **Hero Section Height & Layout Fix**
+   - Fixed massive height issue (changed from min-h-screen to 550px)
+   - Fixed left column overflow (proper 50/50 split on large screens)
+   - Centered content vertically with flexbox alignment
+   - Maintained all animations while fixing dimensions
+12. ✅ **Auto-Rotating Marketing Subtitles**
+   - 4 dynamic marketing sentences rotating every 5.5 seconds
+   - Malaysia-focused messaging (Langkawi, Cameron Highlands, etc.)
+   - Highlights core business (outdoor adventures, local providers, verified activities)
+   - Smooth fade transitions for professional look
 
 **Color Scheme Standardization:**
 - ✅ Guest pages: Yellow/Blue theme (consistent branding)

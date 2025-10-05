@@ -1,26 +1,375 @@
 <x-app-layout>
-    <!-- Hero Section with Search Form -->
-    <div class="relative bg-gray-900 overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-gray-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+    <!-- Hero Section with Animated Text and Rotating Images -->
+    <div class="relative bg-gray-900 overflow-hidden" style="height: 550px;">
+        <div class="max-w-7xl mx-auto h-full">
+            <div class="relative z-10 pb-8 bg-gray-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-1/2 lg:pb-28 xl:pb-32 h-full flex items-center">
                 <div class="relative pt-6 px-4 sm:px-6 lg:px-8"></div>
-                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                <main class="mx-auto w-full px-4 sm:px-6 lg:px-8">
                     <div class="sm:text-center lg:text-left">
+                        <!-- Animated Title -->
                         <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-                            <span class="block xl:inline">Welcome to</span>
-                            <span class="block text-yellow-500 xl:inline">OFYS</span>
+                            <span class="block xl:inline hero-text-slide-up opacity-0" style="animation-delay: 0.2s">Welcome to</span>
+                            <span class="block text-yellow-500 xl:inline hero-text-slide-up opacity-0" style="animation-delay: 0.4s">OFYS</span>
                         </h1>
-                        <p class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            Discover amazing local adventures and experiences in Malaysia. Connect with nature, culture, and community through our curated outdoor activities.
-                        </p>
+
+                        <!-- Auto-Rotating Marketing Subtitle -->
+                        <div class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 hero-text-fade-in opacity-0 relative" style="animation-delay: 0.6s; min-height: 80px;">
+                            <p class="marketing-text absolute inset-0 transition-all duration-1000 active">
+                                Discover amazing local adventures and experiences in Malaysia. Connect with nature, culture, and community through our curated outdoor activities.
+                            </p>
+                            <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
+                                From Langkawi's beaches to Cameron Highlands' tea plantations - explore Malaysia's hidden gems with trusted local providers and unforgettable experiences.
+                            </p>
+                            <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
+                                Book authentic Malaysian outdoor adventures - jungle trekking, island hopping, cultural tours, and eco-camping. Your next adventure starts here!
+                            </p>
+                            <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
+                                Join thousands of adventurers discovering Malaysia's natural wonders. Safe, verified activities from passionate local experts across the nation.
+                            </p>
+                        </div>
+
+                        <!-- Animated Stats/Features -->
+                        <div class="mt-8 flex flex-wrap gap-6 sm:justify-center lg:justify-start hero-stats-appear opacity-0" style="animation-delay: 0.8s">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center pulse-scale">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-white counter" data-target="50">0</p>
+                                    <p class="text-sm text-gray-400">Destinations</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center pulse-scale" style="animation-delay: 0.2s">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-white counter" data-target="100">0</p>
+                                    <p class="text-sm text-gray-400">Activities</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center pulse-scale" style="animation-delay: 0.4s">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-white counter" data-target="500">0</p>
+                                    <p class="text-sm text-gray-400">Happy Customers</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
         </div>
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Outdoor adventure">
+
+        <!-- Rotating Images Section -->
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 relative">
+            @php
+                $heroImages = [
+                    [
+                        'url' => 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&h=800&fit=crop&q=80',
+                        'alt' => 'Hiking Adventure',
+                        'title' => 'Hiking'
+                    ],
+                    [
+                        'url' => 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=1200&h=800&fit=crop&q=80',
+                        'alt' => 'Camping Under Stars',
+                        'title' => 'Camping'
+                    ],
+                    [
+                        'url' => 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&h=800&fit=crop&q=80',
+                        'alt' => 'Glamping Experience',
+                        'title' => 'Glamping'
+                    ],
+                    [
+                        'url' => 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=800&fit=crop&q=80',
+                        'alt' => 'Kayaking Adventure',
+                        'title' => 'Kayaking'
+                    ],
+                    [
+                        'url' => 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&q=80',
+                        'alt' => 'Mountain Climbing',
+                        'title' => 'Climbing'
+                    ]
+                ];
+            @endphp
+
+            @foreach($heroImages as $index => $image)
+                <div class="hero-image absolute inset-0 {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                    <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+                         src="{{ $image['url'] }}"
+                         alt="{{ $image['alt'] }}">
+                    <div class="absolute inset-0 bg-gradient-to-l from-transparent to-gray-900/50"></div>
+
+                    <!-- Activity Label -->
+                    <div class="absolute bottom-8 right-8 bg-yellow-500 text-gray-900 px-6 py-3 rounded-full font-bold text-lg shadow-2xl transform transition-all duration-500 activity-label">
+                        {{ $image['title'] }}
+                    </div>
+                </div>
+            @endforeach
+
+            <!-- Image Navigation Dots -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+                @foreach($heroImages as $index => $image)
+                    <button class="hero-dot w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-yellow-500 w-8' : 'bg-white/50 hover:bg-white/80' }}"
+                            data-index="{{ $index }}"></button>
+                @endforeach
+            </div>
         </div>
     </div>
+
+    <style>
+        /* Text Animations */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes statsAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseScale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .hero-text-slide-up {
+            animation: slideUpFade 0.8s ease-out forwards;
+        }
+
+        .hero-text-fade-in {
+            animation: fadeInScale 1s ease-out forwards;
+        }
+
+        .hero-stats-appear {
+            animation: statsAppear 1s ease-out forwards;
+        }
+
+        .pulse-scale {
+            animation: pulseScale 2s ease-in-out infinite;
+        }
+
+        /* Image Rotation Animations */
+        .hero-image {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            pointer-events: none;
+        }
+
+        .hero-image.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Different animation styles for each image */
+        .hero-image[data-index="0"].active {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero-image[data-index="1"].active {
+            animation: zoomIn 2s ease-in-out;
+        }
+
+        .hero-image[data-index="2"].active {
+            animation: slideFromRight 2s ease-in-out;
+        }
+
+        .hero-image[data-index="3"].active {
+            animation: fadeInRotate 2s ease-in-out;
+        }
+
+        .hero-image[data-index="4"].active {
+            animation: scaleUp 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(1.2);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRotate {
+            from {
+                opacity: 0;
+                transform: rotate(-5deg) scale(1.1);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .activity-label {
+            animation: labelSlide 0.5s ease-out 0.5s backwards;
+        }
+
+        @keyframes labelSlide {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Counter Animation
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.ceil(current) + '+';
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + '+';
+                    }
+                };
+
+                setTimeout(() => {
+                    updateCounter();
+                }, 1000);
+            });
+
+            // Marketing Text Rotation (5-6 seconds)
+            const marketingTexts = document.querySelectorAll('.marketing-text');
+            let currentTextIndex = 0;
+
+            function rotateMarketingText() {
+                // Fade out current text
+                marketingTexts[currentTextIndex].classList.remove('active');
+                marketingTexts[currentTextIndex].classList.add('opacity-0');
+
+                // Move to next text
+                currentTextIndex = (currentTextIndex + 1) % marketingTexts.length;
+
+                // Fade in next text
+                setTimeout(() => {
+                    marketingTexts[currentTextIndex].classList.remove('opacity-0');
+                    marketingTexts[currentTextIndex].classList.add('active');
+                }, 300);
+            }
+
+            // Auto-rotate marketing text every 5.5 seconds
+            setInterval(rotateMarketingText, 5500);
+
+            // Image Rotation
+            const images = document.querySelectorAll('.hero-image');
+            const dots = document.querySelectorAll('.hero-dot');
+            let currentIndex = 0;
+            let interval;
+
+            function showImage(index) {
+                images.forEach((img, i) => {
+                    img.classList.remove('active');
+                    dots[i].classList.remove('bg-yellow-500', 'w-8');
+                    dots[i].classList.add('bg-white/50');
+                });
+
+                images[index].classList.add('active');
+                dots[index].classList.remove('bg-white/50');
+                dots[index].classList.add('bg-yellow-500', 'w-8');
+                currentIndex = index;
+            }
+
+            function nextImage() {
+                const next = (currentIndex + 1) % images.length;
+                showImage(next);
+            }
+
+            // Auto-rotate every 10 seconds
+            interval = setInterval(nextImage, 10000);
+
+            // Dot navigation
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    clearInterval(interval);
+                    showImage(index);
+                    interval = setInterval(nextImage, 10000);
+                });
+            });
+        });
+    </script>
 
     <!-- Search Filter Section -->
     <div class="relative -mt-12 sm:-mt-16 z-20">

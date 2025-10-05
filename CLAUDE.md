@@ -52,6 +52,34 @@
    - 8 popular Malaysian destinations featured
    - Seamless infinite loop with duplicated cards
    - Fade gradient edges for professional look
+11. ✅ **Hero Section Professional Animations** - SaaS-style animated hero
+   - **Left Side (Text)**: Professional slide-up and fade-in animations
+     - Title slides up with staggered delay
+     - Subtitle fades in with scale effect
+     - Animated stats counter (50+ destinations, 100+ activities, 500+ customers)
+     - Pulsing icon animations
+   - **Right Side (Images)**: Auto-rotating activity images (10s intervals)
+     - 5 activity types: Hiking, Camping, Glamping, Kayaking, Climbing
+     - Different animation for each image (fade, zoom, slide, rotate, scale)
+     - Activity labels with slide animation
+     - Navigation dots for manual control
+     - Smooth 2s transitions between images
+12. ✅ **Hero Section Height & Layout Fix** - Proper dimensions and column balance
+   - Fixed massive hero height from `min-h-screen` to fixed `550px` (only +50px from original)
+   - Fixed left column overflow by changing from `max-w-7xl` to `w-1/2` on large screens
+   - Properly balanced 50/50 split between text (left) and images (right)
+   - Centered content vertically with flexbox
+   - Maintained all animations and styling while fixing layout issues
+13. ✅ **Auto-Rotating Marketing Subtitles** - Dynamic marketing messages
+   - Implemented 4 catchy marketing sentences that auto-rotate every 5.5 seconds
+   - All sentences focus on Malaysia destinations and OFYS core business
+   - Smooth fade-in/fade-out transitions (1s duration with 300ms delay)
+   - Marketing messages highlight:
+     - Malaysian adventures and cultural connections
+     - Famous locations (Langkawi, Cameron Highlands)
+     - Activity types (jungle trekking, island hopping, eco-camping)
+     - Trust factors (verified activities, local experts, safety)
+   - Makes hero section more dynamic and engaging
 
 ### Previous Session (October 5, 2025 - Earlier)
 1. ✅ **Unified provider layout framing** – added breadcrumb and subtitle support to `layouts.provider.simple-app` and introduced a shared breadcrumb partial.
@@ -92,7 +120,7 @@ untracked:  database/seeders/ResetPasswordSeeder.php (pre-existing; untouched th
 ```
 
 ### 🔴 STOPPED HERE - CURRENT STATUS (October 4, 2025 - Evening)
-**Last Action**: Redesigned home page Popular Locations with auto-scrolling carousel
+**Last Action**: Added professional SaaS-style animations to hero section
 
 **What Was Just Completed:**
 1. ✅ **Stunning Hero Section** - Gradient yellow background with centered title
