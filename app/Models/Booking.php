@@ -27,6 +27,18 @@ class Booking extends Model
         'cancelation_reason',
         'customer_details',
         'activity_details',
+        // Billplz fields
+        'billplz_bill_id',
+        'billplz_collection_id',
+        'billplz_url',
+        'billplz_transaction_id',
+        'billplz_transaction_status',
+        'billplz_paid_at',
+        'billplz_paid_amount',
+        'billplz_x_signature',
+        'payment_gateway_response',
+        'payment_attempts',
+        'last_payment_attempt',
     ];
 
     protected $casts = [
@@ -36,6 +48,9 @@ class Booking extends Model
         'customer_details' => 'array',
         'activity_details' => 'array',
         'total_price' => 'decimal:2',
+        'billplz_paid_at' => 'datetime',
+        'last_payment_attempt' => 'datetime',
+        'payment_gateway_response' => 'array',
     ];
 
     /**
@@ -113,5 +128,102 @@ class Booking extends Model
             'failed' => 'bg-red-100 text-red-800',
             default => 'bg-gray-100 text-gray-800',
         };
+    }
+
+    /**
+     * Check if payment is pending
+     */
+    public function isPending()
+    {
+        return $this->payment_status === 'pending';
+    }
+
+    /**
+     * Check if payment is completed
+     */
+    public function isPaid()
+    {
+        return $this->payment_status === 'done';
+    }
+
+    /**
+     * Check if payment failed
+     */
+    public function isFailed()
+    {
+        return $this->payment_status === 'failed';
+    }
+
+    /**
+     * Get total price in cents (for Billplz)
+     */
+    public function getTotalPriceInCents()
+    {
+        return (int) ($this->total_price * 100);
+    }
+
+    /**
+     * Mark payment as processing
+     */
+    public function markAsProcessing()
+    {
+        $this->update([
+            'payment_status' => 'processing',
+            'payment_attempts' => $this->payment_attempts + 1,
+            'last_payment_attempt' => now(),
+        ]);
+    }
+
+    /**
+     * Mark payment as successful
+     */
+    public function markAsPaid($transactionData = [])
+    {
+        $this->update([
+            'payment_status' => 'done',
+            'status' => 'confirmed',
+            'billplz_transaction_status' => 'paid',
+            'billplz_paid_at' => now(),
+            'payment_gateway_response' => $transactionData,
+        ]);
+    }
+
+    /**
+     * Mark payment as failed
+     */
+    public function markAsFailed($reason = null)
+    {
+        $this->update([
+            'payment_status' => 'failed',
+            'billplz_transaction_status' => 'failed',
+            'payment_gateway_response' => array_merge(
+                $this->payment_gateway_response ?? [],
+                ['failure_reason' => $reason, 'failed_at' => now()->toIso8601String()]
+            ),
+        ]);
+    }
+
+    /**
+     * Scope to get pending payments
+     */
+    public function scopePendingPayment($query)
+    {
+        return $query->where('payment_status', 'pending');
+    }
+
+    /**
+     * Scope to get paid bookings
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('payment_status', 'done');
+    }
+
+    /**
+     * Scope to get failed payments
+     */
+    public function scopeFailedPayment($query)
+    {
+        return $query->where('payment_status', 'failed');
     }
 }
