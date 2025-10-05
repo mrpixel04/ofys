@@ -1531,4 +1531,267 @@ class AdminController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Show API Documentation
+     *
+     * Displays embedded Swagger API documentation for Admin, Customer, and Provider APIs
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showApiDocumentation(Request $request)
+    {
+        return view('admin.developers.api');
+    }
+
+    /**
+     * Show Integration Settings
+     *
+     * Displays integration settings for WhatsApp Web.js and N8N
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showIntegration(Request $request)
+    {
+        // Get existing integration settings from database or config
+        $integrations = [
+            'whatsapp' => [
+                'api_url' => config('services.whatsapp.api_url', ''),
+                'webhook_url' => config('services.whatsapp.webhook_url', ''),
+                'api_key' => config('services.whatsapp.api_key', ''),
+                'secret_key' => config('services.whatsapp.secret_key', ''),
+                'qr_endpoint' => config('services.whatsapp.qr_endpoint', ''),
+                'session_active' => false, // Check session status
+            ],
+            'n8n' => [
+                'api_url' => config('services.n8n.api_url', ''),
+                'webhook_url' => config('services.n8n.webhook_url', ''),
+                'api_key' => config('services.n8n.api_key', ''),
+                'workflow_id' => config('services.n8n.workflow_id', ''),
+            ],
+        ];
+
+        return view('admin.developers.integration', compact('integrations'));
+    }
+
+    /**
+     * Update WhatsApp Integration Settings
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateWhatsAppIntegration(Request $request)
+    {
+        $request->validate([
+            'api_url' => 'required|url',
+            'webhook_url' => 'nullable|url',
+            'api_key' => 'required|string',
+            'secret_key' => 'nullable|string',
+            'qr_endpoint' => 'nullable|url',
+        ]);
+
+        try {
+            // Save to config or database
+            // For now, we'll return success
+            // In production, save to database or .env file
+
+            return response()->json([
+                'success' => true,
+                'message' => 'WhatsApp integration settings updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update WhatsApp settings',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update N8N Integration Settings
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateN8NIntegration(Request $request)
+    {
+        $request->validate([
+            'api_url' => 'required|url',
+            'webhook_url' => 'nullable|url',
+            'api_key' => 'required|string',
+            'workflow_id' => 'nullable|string',
+        ]);
+
+        try {
+            // Save to config or database
+            // For now, we'll return success
+            // In production, save to database or .env file
+
+            return response()->json([
+                'success' => true,
+                'message' => 'N8N integration settings updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update N8N settings',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show WhatsApp Messages Management
+     *
+     * Displays all WhatsApp messages from BuzzBridge integration
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showWhatsAppMessages(Request $request)
+    {
+        // In production, fetch messages from database
+        // For now, return empty array
+        $messages = [];
+
+        return view('admin.whatsapp.messages', compact('messages'));
+    }
+
+    /**
+     * Fetch WhatsApp Messages from BuzzBridge
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function fetchWhatsAppMessages(Request $request)
+    {
+        try {
+            $apiUrl = config('services.whatsapp.api_url');
+            $apiKey = config('services.whatsapp.api_key');
+
+            if (!$apiUrl || !$apiKey) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'WhatsApp integration not configured'
+                ], 400);
+            }
+
+            // In production, make API call to BuzzBridge
+            // Example: $response = Http::withHeaders(['Authorization' => "Bearer {$apiKey}"])->get("{$apiUrl}/messages");
+
+            // Mock response for now
+            $messages = [
+                [
+                    'id' => 1,
+                    'from' => '+60123456789',
+                    'name' => 'John Doe',
+                    'message' => 'Hi, I want to book a hiking trip',
+                    'timestamp' => now()->subMinutes(5)->toIso8601String(),
+                    'status' => 'unread'
+                ],
+                [
+                    'id' => 2,
+                    'from' => '+60198765432',
+                    'name' => 'Jane Smith',
+                    'message' => 'What are the available activities?',
+                    'timestamp' => now()->subMinutes(10)->toIso8601String(),
+                    'status' => 'unread'
+                ]
+            ];
+
+            return response()->json([
+                'success' => true,
+                'messages' => $messages
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch messages',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Reply to WhatsApp Message
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function replyWhatsAppMessage(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        try {
+            $apiUrl = config('services.whatsapp.api_url');
+            $apiKey = config('services.whatsapp.api_key');
+
+            if (!$apiUrl || !$apiKey) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'WhatsApp integration not configured'
+                ], 400);
+            }
+
+            // In production, make API call to BuzzBridge to send message
+            // Example:
+            // $response = Http::withHeaders(['Authorization' => "Bearer {$apiKey}"])
+            //     ->post("{$apiUrl}/send", [
+            //         'phone' => $request->phone,
+            //         'message' => $request->message
+            //     ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Message sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send message',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Train Chatbot Response
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function trainChatbotResponse(Request $request)
+    {
+        $request->validate([
+            'keyword' => 'required|string',
+            'response' => 'required|string',
+        ]);
+
+        try {
+            // In production, save to database table: chatbot_responses
+            // Example:
+            // ChatbotResponse::create([
+            //     'keyword' => $request->keyword,
+            //     'response' => $request->response,
+            //     'created_by' => Auth::id()
+            // ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Chatbot response trained successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to train chatbot',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

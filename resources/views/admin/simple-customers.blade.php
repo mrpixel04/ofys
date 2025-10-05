@@ -1,35 +1,62 @@
 @extends('layouts.simple-admin')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Customer Management</h1>
-        <p class="text-lg text-gray-600">View and manage all customer accounts on your platform.</p>
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Enhanced Header with Animation -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
+                Customer Management
+            </h1>
+            <p class="text-gray-600 text-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                View and manage all customer accounts on your platform
+            </p>
+        </div>
 
+        <!-- Enhanced Flash Messages -->
         @if(session('success'))
-            <div class="mt-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded animate__animated animate__fadeIn">
-                {{ session('success') }}
+        <div class="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-700 p-4 rounded-xl shadow-lg animate-slide-in">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <p class="ml-3 font-semibold">{{ session('success') }}</p>
             </div>
+        </div>
         @endif
 
         @if(session('error'))
-            <div class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded animate__animated animate__fadeIn">
-                {{ session('error') }}
+        <div class="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-lg animate-slide-in">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <p class="ml-3 font-semibold">{{ session('error') }}</p>
             </div>
-        @endif
-    </div>
-
-    <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-md mb-8 overflow-hidden border border-gray-100">
-        <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Search & Filter
-            </h2>
         </div>
-        <div class="p-8">
+        @endif
+
+        <!-- Enhanced Search and Filter Section -->
+        <div class="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden border border-purple-100">
+            <div class="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 p-6 relative overflow-hidden">
+                <div class="absolute inset-0 bg-white opacity-10 transform -skew-x-12"></div>
+                <div class="relative">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                        </svg>
+                        Search & Filter Customers
+                    </h2>
+                </div>
+            </div>
+            <div class="p-8 bg-gradient-to-br from-white to-purple-50">
             <form id="searchForm" action="{{ route('admin.customers') }}" method="GET">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                     <!-- Customer Name Search -->
@@ -87,62 +114,107 @@
                     </div>
                 </div>
 
-                <div class="mt-8 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
-                    <button type="button" id="resetFilters"
-                        class="flex justify-center items-center py-3 px-6 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out">
-                        <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Reset Filters
-                    </button>
-                    <button type="submit"
-                        class="flex justify-center items-center py-3 px-6 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
-                        <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        Search Customers
-                    </button>
-                </div>
-            </form>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button type="button" id="resetFilters"
+                            class="flex justify-center items-center py-3 px-8 h-12 border border-purple-200 rounded-xl shadow-md text-base font-semibold text-purple-600 bg-white hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-300">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Reset Filters
+                        </button>
+                        <button type="submit"
+                            class="flex justify-center items-center py-3 px-8 h-12 border border-transparent rounded-xl shadow-lg text-base font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-300">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            Search Customers
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Customers List -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
-        <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                All Customers
-            </h2>
-            <div class="text-sm text-gray-500">Total: <span class="font-semibold">{{ $customers->total() }}</span> customers</div>
-        </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Customer
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Contact
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Registered On
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($customers as $customer)
-                            <tr class="hover:bg-gray-50 transition-colors">
+        <!-- Enhanced Customers List -->
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-purple-100">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-5">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        All Customers
+                    </h2>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                        <div class="text-sm text-white bg-white bg-opacity-20 px-4 py-2 rounded-xl backdrop-blur-sm">
+                            Total: <span class="font-bold">{{ $customers->total() }}</span> customers
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="exportToExcel()" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Export Excel
+                            </button>
+                            <button onclick="exportToCSV()" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Export CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-purple-50 to-indigo-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-purple-700 uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                        Customer
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-purple-700 uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Contact
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-purple-700 uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Status
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-purple-700 uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Registered On
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-purple-700 uppercase tracking-wider">
+                                    <div class="flex items-center justify-end">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                        Actions
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($customers as $index => $customer)
+                            <tr class="customer-row hover:bg-purple-50 transition-all duration-300 transform hover:scale-[1.01]">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
@@ -194,39 +266,106 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $customer->created_at->format('d M Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex justify-end space-x-2">
-                                        <button data-id="{{ $customer->id }}" class="view-customer flex items-center justify-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md transition duration-150 ease-in-out">
-                                            <i class="fas fa-eye mr-1"></i>
-                                            View
-                                        </button>
-                                        <button data-id="{{ $customer->id }}" class="delete-customer flex items-center justify-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-md transition duration-150 ease-in-out">
-                                            <i class="fas fa-trash-alt mr-1"></i>
-                                            Delete
-                                        </button>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2">
+                                            <button data-id="{{ $customer->id }}" class="view-customer inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                View
+                                            </button>
+                                            <button data-id="{{ $customer->id }}" class="delete-customer inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:from-red-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-16 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="w-24 h-24 text-purple-200 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                        <p class="text-gray-900 text-2xl font-bold mb-2">No customers found</p>
+                                        <p class="text-gray-500 text-lg mb-6">Try adjusting your search filters or check back later.</p>
+                                        <a href="{{ route('admin.customers') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                            </svg>
+                                            Clear All Filters
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                    No customers found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-            <!-- Pagination -->
-            @if($customers->count() > 0)
-                <div class="mt-6">
+                <!-- Enhanced Pagination -->
+                @if($customers->count() > 0)
+                <div class="mt-6 bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-xl border border-purple-100">
                     {{ $customers->withQueryString()->links() }}
                 </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Animations & Styles -->
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-slide-in {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .customer-row {
+        animation: fadeIn 0.4s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .customer-row:nth-child(1) { animation-delay: 0.05s; }
+    .customer-row:nth-child(2) { animation-delay: 0.1s; }
+    .customer-row:nth-child(3) { animation-delay: 0.15s; }
+    .customer-row:nth-child(4) { animation-delay: 0.2s; }
+    .customer-row:nth-child(5) { animation-delay: 0.25s; }
+    .customer-row:nth-child(6) { animation-delay: 0.3s; }
+    .customer-row:nth-child(7) { animation-delay: 0.35s; }
+    .customer-row:nth-child(8) { animation-delay: 0.4s; }
+    .customer-row:nth-child(9) { animation-delay: 0.45s; }
+    .customer-row:nth-child(10) { animation-delay: 0.5s; }
+</style>
 
 <!-- View Customer Modal -->
 <div id="viewCustomerModal" class="fixed inset-0 z-[200] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -486,6 +625,91 @@
                 $('#deleteConfirmationModal').addClass('hidden');
             }
         });
+
+        // Export to Excel function
+        window.exportToExcel = function() {
+            // Get all customer data from the table
+            const customers = [];
+
+            $('tbody tr.customer-row').each(function() {
+                const row = $(this);
+                const name = row.find('td:eq(0) .text-sm.font-medium').text().trim();
+                const username = row.find('td:eq(0) .text-xs').text().trim();
+                const email = row.find('td:eq(1) .text-sm.font-medium').text().trim();
+                const phone = row.find('td:eq(1) .text-xs').text().trim();
+                const status = row.find('td:eq(2) span').text().trim();
+                const registeredOn = row.find('td:eq(3)').text().trim();
+
+                customers.push({
+                    'Name': name,
+                    'Username': username,
+                    'Email': email,
+                    'Phone': phone,
+                    'Status': status,
+                    'Registered On': registeredOn
+                });
+            });
+
+            // Convert to Excel format using SheetJS (if available) or fallback to CSV
+            if (typeof XLSX !== 'undefined') {
+                const ws = XLSX.utils.json_to_sheet(customers);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Customers');
+                XLSX.writeFile(wb, 'customers_' + new Date().toISOString().slice(0,10) + '.xlsx');
+            } else {
+                // Fallback to CSV if XLSX library not available
+                console.warn('XLSX library not found, falling back to CSV export');
+                exportToCSV();
+            }
+        };
+
+        // Export to CSV function
+        window.exportToCSV = function() {
+            // Get all customer data from the table
+            const rows = [];
+
+            // Add header row
+            rows.push(['Name', 'Username', 'Email', 'Phone', 'Status', 'Registered On']);
+
+            // Add data rows
+            $('tbody tr.customer-row').each(function() {
+                const row = $(this);
+                const name = row.find('td:eq(0) .text-sm.font-medium').text().trim();
+                const username = row.find('td:eq(0) .text-xs').text().trim();
+                const email = row.find('td:eq(1) .text-sm.font-medium').text().trim();
+                const phone = row.find('td:eq(1) .text-xs').text().trim();
+                const status = row.find('td:eq(2) span').text().trim();
+                const registeredOn = row.find('td:eq(3)').text().trim();
+
+                rows.push([name, username, email, phone, status, registeredOn]);
+            });
+
+            // Convert to CSV
+            let csvContent = rows.map(row =>
+                row.map(cell => {
+                    // Escape quotes and wrap in quotes if contains comma
+                    const escaped = String(cell).replace(/"/g, '""');
+                    return escaped.includes(',') || escaped.includes('\n') ? `"${escaped}"` : escaped;
+                }).join(',')
+            ).join('\n');
+
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'customers_' + new Date().toISOString().slice(0,10) + '.csv');
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
     });
 </script>
+
+<!-- SheetJS Library for Excel Export (Optional - loads from CDN) -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
 @endsection
