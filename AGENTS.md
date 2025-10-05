@@ -1,7 +1,31 @@
 # 🤖 AI AGENTS - OFYS Development Guide
 
 > **For**: Any AI Assistant (Claude, ChatGPT, Copilot, etc.)  
-> **Purpose**: Quick onboarding and development guidelines for OFYS project
+> **Purpose**: Quick onboarding and development guidelines for OFYS project  
+> **Last Updated**: October 4, 2025 (Evening Session)
+
+---
+
+## 📢 RECENT SESSION UPDATES
+
+### October 4, 2025 - Evening Session
+**What was completed:**
+1. ✅ **Documentation System** - Created CLAUDE.md, AGENTS.md, and PROMPT1.md for AI session continuity
+2. ✅ **User Authentication Fixed** - Reset ADMIN & PROVIDER passwords (both: `Passw0rd123`)
+3. ✅ **Activities Page Redesigned** - Fixed styling to match home page (yellow/blue theme)
+4. ✅ **Image Display Fixed** - Activities now show images correctly using `storage/` path
+5. ✅ **Code Cleanup** - Removed unnecessary `.sh` and `.md` files
+6. ✅ **Controller Fixes** - Added missing imports in HomeController
+
+**Color Scheme Standardization:**
+- ✅ Guest pages: Yellow/Blue theme (consistent branding)
+- ✅ Provider pages: Teal/Emerald theme (distinct provider identity)
+- ✅ Admin pages: To be standardized (future task)
+
+**Important Notes:**
+- All guest-facing pages should use **yellow (#EAB308)** and **blue (#2563EB)** colors
+- Provider pages use **teal (#14B8A6)** and **emerald (#10B981)** colors
+- Images are stored in `storage/` and accessed via `asset('storage/...')`
 
 ---
 
@@ -189,6 +213,65 @@ Route::middleware(['auth', 'role:{role}'])->group(function () {
 
 ## 🎨 FRONTEND DEVELOPMENT
 
+### Design System & Color Palette
+
+**IMPORTANT: Follow role-based color schemes**
+
+#### Guest Pages (Public)
+```css
+Primary: Yellow (#EAB308, bg-yellow-500)
+Secondary: Blue (#2563EB, bg-blue-600)
+Accent: Gray (#6B7280, text-gray-600)
+
+Usage:
+- Buttons: bg-yellow-500 hover:bg-yellow-600
+- Links: text-blue-600 hover:text-blue-800
+- Badges: bg-yellow-500 text-white
+- Price: text-yellow-600
+```
+
+#### Provider Pages
+```css
+Primary: Teal (#14B8A6, bg-teal-600)
+Secondary: Emerald (#10B981, bg-emerald-500)
+Accent: Teal-50 (#F0FDFA, bg-teal-50)
+
+Usage:
+- Buttons: bg-teal-600 hover:bg-teal-700
+- Cards: border-teal-100
+- Badges: bg-teal-50 text-teal-700
+- Icons: text-teal-500
+```
+
+#### Admin Pages
+```css
+Primary: Indigo (#4F46E5, bg-indigo-600)
+Secondary: Purple (#9333EA, bg-purple-600)
+Accent: Gray (#374151, text-gray-700)
+
+Usage:
+- Buttons: bg-indigo-600 hover:bg-indigo-700
+- Status badges: Various colors
+- Alerts: bg-red-50, bg-green-50
+```
+
+### Image Handling
+```blade
+{{-- Correct way to display activity images --}}
+@if($activity->images && count($activity->images) > 0)
+    <img src="{{ asset('storage/' . $activity->images[0]) }}" 
+         alt="{{ $activity->name }}" 
+         class="w-full h-full object-cover">
+@else
+    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+        <span class="text-gray-500">No Image</span>
+    </div>
+@endif
+
+{{-- DON'T use cover_image_url (doesn't exist) --}}
+{{-- ❌ $activity->cover_image_url --}}
+```
+
 ### Blade Templates
 ```blade
 {{-- Layouts --}}
@@ -218,9 +301,13 @@ $(document).ready(function() {
 
 ### Tailwind CSS
 ```html
-<!-- Use utility classes -->
-<div class="bg-blue-500 text-white p-4 rounded-lg">
-    Content
+<!-- Use utility classes with role-based colors -->
+<div class="bg-yellow-500 text-white p-4 rounded-lg">
+    Guest Content (Yellow theme)
+</div>
+
+<div class="bg-teal-600 text-white p-4 rounded-lg">
+    Provider Content (Teal theme)
 </div>
 ```
 
@@ -521,4 +608,5 @@ git branch                      # List branches
 
 *This is a living document. Update as the project evolves!*
 
-**Last Updated**: October 5, 2025
+**Last Updated**: October 4, 2025 (Evening Session)  
+**Major Updates**: Added design system color palette, image handling guidelines, and recent session notes

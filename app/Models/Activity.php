@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Activity extends Model
 {
@@ -236,5 +238,29 @@ class Activity extends Model
             'weather_dependent' => '🌤️ Weather Dependent Activity',
             'advance_booking' => '📅 Advance Booking Required',
         ];
+    }
+
+    /**
+     * Resolve the primary image URL for public listings.
+     */
+    public function getCoverImageUrlAttribute(): ?string
+    {
+        $imagePath = null;
+
+        if (is_array($this->images) && count($this->images) > 0) {
+            $imagePath = $this->images[0];
+        } elseif (!empty($this->image)) {
+            $imagePath = $this->image;
+        }
+
+        if (!$imagePath) {
+            return null;
+        }
+
+        if (Str::startsWith($imagePath, ['http://', 'https://'])) {
+            return $imagePath;
+        }
+
+        return Storage::disk('public')->url($imagePath);
     }
 }
