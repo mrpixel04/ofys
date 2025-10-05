@@ -228,13 +228,35 @@
                         @endif
 
                         <!-- Page header -->
-                        <div class="mb-6">
-                            <h1 class="text-2xl font-semibold text-gray-900">@yield('header', 'Dashboard')</h1>
-                            @hasSection('header_actions')
-                                <div class="mt-4">
-                                    @yield('header_actions')
+                        @php
+                            $pageTitle = trim($__env->yieldContent('header', 'Dashboard'));
+                        @endphp
+
+                        <div class="mb-8">
+                            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div class="space-y-3">
+                                    @hasSection('breadcrumbs')
+                                        <div>
+                                            @yield('breadcrumbs')
+                                        </div>
+                                    @endif
+
+                                    @if($pageTitle !== '')
+                                        <div>
+                                            <h1 class="text-2xl font-semibold text-gray-900">{{ $pageTitle }}</h1>
+                                            @hasSection('header_subtitle')
+                                                <p class="mt-1 text-sm text-gray-500">@yield('header_subtitle')</p>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
+
+                                @hasSection('header_actions')
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        @yield('header_actions')
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Page content -->

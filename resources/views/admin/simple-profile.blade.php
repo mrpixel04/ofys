@@ -1,28 +1,52 @@
 @extends('layouts.simple-admin')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
-        <p class="text-lg text-gray-600">Manage your account information and preferences</p>
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Enhanced Header with Animation -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
+                Profile Settings
+            </h1>
+            <p class="text-gray-600 text-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Manage your account information and preferences
+            </p>
+        </div>
 
+        <!-- Enhanced Flash Messages -->
         @if(session('success'))
-            <div class="mt-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded animate__animated animate__fadeIn">
-                {{ session('success') }}
+        <div class="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-700 p-4 rounded-xl shadow-lg animate-slide-in">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <p class="ml-3 font-semibold">{{ session('success') }}</p>
             </div>
+        </div>
         @endif
 
         @if(isset($error))
-            <div class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded animate__animated animate__fadeIn">
-                {{ $error }}
+        <div class="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-lg animate-slide-in">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <p class="ml-3 font-semibold">{{ $error }}</p>
             </div>
+        </div>
         @endif
-    </div>
 
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden mb-8 border border-purple-100">
         <div class="flex flex-col md:flex-row">
-            <!-- Left sidebar for profile image and summary -->
-            <div class="w-full md:w-1/3 bg-gray-50 p-6 border-b md:border-b-0 md:border-r border-gray-200">
+            <!-- Enhanced Left sidebar for profile image and summary -->
+            <div class="w-full md:w-1/3 bg-gradient-to-br from-purple-50 to-indigo-50 p-6 border-b md:border-b-0 md:border-r border-purple-100">
                 <div class="text-center">
                     <div class="relative mx-auto w-32 h-32 mb-4 group">
                         @if(Auth::user()->profile_image)
@@ -44,7 +68,7 @@
                     <p class="text-gray-500 mb-4">{{ Auth::user()->email }}</p>
 
                     <div class="flex justify-center mb-6">
-                        <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 font-semibold uppercase">Administrator</span>
+                        <span class="px-4 py-2 text-xs rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold uppercase shadow-lg">Administrator</span>
                     </div>
 
                     <div class="space-y-2 text-left text-sm">
@@ -79,19 +103,25 @@
                 </form>
             </div>
 
-            <!-- Right content area with tabs -->
+            <!-- Enhanced Right content area with tabs -->
             <div class="w-full md:w-2/3 p-0">
-                <div class="border-b border-gray-200">
-                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="profileTabs" role="tablist">
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4">
+                    <ul class="flex flex-wrap text-sm font-semibold" id="profileTabs" role="tablist">
                         <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-purple-600 hover:border-purple-300 active-tab"
+                            <button class="inline-flex items-center px-6 py-3 rounded-xl bg-white bg-opacity-20 text-white hover:bg-opacity-30 transition-all duration-300 active-tab backdrop-blur-sm"
                                 id="personal-tab" data-target="personal-content" type="button" role="tab">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
                                 Personal Information
                             </button>
                         </li>
                         <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-purple-600 hover:border-purple-300"
+                            <button class="inline-flex items-center px-6 py-3 rounded-xl text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300"
                                 id="security-tab" data-target="security-content" type="button" role="tab">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
                                 Security
                             </button>
                         </li>
@@ -135,7 +165,7 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-purple-700 active:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                <button type="submit" class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 border border-transparent rounded-xl font-bold text-sm text-white uppercase tracking-widest hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -210,7 +240,7 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-purple-700 active:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                <button type="submit" class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 border border-transparent rounded-xl font-bold text-sm text-white uppercase tracking-widest hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                                     </svg>
@@ -223,7 +253,45 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
+
+<!-- Animations & Styles -->
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-slide-in {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    .active-tab {
+        background-color: rgba(255, 255, 255, 0.3) !important;
+    }
+</style>
 @endsection
 
 @section('scripts')

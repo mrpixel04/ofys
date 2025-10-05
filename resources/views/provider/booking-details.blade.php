@@ -8,7 +8,7 @@
 <div class="container mx-auto">
 
     {{-- Header Banner --}}
-    <div class="bg-gradient-to-r from-blue-500 to-teal-500 text-white p-6 rounded-lg shadow-lg mb-6">
+    <div class="bg-gradient-to-r from-teal-500 to-emerald-600 text-white p-6 rounded-lg shadow-lg mb-6">
         <div class="flex flex-col md:flex-row justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold mb-2 flex items-center">
@@ -48,7 +48,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 @elseif($booking->status == 'completed')
-                    <svg class="h-5 w-5 mr-1.5 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-5 w-5 mr-1.5 text-teal-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                 @endif
@@ -92,9 +92,9 @@
 
             {{-- Activity Card --}}
             <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-                <div class="px-6 py-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
+                <div class="px-6 py-4 bg-gradient-to-r from-teal-50 to-emerald-50 border-b border-gray-200">
                     <h3 class="text-lg font-semibold leading-6 text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                         </svg>
                         Activity Information
@@ -129,7 +129,7 @@
                                     <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
                                         @if($activityType === 'camping') bg-green-100 text-green-800
                                         @elseif($activityType === 'glamping') bg-purple-100 text-purple-800
-                                        @elseif($activityType === 'hiking') bg-blue-100 text-blue-800
+                                        @elseif($activityType === 'hiking') bg-emerald-100 text-emerald-700
                                         @elseif($activityType === 'water_rafting') bg-cyan-100 text-cyan-800
                                         @elseif($activityType === 'houseboat') bg-orange-100 text-orange-800
                                         @else bg-gray-100 text-gray-800
@@ -256,9 +256,9 @@
 
             {{-- Customer Card --}}
             <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-                <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+                <div class="px-6 py-4 bg-gradient-to-r from-teal-50 to-emerald-50 border-b border-gray-200">
                     <h3 class="text-lg font-semibold leading-6 text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         Customer Information
@@ -267,7 +267,7 @@
                 <div class="px-6 py-5">
                     <div class="flex items-center mb-5">
                         <div class="flex-shrink-0">
-                            <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <div class="h-12 w-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>

@@ -1,7 +1,121 @@
 # 🤖 AI AGENTS - OFYS Development Guide
 
 > **For**: Any AI Assistant (Claude, ChatGPT, Copilot, etc.)  
-> **Purpose**: Quick onboarding and development guidelines for OFYS project
+> **Purpose**: Quick onboarding and development guidelines for OFYS project  
+> **Last Updated**: October 5, 2025 (Late Evening Session)
+
+---
+
+## 📢 RECENT SESSION UPDATES
+
+### October 5, 2025 - Late Evening Session (LATEST)
+**What was completed:**
+1. ✅ **Admin Section Complete Redesign** - SaaS-style UI with Purple/Indigo theme
+   - Dashboard: Animated stat cards, gradient backgrounds, modern tables
+   - Providers: Enhanced filtering, action buttons, professional design
+   - Customers: Modern UI with Excel/CSV export functionality
+   - Bookings: Stat cards, gradient headers, enhanced filters
+   - Activities: Card-based layout with gradient buttons
+   - Profile/Settings: Tabbed interface with password toggle
+
+2. ✅ **Developers Menu Added** - New menu with 3 powerful submenus
+   - **API Documentation**: Embedded Swagger UI for all APIs (Admin/Customer/Provider)
+   - **Integration**: WhatsApp Web.js and N8N configuration pages
+   - **WhatsApp Messages**: Full chat interface for customer communication
+
+3. ✅ **WhatsApp Messages Management System**
+   - Complete chat interface (conversations list + message display)
+   - Fetch messages from BuzzBridge API
+   - Reply to customers directly from admin panel
+   - Train chatbot with keyword-based auto-responses
+   - Search and filter conversations
+   - WhatsApp-style UI with real-time updates
+
+4. ✅ **Database Tables & Models**
+   - Created `whatsapp_messages`, `chatbot_responses`, `whatsapp_sessions` tables
+   - Eloquent models: WhatsAppMessage, ChatbotResponse, WhatsAppSession
+   - Relationships, scopes, and helper methods included
+   - Migration run successfully
+
+5. ✅ **BuzzBridge Integration Documentation**
+   - Created BUZZBRIDGE_INTEGRATION.md
+   - 7 required API endpoints documented
+   - 3 webhook events specified
+   - Security standards, authentication, error handling
+   - Complete integration checklist for BuzzBridge team
+
+6. ✅ **Export Functionality**
+   - Excel export (SheetJS CDN) on Customers page
+   - CSV export (pure JavaScript)
+   - Client-side implementation for fast downloads
+
+**Color Scheme Finalized:**
+- ✅ Guest pages: Yellow (#EAB308) / Blue (#2563EB)
+- ✅ Provider pages: Teal (#14B8A6) / Emerald (#10B981)
+- ✅ Admin pages: Purple (#7C3AED) / Indigo (#6366F1)
+
+---
+
+### October 5, 2025 - Evening Session
+**What was completed:**
+1. ✅ **Documentation System** - Created CLAUDE.md, AGENTS.md, and PROMPT1.md for AI session continuity
+2. ✅ **User Authentication Fixed** - Reset ADMIN & PROVIDER passwords (both: `Passw0rd123`)
+3. ✅ **Activities Page Complete Redesign** - Professional, commercial-grade UI/UX
+   - Stunning gradient hero section with yellow theme
+   - Advanced filtering system (search, location, type, price range)
+   - Grid/List view toggle functionality
+   - Sort options (newest, price low/high, name A-Z)
+   - Real-time search and filtering with jQuery
+   - Professional card designs with hover effects and animations
+   - Responsive design for all screen sizes
+   - Results counter and beautiful empty states
+4. ✅ **Image Display Fixed** - Activities now show images correctly using `storage/` path
+5. ✅ **Code Cleanup** - Removed unnecessary `.sh` and `.md` files
+6. ✅ **Controller Fixes** - Added missing imports in HomeController
+7. ✅ **Project Cleanup** - Removed all unnecessary files and folders
+   - Deleted `deploy/` and `deploy-complete/` folders (old deployment artifacts)
+   - Removed 20+ test files from `public/` directory
+   - Removed temporary directories and SSH keys
+   - Project is now clean and production-ready
+8. ✅ **Activities Page Bug Fixes**
+   - Changed button color from blue to yellow (brand consistency)
+   - Fixed view toggle bug (grid/list switching with filters)
+   - Filters now respect current view mode
+   - Fixed results counter to show correct count in both views
+9. ✅ **Home Page Popular Locations Carousel**
+   - Auto-scrolling carousel with 8 Malaysia destinations
+   - Beautiful Unsplash images with gradient overlays
+   - Smooth 40-second animation loop
+   - Parallax hover effects and scale animations
+   - Pause on hover, fade edges, navigation dots
+10. ✅ **Hero Section SaaS-Style Animations**
+   - Animated text with slide-up and fade effects
+   - Counter animations for stats (destinations, activities, customers)
+   - Auto-rotating images (5 activities, 10s intervals)
+   - Different animation styles per image (fade, zoom, slide, rotate, scale)
+   - Navigation dots and activity labels
+11. ✅ **Hero Section Height & Layout Fix**
+   - Fixed massive height issue (changed from min-h-screen to 550px)
+   - Fixed left column overflow (proper 50/50 split on large screens)
+   - Centered content vertically with flexbox alignment
+   - Maintained all animations while fixing dimensions
+12. ✅ **Auto-Rotating Marketing Subtitles**
+   - 4 dynamic marketing sentences rotating every 5.5 seconds
+   - Malaysia-focused messaging (Langkawi, Cameron Highlands, etc.)
+   - Highlights core business (outdoor adventures, local providers, verified activities)
+   - Smooth fade transitions for professional look
+
+**Color Scheme Standardization:**
+- ✅ Guest pages: Yellow/Blue theme (consistent branding)
+- ✅ Provider pages: Teal/Emerald theme (distinct provider identity)
+- ✅ Admin pages: Purple/Indigo theme (SaaS-style professional)
+
+**Important Notes:**
+- All guest-facing pages should use **yellow (#EAB308)** and **blue (#2563EB)** colors
+- Provider pages use **teal (#14B8A6)** and **emerald (#10B981)** colors
+- Admin pages use **purple (#7C3AED)** and **indigo (#6366F1)** colors
+- Images are stored in `storage/` and accessed via `asset('storage/...')`
+- WhatsApp integration uses BuzzBridge API (see BUZZBRIDGE_INTEGRATION.md)
 
 ---
 
@@ -50,6 +164,11 @@ Removed:
 ---
 
 ## 📂 PROJECT STRUCTURE
+
+### Provider UI Pattern (New)
+- Provider views extend `layouts.provider.simple-app`, which exposes `breadcrumbs`, `header_subtitle`, and `header_actions` sections so every surface renders with the same header shell.
+- Use the shared breadcrumb include at `resources/views/layouts/partials/breadcrumbs.blade.php` whenever adding provider navigation trails.
+- Keep provider-facing components on the teal/emerald palette introduced in this refactor (cards, badges, CTAs) for visual consistency.
 
 ### Directory Organization (Role-Based)
 
@@ -184,6 +303,65 @@ Route::middleware(['auth', 'role:{role}'])->group(function () {
 
 ## 🎨 FRONTEND DEVELOPMENT
 
+### Design System & Color Palette
+
+**IMPORTANT: Follow role-based color schemes**
+
+#### Guest Pages (Public)
+```css
+Primary: Yellow (#EAB308, bg-yellow-500)
+Secondary: Blue (#2563EB, bg-blue-600)
+Accent: Gray (#6B7280, text-gray-600)
+
+Usage:
+- Buttons: bg-yellow-500 hover:bg-yellow-600
+- Links: text-blue-600 hover:text-blue-800
+- Badges: bg-yellow-500 text-white
+- Price: text-yellow-600
+```
+
+#### Provider Pages
+```css
+Primary: Teal (#14B8A6, bg-teal-600)
+Secondary: Emerald (#10B981, bg-emerald-500)
+Accent: Teal-50 (#F0FDFA, bg-teal-50)
+
+Usage:
+- Buttons: bg-teal-600 hover:bg-teal-700
+- Cards: border-teal-100
+- Badges: bg-teal-50 text-teal-700
+- Icons: text-teal-500
+```
+
+#### Admin Pages
+```css
+Primary: Indigo (#4F46E5, bg-indigo-600)
+Secondary: Purple (#9333EA, bg-purple-600)
+Accent: Gray (#374151, text-gray-700)
+
+Usage:
+- Buttons: bg-indigo-600 hover:bg-indigo-700
+- Status badges: Various colors
+- Alerts: bg-red-50, bg-green-50
+```
+
+### Image Handling
+```blade
+{{-- Correct way to display activity images --}}
+@if($activity->images && count($activity->images) > 0)
+    <img src="{{ asset('storage/' . $activity->images[0]) }}" 
+         alt="{{ $activity->name }}" 
+         class="w-full h-full object-cover">
+@else
+    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+        <span class="text-gray-500">No Image</span>
+    </div>
+@endif
+
+{{-- DON'T use cover_image_url (doesn't exist) --}}
+{{-- ❌ $activity->cover_image_url --}}
+```
+
 ### Blade Templates
 ```blade
 {{-- Layouts --}}
@@ -213,9 +391,13 @@ $(document).ready(function() {
 
 ### Tailwind CSS
 ```html
-<!-- Use utility classes -->
-<div class="bg-blue-500 text-white p-4 rounded-lg">
-    Content
+<!-- Use utility classes with role-based colors -->
+<div class="bg-yellow-500 text-white p-4 rounded-lg">
+    Guest Content (Yellow theme)
+</div>
+
+<div class="bg-teal-600 text-white p-4 rounded-lg">
+    Provider Content (Teal theme)
 </div>
 ```
 
@@ -516,5 +698,5 @@ git branch                      # List branches
 
 *This is a living document. Update as the project evolves!*
 
-**Last Updated**: October 4, 2025
-
+**Last Updated**: October 4, 2025 (Evening Session)  
+**Major Updates**: Added design system color palette, image handling guidelines, and recent session notes

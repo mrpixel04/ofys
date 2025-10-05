@@ -2,6 +2,19 @@
 
 @section('header', 'My Profile')
 
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+            ['label' => 'My Profile'],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Review your account details, update contact information, and secure your password.
+@endsection
+
 @section('header_actions')
     <div class="flex space-x-3">
         <button
@@ -153,7 +166,7 @@
         'formMethod' => 'POST',
     ])
 
-    <div id="profile-edit-modal-content" class="hidden">
+    <template id="profile-edit-modal-template">
         <!-- Profile Image -->
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
@@ -198,12 +211,11 @@
             <div id="name-error" class="mt-1 text-sm text-red-600 hidden">Your name is required.</div>
         </div>
 
-        <!-- Email Field - Disabled -->
+        <!-- Email Field -->
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
             <div class="mt-1">
-                <input type="email" name="email" id="email" value="{{ $user->email }}" class="block w-full px-4 py-3 text-base rounded-md border-gray-300 bg-gray-50 shadow-sm" readonly disabled>
-                <p class="mt-1 text-xs text-gray-500">Email cannot be changed.</p>
+                <input type="email" name="email" id="email" value="{{ $user->email }}" class="block w-full px-4 py-3 text-base rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="you@example.com" required>
             </div>
         </div>
 
@@ -224,7 +236,7 @@
             </div>
             <div id="phone-error" class="mt-1 text-sm text-red-600 hidden">Please enter a valid phone number.</div>
         </div>
-    </div>
+    </template>
 
     <!-- Password Edit Modal -->
     @include('provider.partials.form-modal', [
@@ -235,7 +247,7 @@
         'formMethod' => 'POST',
     ])
 
-    <div id="password-edit-modal-content">
+    <template id="password-edit-modal-template">
         <!-- Current Password Field -->
         <div class="mb-4">
             <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
@@ -315,20 +327,21 @@
             </div>
             <div id="password-confirmation-error" class="mt-1 text-sm text-red-600 hidden">Passwords do not match.</div>
         </div>
-    </div>
+    </template>
 @endsection
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Preview uploaded profile image
-        $('#profile-upload').on('change', function() {
+        // Preview uploaded profile image (works for dynamically injected markup)
+        $(document).on('change', '#profile-upload', function() {
             const file = this.files[0];
-            if (file) {
+            const preview = $('#profile-image-preview');
+            if (file && preview.length) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#profile-image-preview').html(`<img src="${e.target.result}" alt="Profile Preview" class="h-full w-full object-cover">`);
-                }
+                    preview.html(`<img src="${e.target.result}" alt="Profile Preview" class=\"h-full w-full object-cover\">`);
+                };
                 reader.readAsDataURL(file);
             }
         });

@@ -2,10 +2,23 @@
 
 @section('header', 'Activities & Services')
 
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+            ['label' => 'Activities & Services'],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Quick glance view of your experiences, availability, and performance metrics.
+@endsection
+
 @section('header_actions')
     <div class="flex space-x-3">
         <a href="{{ route('provider.activities.create') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150">
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-150">
             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -38,7 +51,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
             <div class="bg-white rounded-lg shadow p-5 border border-gray-100">
                 <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-indigo-50 text-indigo-700 mr-4">
+                    <div class="p-3 rounded-full bg-teal-50 text-teal-700 mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
@@ -86,7 +99,7 @@
                     <label for="search-term" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
                     <div class="relative rounded-md shadow-sm">
                         <input type="text" id="search-term"
-                            class="block w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="block w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                             placeholder="Search activities...">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,7 +112,7 @@
                 <div>
                     <label for="filter-activity-type" class="block text-sm font-medium text-gray-700 mb-1">Activity Type</label>
                     <select id="filter-activity-type"
-                        class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                         <option value="">All Activity Types</option>
                         @foreach($activityTypes as $value => $label)
                             <option value="{{ $value }}">{{ $label }}</option>
@@ -110,7 +123,7 @@
                 <div>
                     <label for="filter-status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                     <select id="filter-status"
-                        class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                         <option value="">All Statuses</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -200,10 +213,10 @@
                     </div>
 
                     <div class="flex justify-between border-t pt-3">
-                        <a href="{{ route('provider.activities.view', $activity->id) }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        <a href="{{ route('provider.activities.view', $activity->id) }}" class="text-teal-600 hover:text-teal-800 text-sm font-medium">
                             View
                         </a>
-                        <a href="{{ route('provider.activities.edit', $activity->id) }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                        <a href="{{ route('provider.activities.edit', $activity->id) }}" class="text-teal-600 hover:text-teal-800 text-sm font-medium">
                             Edit
                         </a>
                         <button type="button" class="text-red-600 hover:text-red-800 text-sm font-medium delete-activity" data-activity-id="{{ $activity->id }}">
@@ -218,7 +231,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
                 <p class="mb-4">No activities found. Click "Add New Activity" to create your first activity.</p>
-                <a href="{{ route('provider.activities.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <a href="{{ route('provider.activities.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -269,7 +282,7 @@
                                 Delete
                             </button>
                         </form>
-                        <button type="button" id="cancel-delete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button type="button" id="cancel-delete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
                     </div>

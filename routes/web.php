@@ -111,6 +111,18 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/admin/profile', [AdminController::class, 'showSimpleProfile'])->name('admin.profile');
     Route::put('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     Route::put('/admin/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
+
+    // Developers Menu
+    Route::get('/admin/developers/api', [AdminController::class, 'showApiDocumentation'])->name('admin.developers.api');
+    Route::get('/admin/developers/integration', [AdminController::class, 'showIntegration'])->name('admin.developers.integration');
+    Route::post('/admin/developers/integration/whatsapp', [AdminController::class, 'updateWhatsAppIntegration'])->name('admin.developers.integration.whatsapp');
+    Route::post('/admin/developers/integration/n8n', [AdminController::class, 'updateN8NIntegration'])->name('admin.developers.integration.n8n');
+
+    // WhatsApp Messages Management
+    Route::get('/admin/whatsapp/messages', [AdminController::class, 'showWhatsAppMessages'])->name('admin.whatsapp.messages');
+    Route::post('/admin/whatsapp/messages/fetch', [AdminController::class, 'fetchWhatsAppMessages'])->name('admin.whatsapp.messages.fetch');
+    Route::post('/admin/whatsapp/messages/reply', [AdminController::class, 'replyWhatsAppMessage'])->name('admin.whatsapp.messages.reply');
+    Route::post('/admin/whatsapp/messages/train', [AdminController::class, 'trainChatbotResponse'])->name('admin.whatsapp.messages.train');
 });
 
 // Provider Routes
@@ -135,6 +147,7 @@ Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->pre
     Route::post('/activities', [ProviderController::class, 'storeActivity'])->name('activities.store');
     Route::get('/activities/{id}', [ProviderController::class, 'viewActivity'])->name('activities.view');
     Route::get('/activities/{id}/edit', [ProviderController::class, 'editActivity'])->name('activities.edit');
+    Route::put('/activities/{id}', [ProviderController::class, 'updateActivity'])->name('activities.update');
     Route::delete('/activities/{id}', [ProviderController::class, 'deleteActivity'])->name('activities.delete');
 
     // Bookings

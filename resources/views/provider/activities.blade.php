@@ -2,6 +2,19 @@
 
 @section('header', 'Activities & Services')
 
+@section('breadcrumbs')
+    @include('layouts.partials.breadcrumbs', [
+        'breadcrumbs' => [
+            ['label' => 'Dashboard', 'url' => route('provider.dashboard')],
+            ['label' => 'Activities & Services'],
+        ],
+    ])
+@endsection
+
+@section('header_subtitle')
+    Manage every offering, pricing update, and availability from a single view.
+@endsection
+
 @section('header_actions')
     <div class="flex space-x-3">
         <a href="{{ route('provider.activities.create') }}"
@@ -123,7 +136,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('provider.activities.view', $activity->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <a href="{{ route('provider.activities.view', $activity->id) }}" class="text-teal-600 hover:text-teal-900 mr-3">
                                 View
                             </a>
                             <a href="{{ route('provider.activities.edit', $activity->id) }}" class="text-teal-600 hover:text-teal-900 mr-3">

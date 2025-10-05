@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Guest;
 
+use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\ShopInfo;
 use Illuminate\Http\Request;

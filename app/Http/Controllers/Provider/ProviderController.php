@@ -291,9 +291,22 @@ class ProviderController extends Controller
      */
     public function viewActivity($id)
     {
-        $activity = Activity::findOrFail($id);
+        $user = Auth::user();
+
+        $activity = Activity::with(['lots'])
+            ->where('id', $id)
+            ->whereHas('shopInfo', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->firstOrFail();
+
         $activityTypes = Activity::getActivityTypes();
-        return view('provider.activities.view', compact('activity', 'activityTypes'));
+
+        return view('provider.activities.view', [
+            'activity' => $activity,
+            'activityTypes' => $activityTypes,
+            'states' => Activity::getMalaysianStates(),
+        ]);
     }
 
     /**
@@ -304,8 +317,167 @@ class ProviderController extends Controller
      */
     public function editActivity($id)
     {
-        $activity = Activity::findOrFail($id);
-        return view('provider.activities.edit', compact('activity'));
+        $user = Auth::user();
+
+        $activity = Activity::with(['lots'])
+            ->where('id', $id)
+            ->whereHas('shopInfo', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->firstOrFail();
+
+        return view('provider.activities.edit', [
+            'activity' => $activity,
+            'activityTypes' => Activity::getActivityTypes(),
+            'priceTypes' => Activity::getPriceTypes(),
+            'states' => Activity::getMalaysianStates(),
+        ]);
+    }
+
+    /**
+     * Update an existing activity.
+     */
+    public function updateActivity(Request $request, $id)
+    {
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->firstOrFail();
+
+        $activity = Activity::with('lots')
+            ->where('id', $id)
+            ->where('shop_info_id', $shopInfo->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'activity_type' => ['required', 'string', Rule::in(array_keys(Activity::getActivityTypes()))],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
+            'requirements' => ['nullable', 'string'],
+            'min_participants' => ['required', 'integer', 'min:1'],
+            'max_participants' => ['nullable', 'integer', 'gte:min_participants'],
+            'duration_days' => ['nullable', 'integer', 'min:0', 'max:365'],
+            'duration_hours' => ['nullable', 'integer', 'min:0', 'max:23'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'price_type' => ['required', 'string', Rule::in(array_keys(Activity::getPriceTypes()))],
+            'includes_gear' => ['nullable', 'boolean'],
+            'included_items' => ['nullable', 'array'],
+            'included_items.*' => ['string'],
+            'excluded_items' => ['nullable', 'array'],
+            'excluded_items.*' => ['string'],
+            'amenities' => ['nullable', 'array'],
+            'amenities.*' => ['string'],
+            'rules' => ['nullable', 'array'],
+            'rules.*' => ['string'],
+            'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:4096'],
+            'remove_images' => ['nullable', 'array'],
+            'remove_images.*' => ['string'],
+            'lots' => ['nullable', 'array'],
+            'lots.*.id' => ['nullable', 'integer', 'exists:activity_lots,id'],
+            'lots.*.name' => ['required_with:lots', 'string', 'max:255'],
+            'lots.*.capacity' => ['required_with:lots', 'integer', 'min:1'],
+            'lots.*.description' => ['nullable', 'string'],
+        ]);
+
+        $requiresLots = in_array($validated['activity_type'], ['camping', 'glamping']);
+        $submittedLots = collect($request->input('lots', []));
+
+        if ($requiresLots && $submittedLots->isEmpty()) {
+            return back()
+                ->withErrors(['lots' => 'At least one lot is required for this activity type.'])
+                ->withInput();
+        }
+
+        $durationMinutes = null;
+        if ($request->filled('duration_days') || $request->filled('duration_hours')) {
+            $days = (int) $request->input('duration_days', 0);
+            $hours = (int) $request->input('duration_hours', 0);
+            $durationMinutes = ($days * 24 * 60) + ($hours * 60);
+        }
+
+        $updateData = [
+            'activity_type' => $validated['activity_type'],
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'state' => $validated['state'] ?? null,
+            'requirements' => $validated['requirements'] ?? null,
+            'min_participants' => $validated['min_participants'],
+            'max_participants' => $validated['max_participants'] ?? null,
+            'duration_minutes' => $durationMinutes,
+            'price' => $validated['price'],
+            'price_type' => $validated['price_type'],
+            'includes_gear' => $request->boolean('includes_gear'),
+            'included_items' => $request->input('included_items', []),
+            'excluded_items' => $request->input('excluded_items', []),
+            'amenities' => $request->input('amenities', []),
+            'rules' => $request->input('rules', []),
+        ];
+
+        $currentImages = $activity->images ?? [];
+        $imagesToRemove = $request->input('remove_images', []);
+
+        if (!empty($imagesToRemove)) {
+            foreach ($imagesToRemove as $imagePath) {
+                if (in_array($imagePath, $currentImages, true)) {
+                    Storage::disk('public')->delete($imagePath);
+                    $currentImages = array_values(array_filter($currentImages, fn ($path) => $path !== $imagePath));
+                }
+            }
+        }
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $safeName = time() . '_' . $user->id . '_' . uniqid('', true) . '.' . $image->getClientOriginalExtension();
+                $currentImages[] = $image->storeAs('activity_images', $safeName, 'public');
+            }
+        }
+
+        $updateData['images'] = $currentImages;
+
+        $activity->update($updateData);
+
+        if ($requiresLots) {
+            $retainedIds = [];
+
+            foreach ($submittedLots as $lotData) {
+                $lotId = $lotData['id'] ?? null;
+
+                if ($lotId) {
+                    $lot = $activity->lots->firstWhere('id', (int) $lotId);
+                    if ($lot) {
+                        $lot->update([
+                            'name' => $lotData['name'],
+                            'description' => $lotData['description'] ?? null,
+                            'capacity' => $lotData['capacity'],
+                        ]);
+                        $retainedIds[] = $lot->id;
+                        continue;
+                    }
+                }
+
+                $newLot = ActivityLot::create([
+                    'activity_id' => $activity->id,
+                    'provider_id' => $user->id,
+                    'name' => $lotData['name'],
+                    'description' => $lotData['description'] ?? null,
+                    'capacity' => $lotData['capacity'],
+                    'is_available' => true,
+                ]);
+
+                $retainedIds[] = $newLot->id;
+            }
+
+            $activity->lots()
+                ->whereNotIn('id', $retainedIds)
+                ->delete();
+        } else {
+            $activity->lots()->delete();
+        }
+
+        return redirect()
+            ->route('provider.activities.view', $activity->id)
+            ->with('success', 'Activity updated successfully.');
     }
 
     /**
@@ -317,7 +489,7 @@ class ProviderController extends Controller
         $shopInfo = ShopInfo::where('user_id', $user->id)->firstOrFail();
 
         $validated = $request->validate([
-            'activity_type' => ['required','string'],
+            'activity_type' => ['required','string', Rule::in(array_keys(Activity::getActivityTypes()))],
             'name' => ['required','string','max:255'],
             'description' => ['nullable','string'],
             'location' => ['nullable','string','max:255'],
@@ -328,7 +500,7 @@ class ProviderController extends Controller
             'duration_days' => ['nullable','integer','min:0','max:365'],
             'duration_hours' => ['nullable','integer','min:0','max:23'],
             'price' => ['required','numeric','min:0'],
-            'price_type' => ['required','string'],
+            'price_type' => ['required','string', Rule::in(array_keys(Activity::getPriceTypes()))],
             'includes_gear' => ['nullable','boolean'],
             'included_items' => ['nullable','array'],
             'excluded_items' => ['nullable','array'],
@@ -460,18 +632,41 @@ class ProviderController extends Controller
     {
         $user = Auth::user();
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone' => ['required', 'string', 'max:20'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'remove_profile_image' => ['nullable', 'boolean'],
         ]);
 
-        // Update the user record
-        User::where('id', $user->id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+        ];
+
+        if ($request->boolean('remove_profile_image') && $user->profile_image) {
+            Storage::disk('public')->delete($user->profile_image);
+            $updateData['profile_image'] = null;
+        }
+
+        if ($request->hasFile('profile_image')) {
+            $profileImage = $request->file('profile_image');
+            $profilePath = $profileImage->storeAs(
+                'profile_images',
+                time() . '_' . $user->id . '.' . $profileImage->getClientOriginalExtension(),
+                'public'
+            );
+
+            if (!empty($user->profile_image)) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+
+            $updateData['profile_image'] = $profilePath;
+        }
+
+        User::where('id', $user->id)->update($updateData);
 
         return redirect()->route('provider.profile')->with('success', 'Profile updated successfully.');
     }

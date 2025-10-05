@@ -40,10 +40,14 @@ $(document).ready(function() {
         $('.dropdown-content').addClass('hidden');
     });
 
-    // Toggle password visibility
-    $('.toggle-password').on('click', function() {
+    // Toggle password visibility (delegated for dynamically injected forms)
+    $(document).on('click', '.toggle-password', function() {
         const targetId = $(this).data('target');
         const input = $(`#${targetId}`);
+
+        if (!input.length) {
+            return;
+        }
 
         if (input.attr('type') === 'password') {
             input.attr('type', 'text');
@@ -66,27 +70,20 @@ $(document).ready(function() {
 
 // Modal functionality
 window.showModal = function(modalId) {
-    // Show the modal
-    $('#' + modalId).removeClass('hidden');
+    const modalSelector = '#' + modalId;
+    const modalContentSelector = '#' + modalId + '-content';
+    const template = document.getElementById(modalId + '-template');
 
-    // Load the modal content if it exists
-    const contentId = modalId + '-content';
-    const contentElement = $('#' + contentId);
-
-    if (contentElement.length) {
-        // Copy the content from the hidden div to the modal content area
-        const modalContentArea = $('#' + modalId + '-content');
-        const contentHtml = contentElement.html();
-
-        if (contentHtml && modalContentArea.length) {
-            modalContentArea.html(contentHtml);
+    if (template) {
+        const modalContentArea = $(modalContentSelector);
+        if (modalContentArea.length) {
+            modalContentArea.html(template.innerHTML);
         }
     }
 
-    // Add overflow:hidden to body to prevent scrolling
+    $(modalSelector).removeClass('hidden');
     $('body').addClass('overflow-hidden');
 
-    // Add event listener for ESC key
     $(document).on('keydown.modal', function(event) {
         if (event.key === 'Escape') {
             hideModal(modalId);
@@ -95,12 +92,15 @@ window.showModal = function(modalId) {
 }
 
 window.hideModal = function(modalId) {
-    // Hide the modal
-    $('#' + modalId).addClass('hidden');
+    const modalSelector = '#' + modalId;
+    const modalContentSelector = '#' + modalId + '-content';
 
-    // Remove overflow:hidden from body
+    $(modalSelector).addClass('hidden');
     $('body').removeClass('overflow-hidden');
-
-    // Remove ESC key event listener
     $(document).off('keydown.modal');
+
+    const modalContentArea = $(modalContentSelector);
+    if (modalContentArea.length) {
+        modalContentArea.empty();
+    }
 }
