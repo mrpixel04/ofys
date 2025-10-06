@@ -1,0 +1,20 @@
+<?php
+
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+// Determine if the application is in maintenance mode...
+// NOTE: Update this path to point to your Laravel installation outside public_html
+if (file_exists($maintenance = __DIR__.'/../ofys/storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+// Register the Composer autoloader...
+// NOTE: Update this path to point to your Laravel installation outside public_html
+require __DIR__.'/../ofys/vendor/autoload.php';
+
+// Bootstrap Laravel and handle the request...
+// NOTE: Update this path to point to your Laravel installation outside public_html
+(require_once __DIR__.'/../ofys/bootstrap/app.php')
+    ->handleRequest(Request::capture());

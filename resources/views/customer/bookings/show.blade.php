@@ -186,86 +186,87 @@
                                     </div>
                                 </div>
 
-                                <!-- Payment Options -->
-                                @if($booking->payment_status !== 'paid' && $booking->status !== 'cancelled')
-                                <div class="mt-6 js-accordion">
-                                    <h3 class="text-base font-medium text-gray-900 mb-3">Payment Options</h3>
-
-                                    <!-- Payment Method Selection -->
-                                    <div class="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden mb-4">
-                                        <!-- Option 1: Online Transfer -->
-                                        <div class="payment-option border-b border-gray-200">
-                                            <button type="button"
-                                                    class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
-                                                    data-target="transfer">
-                                                <span class="font-medium text-gray-800">Bank Transfer</span>
-                                                <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                <!-- Payment Actions -->
+                                @if($booking->payment_status === 'done' || $booking->payment_status === 'paid')
+                                    <!-- Payment Successful - Show Receipt Button -->
+                                    <div class="mt-6">
+                                        <div class="bg-green-50 border-l-4 border-green-500 rounded-lg p-4 mb-4">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
-                                            </button>
-                                            <div class="js-accordion-panel hidden px-4 pb-4" data-panel="transfer">
-                                                <div class="bg-gray-50 p-3 rounded-md mb-3">
-                                                    <p class="text-sm text-gray-600 mb-1"><strong>Bank:</strong> Maybank</p>
-                                                    <p class="text-sm text-gray-600 mb-1"><strong>Account Number:</strong> 1234 5678 9012</p>
-                                                    <p class="text-sm text-gray-600"><strong>Account Name:</strong> OFYS Outdoor Adventures</p>
-                                                </div>
-                                                <p class="text-sm text-gray-600 mb-3">Please upload your receipt after making the transfer:</p>
-
-                                                <form action="{{ route('customer.bookings.payment.transfer', $booking->id) }}" method="POST" enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div class="mb-3">
-                                                        <label for="receipt" class="block text-sm font-medium text-gray-700 mb-1">Upload Receipt</label>
-                                                        <input type="file" name="receipt" id="receipt" accept="image/*,.pdf"
-                                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100" required>
-                                                        <p class="mt-1 text-xs text-gray-500">Upload JPG, PNG or PDF (max 2MB)</p>
-                                                    </div>
-                                                    <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                                        Confirm Payment
-                                                    </button>
-                                                </form>
+                                                <span class="text-sm font-semibold text-green-800">Payment Confirmed!</span>
                                             </div>
                                         </div>
-
-                                        <!-- Option 2: Payment Gateway -->
-                                        <div class="payment-option border-b border-gray-200">
-                                            <button type="button"
-                                                    class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
-                                                    data-target="online">
-                                                <span class="font-medium text-gray-800">Online Payment</span>
-                                                <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                            <div class="js-accordion-panel hidden px-4 pb-4" data-panel="online">
-                                                <p class="text-sm text-gray-600 mb-3">Pay securely using our online payment gateway.</p>
-                                                <a href="{{ route('customer.bookings.payment.online', $booking->id) }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                                    Proceed to Payment
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <!-- Option 3: Pay at Venue -->
-                                        <div class="payment-option">
-                                            <button type="button"
-                                                    class="js-accordion-toggle w-full px-4 py-3 text-left flex justify-between items-center focus:outline-none"
-                                                    data-target="cash">
-                                                <span class="font-medium text-gray-800">Manual Payment (Cash)</span>
-                                                <svg class="js-accordion-arrow h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                            <div class="js-accordion-panel hidden px-4 pb-4" data-panel="cash">
-                                                <p class="text-sm text-gray-600 mb-3">Pay with cash at the venue before your activity starts.</p>
-                                                <form action="{{ route('customer.bookings.payment.cash', $booking->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                                        Pay at Site
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                        <a href="{{ route('payment.receipt', $booking->id) }}" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-300">
+                                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            View Receipt
+                                        </a>
+                                        <a href="{{ route('payment.status', $booking->id) }}" class="mt-3 w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                            Payment Status
+                                        </a>
                                     </div>
-                                </div>
+                                @elseif($booking->payment_status === 'failed' && $booking->status !== 'cancelled')
+                                    <!-- Payment Failed - Show Retry Button -->
+                                    <div class="mt-6">
+                                        <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-4">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                                <span class="text-sm font-semibold text-red-800">Payment Failed</span>
+                                            </div>
+                                            <p class="text-xs text-red-700 mt-1">Your payment could not be processed. Please try again.</p>
+                                        </div>
+                                        <form action="{{ route('payment.retry', $booking->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-300">
+                                                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                                Retry Payment
+                                            </button>
+                                        </form>
+                                        <a href="{{ route('payment.status', $booking->id) }}" class="mt-3 w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                            View Payment Details
+                                        </a>
+                                    </div>
+                                @elseif($booking->status !== 'cancelled')
+                                    <!-- Payment Pending - Show Pay Now Button -->
+                                    <div class="mt-6">
+                                        <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-4 mb-4">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-semibold text-yellow-800">Payment Pending</span>
+                                            </div>
+                                            <p class="text-xs text-yellow-700 mt-1">Complete your payment to confirm this booking.</p>
+                                        </div>
+                                        <a href="{{ route('payment.initiate', $booking->id) }}" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                            </svg>
+                                            Pay Now with Billplz
+                                        </a>
+                                        <p class="text-xs text-center text-gray-500 mt-2">
+                                            Secure payment via FPX, Credit Card, or E-Wallet
+                                        </p>
+                                        <a href="{{ route('payment.status', $booking->id) }}" class="mt-3 w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                            Check Payment Status
+                                        </a>
+                                    </div>
                                 @endif
 
                                 <!-- Actions -->

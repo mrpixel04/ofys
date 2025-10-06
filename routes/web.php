@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Provider\ProviderController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
+use App\Http\Controllers\Customer\PaymentController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
@@ -66,6 +67,10 @@ Route::get('/language/{locale}', function ($locale) {
     }
     return back();
 })->name('language.switch');
+
+// Billplz Payment Callback (Public - no auth required)
+Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+Route::get('/payment/return', [PaymentController::class, 'return'])->name('payment.return');
 
 // Admin Routes
 Route::middleware(['auth', 'role:ADMIN'])->group(function () {
@@ -179,10 +184,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bookings/{id}', [CustomerBookingController::class, 'show'])->name('customer.bookings.show');
     Route::post('/bookings/{id}/cancel', [CustomerBookingController::class, 'cancel'])->name('customer.bookings.cancel');
 
-    // Payment routes
+    // Payment routes (old methods - keep for backward compatibility)
     Route::post('/bookings/{id}/payment/transfer', [CustomerBookingController::class, 'processTransferPayment'])->name('customer.bookings.payment.transfer');
     Route::get('/bookings/{id}/payment/online', [CustomerBookingController::class, 'showOnlinePayment'])->name('customer.bookings.payment.online');
     Route::post('/bookings/{id}/payment/cash', [CustomerBookingController::class, 'processCashPayment'])->name('customer.bookings.payment.cash');
+
+    // Billplz Payment Routes (requires auth)
+    Route::get('/payment/initiate/{bookingId}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
+    Route::get('/payment/success/{bookingId}', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/failed/{bookingId}', [PaymentController::class, 'failed'])->name('payment.failed');
+    Route::get('/payment/receipt/{bookingId}', [PaymentController::class, 'receipt'])->name('payment.receipt');
+    Route::get('/payment/status/{bookingId}', [PaymentController::class, 'status'])->name('payment.status');
+    Route::post('/payment/retry/{bookingId}', [PaymentController::class, 'retry'])->name('payment.retry');
 
     // Activity booking (requires login)
     Route::get('/activities/{id}/book', [CustomerBookingController::class, 'create'])->name('customer.bookings.create');
