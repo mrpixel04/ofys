@@ -2,13 +2,30 @@
 
 > **For**: Any AI Assistant (Claude, ChatGPT, Copilot, etc.)  
 > **Purpose**: Quick onboarding and development guidelines for OFYS project  
-> **Last Updated**: October 5, 2025 (Late Evening Session)
+> **Last Updated**: November 26, 2025 (Midday Session)
 
 ---
 
 ## 📢 RECENT SESSION UPDATES
 
-### October 5, 2025 - Late Evening Session (LATEST)
+### November 26, 2025 - Midday Session (LATEST)
+**What was completed:**
+1. ✅ **Vendor Onboarding Flow Fixes**
+   - Restored proper create-vs-update handling so the "new vendor" form works via `admin.providers.update('new')`.
+   - Added full validation + persistence for the new compliance fields (SSM No., E-Invoice No., bank account & bank name) across web + API controllers.
+   - Updated `ShopInfo` fillables and created migration `2025_11_26_000001_add_compliance_fields_to_shop_infos_table.php`; run `php artisan migrate` after pulling.
+
+2. ✅ **Media & Deletion Reliability**
+   - Vendor profile image uploads now save to `storage/app/public/profile-images` and old files are removed on replacement or account deletion.
+   - Added missing DELETE route (`admin.providers.delete`) and pointed the admin UI to `/admin/providers/{id}` so the modal delete button works without hitting the API stack.
+
+3. ✅ **Admin UI Enhancements**
+   - Company Details tab now includes branded inputs for SSM, E-Invoice, and a “Banking & Settlement” card (account number + bank name) without breaking the SaaS layout.
+   - Vendor detail view surfaces the new compliance/banking metadata for quick audits.
+
+---
+
+### October 5, 2025 - Late Evening Session
 **What was completed:**
 1. ✅ **Admin Section Complete Redesign** - SaaS-style UI with Purple/Indigo theme
    - Dashboard: Animated stat cards, gradient backgrounds, modern tables

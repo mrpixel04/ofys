@@ -8,10 +8,10 @@
             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Back to Providers
+            Back to Vendors
         </a>
         <span class="text-gray-500">/</span>
-        <span class="text-gray-700">{{ isset($provider) && $provider->id ? 'Edit Provider' : 'Add New Provider' }}</span>
+        <span class="text-gray-700">{{ isset($provider) && $provider->id ? 'Edit Vendor' : 'Add New Vendor' }}</span>
     </div>
 
     <!-- Header -->
@@ -22,8 +22,8 @@
                     <i class="fas {{ isset($provider) && $provider->id ? 'fa-user-edit' : 'fa-user-plus' }} text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold">{{ isset($provider) && $provider->id ? 'Edit Provider' : 'Add New Provider' }}</h1>
-                    <p class="text-purple-100 mt-1">{{ isset($provider) && $provider->id ? 'Update provider information and settings' : 'Create a new provider account' }}</p>
+                    <h1 class="text-2xl font-bold">{{ isset($provider) && $provider->id ? 'Edit Vendor' : 'Add New Vendor' }}</h1>
+                    <p class="text-purple-100 mt-1">{{ isset($provider) && $provider->id ? 'Update vendor information and settings' : 'Create a new vendor account' }}</p>
                 </div>
             </div>
         </div>
@@ -48,11 +48,9 @@
         @endif
 
         <div class="p-6">
-            <form id="providerForm" action="{{ isset($provider) && $provider->id ? route('admin.providers.update', $provider->id) : route('admin.providers.update', 'new') }}" method="POST" class="space-y-6">
+            <form id="providerForm" action="{{ isset($provider) && $provider->id ? route('admin.providers.update', $provider->id) : route('admin.providers.update', 'new') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
-                @if(isset($provider) && $provider->id)
-                    @method('PUT')
-                @endif
+                @method('PUT')
 
                 <!-- Form sections tabs -->
                 <div class="border-b border-gray-200 mb-6">
@@ -105,7 +103,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                     <i class="far fa-envelope"></i>
                                 </div>
-                                <input type="email" id="email" name="email" value="{{ $provider->email ?? old('email') }}" required placeholder="provider@example.com" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
+                                <input type="email" id="email" name="email" value="{{ $provider->email ?? old('email') }}" required placeholder="vendor@example.com" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
                             </div>
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -259,7 +257,7 @@
                             </div>
                             <p class="mt-2 text-xs text-gray-500 flex items-center">
                                 <i class="fas fa-info-circle mr-1 text-blue-500"></i>
-                                Upload a professional profile image for this provider account.
+                                Upload a professional profile image for this vendor account.
                             </p>
                         </div>
                     </div>
@@ -330,6 +328,46 @@
                                 </div>
                             </div>
                             @error('business_type')
+                                <p class="mt-1 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <!-- SSM Registration Number -->
+                        <div>
+                            <label for="ssm_number" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                <i class="fas fa-file-contract text-purple-500 mr-2"></i>
+                                No. SSM
+                            </label>
+                            <div class="mt-1 relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <input type="text" id="ssm_number" name="ssm_number" value="{{ $provider->shopInfo->ssm_number ?? old('ssm_number') }}" placeholder="e.g. 202001234567" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
+                            </div>
+                            @error('ssm_number')
+                                <p class="mt-1 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <!-- E-Invoice Number -->
+                        <div>
+                            <label for="einvoice_number" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                <i class="fas fa-file-invoice text-purple-500 mr-2"></i>
+                                No. E-Invoice
+                            </label>
+                            <div class="mt-1 relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+                                <input type="text" id="einvoice_number" name="einvoice_number" value="{{ $provider->shopInfo->einvoice_number ?? old('einvoice_number') }}" placeholder="Enter latest E-Invoice reference" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
+                            </div>
+                            @error('einvoice_number')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -469,6 +507,50 @@
                             </div>
                         </div>
 
+                        <!-- Banking & Settlement -->
+                        <div class="md:col-span-2 bg-white rounded-lg p-4 border border-purple-100 shadow-sm">
+                            <h3 class="font-medium text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-piggy-bank text-purple-500 mr-2"></i>
+                                Banking & Settlement
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="bank_account_number" class="block text-sm font-medium text-gray-700 mb-1">Bank Account Number</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <input type="text" id="bank_account_number" name="bank_account_number" value="{{ $provider->shopInfo->bank_account_number ?? old('bank_account_number') }}" placeholder="e.g. 1234 5678 9012" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
+                                    </div>
+                                    @error('bank_account_number')
+                                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-1"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="bank_name" class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <input type="text" id="bank_name" name="bank_name" value="{{ $provider->shopInfo->bank_name ?? old('bank_name') }}" placeholder="e.g. Maybank Berhad" class="pl-10 pr-3 py-3 focus:ring-purple-500 focus:border-purple-500 block w-full border-gray-300 rounded-lg h-12 text-base">
+                                    </div>
+                                    @error('bank_name')
+                                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-1"></i>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <p class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-info-circle mr-1 text-blue-500"></i>
+                                We use these details to generate receipts and reconcile Billplz payouts.
+                            </p>
+                        </div>
+
                         <!-- Verification Status -->
                         <div class="md:col-span-2">
                             <div class="flex items-center p-4 border border-purple-200 rounded-lg bg-purple-50">
@@ -480,10 +562,10 @@
                                 <div class="flex-1">
                                     <div class="flex items-center">
                                         <input type="checkbox" id="is_verified" name="is_verified" value="1" {{ (isset($provider->shopInfo) && $provider->shopInfo->is_verified) || old('is_verified') ? 'checked' : '' }} class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <label for="is_verified" class="ml-2 block text-sm font-medium text-gray-900">Mark as verified provider</label>
+                                        <label for="is_verified" class="ml-2 block text-sm font-medium text-gray-900">Mark as verified vendor</label>
                                     </div>
                                     <p class="text-xs text-gray-500 mt-1">
-                                        Verified providers are highlighted on the platform and are considered trusted partners.
+                                        Verified vendors are highlighted on the platform and are considered trusted partners.
                                     </p>
                                 </div>
                             </div>
@@ -505,7 +587,7 @@
                     </a>
                     <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 border border-transparent rounded-lg font-medium text-white hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors shadow-sm h-12">
                         <i class="fas fa-save mr-2"></i>
-                        Save Provider
+                        Save Vendor
                     </button>
                 </div>
             </form>

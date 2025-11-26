@@ -100,7 +100,9 @@ Route::middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::delete('/admin/providers/activities/{id}', [AdminController::class, 'deleteActivity'])->name('admin.providers.activities.delete');
     Route::get('/admin/providers/{id}', [AdminController::class, 'showProviderDetails'])->name('admin.providers.view');
     Route::get('/admin/providers/{id}/edit', [AdminController::class, 'editProvider'])->name('admin.providers.edit');
+    Route::post('/admin/providers/store', [AdminController::class, 'storeProvider'])->name('admin.providers.store');
     Route::put('/admin/providers/{id}', [AdminController::class, 'updateProvider'])->name('admin.providers.update');
+    Route::delete('/admin/providers/{id}', [AdminController::class, 'deleteProvider'])->name('admin.providers.delete');
 
     // Customers management
     Route::get('/admin/customers', [AdminCustomerController::class, 'index'])->name('admin.customers');

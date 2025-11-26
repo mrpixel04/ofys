@@ -55,12 +55,12 @@
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Provider Selection -->
+                <!-- Vendor Selection -->
                 <div class="md:col-span-2">
-                    <label for="shop_info_id" class="block text-sm font-medium text-gray-700 mb-1">Select Provider <span class="text-red-600">*</span></label>
+                    <label for="shop_info_id" class="block text-sm font-medium text-gray-700 mb-1">Select Vendor <span class="text-red-600">*</span></label>
                     <select name="shop_info_id" id="shop_info_id" required
                         class="block w-full h-10 px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
-                        <option value="">-- Select a Provider --</option>
+                        <option value="">-- Select a Vendor --</option>
                         @foreach(\App\Models\ShopInfo::with('user')->get() as $shopInfo)
                             <option value="{{ $shopInfo->id }}" {{ old('shop_info_id') == $shopInfo->id ? 'selected' : '' }}>
                                 {{ $shopInfo->company_name ?? $shopInfo->user->name }} ({{ $shopInfo->user->email }})

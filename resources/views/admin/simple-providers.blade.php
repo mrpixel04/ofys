@@ -5,13 +5,13 @@
     <!-- Header with title and add button -->
     <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800">Providers Management</h1>
-            <p class="mt-1 text-gray-600">Manage all provider accounts on the platform</p>
+            <h1 class="text-2xl font-bold text-gray-800">Vendors Management</h1>
+            <p class="mt-1 text-gray-600">Manage all vendor accounts on the platform</p>
         </div>
         <div class="mt-4 md:mt-0">
             <button id="createProviderBtn" type="button" class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-white tracking-wide hover:bg-purple-700 active:bg-purple-900 focus:outline-none focus:border-purple-900 focus:ring ring-purple-300 transition ease-in-out duration-150">
                 <i class="fas fa-plus-circle mr-2"></i>
-                New Provider
+                New Vendor
             </button>
         </div>
     </div>
@@ -47,7 +47,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
-                        <input type="search" id="search" name="search" value="{{ request('search') }}" class="focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 sm:text-sm border-gray-300 rounded-md" placeholder="Search providers...">
+                        <input type="search" id="search" name="search" value="{{ request('search') }}" class="focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 sm:text-sm border-gray-300 rounded-md" placeholder="Search vendors...">
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Provider
+                                    Vendor
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Username
@@ -183,7 +183,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                        No providers found.
+                                        No vendors found.
                                     </td>
                                 </tr>
                             @endforelse
@@ -204,7 +204,7 @@
 @endsection
 
 @section('modals')
-<!-- View Provider Modal -->
+<!-- View Vendor Modal -->
 <div id="viewProviderModal" class="fixed inset-0 z-[200] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -219,7 +219,7 @@
             <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white flex items-center" id="modal-title">
                     <i class="fas fa-user-tie mr-2"></i>
-                    Provider Details
+                    Vendor Details
                 </h3>
                 <button type="button" id="closeProviderModal" class="text-white hover:text-gray-200 focus:outline-none">
                     <i class="fas fa-times text-lg"></i>
@@ -227,7 +227,7 @@
             </div>
 
             <div class="bg-white px-6 py-4">
-                <!-- Provider Avatar and Basic Info -->
+                <!-- Vendor Avatar and Basic Info -->
                 <div class="flex items-center mb-6 pb-4 border-b border-gray-100">
                     <div id="providerAvatar" class="flex-shrink-0 h-16 w-16 mr-4">
                         <!-- Avatar will be populated via JavaScript -->
@@ -238,7 +238,7 @@
                     </div>
                 </div>
 
-                <!-- Provider Details -->
+                <!-- Vendor Details -->
                 <div class="space-y-4">
                     <!-- Email -->
                     <div class="flex items-center">
@@ -334,7 +334,7 @@
             <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white flex items-center" id="modal-title">
                     <i class="fas fa-exclamation-triangle mr-2"></i>
-                    Delete Provider
+                    Delete Vendor
                 </h3>
                 <button type="button" id="cancelDelete" class="text-white hover:text-gray-200 focus:outline-none">
                     <i class="fas fa-times text-lg"></i>
@@ -347,7 +347,7 @@
                         <i class="fas fa-user-times text-red-600 text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-gray-800 font-medium mb-2">Are you sure you want to delete this provider?</p>
+                        <p class="text-gray-800 font-medium mb-2">Are you sure you want to delete this vendor?</p>
                         <p class="text-sm text-gray-600">
                             All of their data, including business information and activities, will be permanently removed from the system.
                             This action cannot be undone.
@@ -392,7 +392,7 @@
             $('#success-message, #error-message').fadeOut(500);
         }, 5000);
 
-        // View Provider
+        // View Vendor
         $('.view-provider').on('click', function() {
             const providerId = $(this).data('id');
 
@@ -408,7 +408,7 @@
 
             // Fetch provider data via AJAX
             $.ajax({
-                url: `/api/providers/${providerId}`,
+                url: `/admin/providers/${providerId}`,
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -477,9 +477,9 @@
                     }
                 },
                 error: function(error) {
-                    console.error('Error fetching provider data:', error);
+                    console.error('Error fetching vendor data:', error);
                     $('#viewProviderModal').addClass('hidden');
-                    alert('Error fetching provider details. Please try again.');
+                    alert('Error fetching vendor details. Please try again.');
                 }
             });
         });
@@ -496,7 +496,7 @@
             window.location.href = "{{ route('admin.providers.edit', ['id' => 'new']) }}";
         });
 
-        // Delete provider
+        // Delete vendor
         $('.delete-provider').on('click', function() {
             const providerId = $(this).data('id');
             const providerName = $(this).closest('tr').find('.text-gray-900').first().text();
@@ -521,7 +521,7 @@
 
             // Send delete request
             $.ajax({
-                url: `/api/providers/${providerId}`,
+                url: `/admin/providers/${providerId}`,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -532,9 +532,9 @@
                     window.location.reload();
                 },
                 error: function(error) {
-                    console.error('Error deleting provider:', error);
+                    console.error('Error deleting vendor:', error);
                     $('#deleteConfirmationModal').addClass('hidden');
-                    alert('Error deleting provider. Please try again.');
+                    alert('Error deleting vendor. Please try again.');
                 }
             });
         });

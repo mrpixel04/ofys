@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\ShopInfo;
 use App\Models\Activity;
@@ -244,6 +245,7 @@ class AdminController extends Controller
                     'password' => 'required|string|min:8',
                     'phone' => 'nullable|string|max:20',
                     'status' => 'nullable|string|in:active,inactive,pending',
+                    'profile_image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
                     'company_name' => 'nullable|string|max:255',
                     'company_email' => 'nullable|email',
                     'business_type' => 'nullable|string|max:255',
@@ -253,8 +255,18 @@ class AdminController extends Controller
                     'state' => 'nullable|string',
                     'postal_code' => 'nullable|string',
                     'country' => 'nullable|string',
+                    'ssm_number' => 'nullable|string|max:100',
+                    'einvoice_number' => 'nullable|string|max:100',
+                    'bank_account_number' => 'nullable|string|max:100',
+                    'bank_name' => 'nullable|string|max:160',
                     'is_verified' => 'nullable|boolean',
                 ]);
+
+                // Handle profile image upload
+                $profileImagePath = null;
+                if ($request->hasFile('profile_image')) {
+                    $profileImagePath = $request->file('profile_image')->store('profile-images', 'public');
+                }
 
                 // Create user with provider role
                 $user = User::create([
@@ -265,6 +277,7 @@ class AdminController extends Controller
                     'role' => 'PROVIDER',
                     'phone' => $request->phone,
                     'status' => $request->status ?? 'active',
+                    'profile_image' => $profileImagePath,
                 ]);
 
                 // Create shop info if company details provided
@@ -281,23 +294,27 @@ class AdminController extends Controller
                         'postal_code' => $request->postal_code,
                         'country' => $request->country,
                         'phone' => $request->phone,
+                        'ssm_number' => $request->ssm_number,
+                        'einvoice_number' => $request->einvoice_number,
+                        'bank_account_number' => $request->bank_account_number,
+                        'bank_name' => $request->bank_name,
                         'is_verified' => $request->has('is_verified'),
                     ]);
                 }
 
                 return redirect()->route('admin.simple-providers-basic')
-                    ->with('success', 'Provider created successfully.');
+                    ->with('success', 'Vendor created successfully.');
             } catch (\Exception $e) {
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Failed to create provider: ' . $e->getMessage());
+                    ->with('error', 'Failed to create vendor: ' . $e->getMessage());
             }
         }
 
         try {
             // Get provider with shop info
             $provider = User::where('id', $id)
-                ->where('role', 'provider')
+                ->where('role', 'PROVIDER')
                 ->with('shopInfo')
                 ->firstOrFail();
 
@@ -309,6 +326,7 @@ class AdminController extends Controller
                 'password' => 'nullable|string|min:8',
                 'phone' => 'nullable|string|max:20',
                 'status' => 'nullable|string|in:active,inactive,pending',
+                'profile_image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
                 'company_name' => 'nullable|string|max:255',
                 'company_email' => 'nullable|email',
                 'business_type' => 'nullable|string|max:255',
@@ -318,6 +336,10 @@ class AdminController extends Controller
                 'state' => 'nullable|string',
                 'postal_code' => 'nullable|string',
                 'country' => 'nullable|string',
+                'ssm_number' => 'nullable|string|max:100',
+                'einvoice_number' => 'nullable|string|max:100',
+                'bank_account_number' => 'nullable|string|max:100',
+                'bank_name' => 'nullable|string|max:160',
                 'is_verified' => 'nullable|boolean',
             ]);
 
@@ -337,6 +359,16 @@ class AdminController extends Controller
                 $userData['password'] = bcrypt($request->password);
             }
 
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                // Delete old image if exists
+                if ($provider->profile_image && Storage::disk('public')->exists($provider->profile_image)) {
+                    Storage::disk('public')->delete($provider->profile_image);
+                }
+                // Store new image
+                $userData['profile_image'] = $request->file('profile_image')->store('profile-images', 'public');
+            }
+
             User::where('id', $provider->id)->update($userData);
 
             // Update or create shop info
@@ -351,6 +383,10 @@ class AdminController extends Controller
                     'state' => $request->state,
                     'postal_code' => $request->postal_code,
                     'country' => $request->country,
+                    'ssm_number' => $request->ssm_number,
+                    'einvoice_number' => $request->einvoice_number,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_name' => $request->bank_name,
                     'is_verified' => $request->has('is_verified'),
                 ];
 
@@ -370,6 +406,10 @@ class AdminController extends Controller
                     'postal_code' => $request->postal_code,
                     'country' => $request->country,
                     'phone' => $request->phone ?? $provider->phone,
+                    'ssm_number' => $request->ssm_number,
+                    'einvoice_number' => $request->einvoice_number,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_name' => $request->bank_name,
                     'is_verified' => $request->has('is_verified'),
                 ]);
             }
@@ -377,25 +417,25 @@ class AdminController extends Controller
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Provider updated successfully',
+                    'message' => 'Vendor updated successfully',
                 ]);
             }
 
             return redirect()->route('admin.simple-providers-basic')
-                ->with('success', 'Provider updated successfully.');
+                ->with('success', 'Vendor updated successfully.');
         } catch (\Exception $e) {
             // Error handling
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to update provider',
+                    'message' => 'Failed to update vendor',
                     'error' => $e->getMessage()
                 ], 500);
             }
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to update provider: ' . $e->getMessage());
+                ->with('error', 'Failed to update vendor: ' . $e->getMessage());
         }
     }
 
@@ -1345,6 +1385,10 @@ class AdminController extends Controller
                 'state' => 'nullable|string',
                 'postal_code' => 'nullable|string',
                 'country' => 'nullable|string',
+                'ssm_number' => 'nullable|string|max:100',
+                'einvoice_number' => 'nullable|string|max:100',
+                'bank_account_number' => 'nullable|string|max:100',
+                'bank_name' => 'nullable|string|max:160',
             ]);
 
             // Create user with provider role
@@ -1372,6 +1416,10 @@ class AdminController extends Controller
                     'postal_code' => $request->postal_code,
                     'country' => $request->country,
                     'phone' => $request->phone,
+                    'ssm_number' => $request->ssm_number,
+                    'einvoice_number' => $request->einvoice_number,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_name' => $request->bank_name,
                     'is_verified' => false,
                 ]);
             }
@@ -1426,6 +1474,10 @@ class AdminController extends Controller
                 'state' => 'nullable|string',
                 'postal_code' => 'nullable|string',
                 'country' => 'nullable|string',
+                'ssm_number' => 'nullable|string|max:100',
+                'einvoice_number' => 'nullable|string|max:100',
+                'bank_account_number' => 'nullable|string|max:100',
+                'bank_name' => 'nullable|string|max:160',
                 'is_verified' => 'nullable|boolean',
             ]);
 
@@ -1456,6 +1508,10 @@ class AdminController extends Controller
                 if ($request->has('state')) $shopData['state'] = $request->state;
                 if ($request->has('postal_code')) $shopData['postal_code'] = $request->postal_code;
                 if ($request->has('country')) $shopData['country'] = $request->country;
+                if ($request->has('ssm_number')) $shopData['ssm_number'] = $request->ssm_number;
+                if ($request->has('einvoice_number')) $shopData['einvoice_number'] = $request->einvoice_number;
+                if ($request->has('bank_account_number')) $shopData['bank_account_number'] = $request->bank_account_number;
+                if ($request->has('bank_name')) $shopData['bank_name'] = $request->bank_name;
                 if ($request->has('is_verified')) $shopData['is_verified'] = $request->is_verified;
 
                 if (count($shopData) > 0) {
@@ -1476,6 +1532,10 @@ class AdminController extends Controller
                     'postal_code' => $request->postal_code,
                     'country' => $request->country,
                     'phone' => $request->phone ?? $provider->phone,
+                    'ssm_number' => $request->ssm_number,
+                    'einvoice_number' => $request->einvoice_number,
+                    'bank_account_number' => $request->bank_account_number,
+                    'bank_name' => $request->bank_name,
                     'is_verified' => $request->is_verified ?? false,
                 ]);
             }
@@ -1511,6 +1571,11 @@ class AdminController extends Controller
                 ->where('role', 'PROVIDER')
                 ->firstOrFail();
 
+            // Delete profile image if exists
+            if ($provider->profile_image && Storage::disk('public')->exists($provider->profile_image)) {
+                Storage::disk('public')->delete($provider->profile_image);
+            }
+
             // Delete shop info if exists (will cascade delete activities)
             if ($provider->shopInfo) {
                 $provider->shopInfo->delete();
@@ -1521,12 +1586,12 @@ class AdminController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Provider deleted successfully'
+                'message' => 'Vendor deleted successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete provider',
+                'message' => 'Failed to delete vendor',
                 'error' => $e->getMessage()
             ], 500);
         }

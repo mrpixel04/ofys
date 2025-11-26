@@ -77,11 +77,11 @@
                 <!-- PROVIDER API Content -->
                 <div id="provider-content" class="tab-content hidden">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Provider API Endpoints</h2>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Vendor API Endpoints</h2>
                         <p class="text-gray-600 mb-4">API reference for provider operations</p>
                     </div>
 
-                    <!-- Swagger UI Container for Provider -->
+                    <!-- Swagger UI Container for Vendor -->
                     <div id="swagger-ui-provider" class="swagger-ui-container"></div>
                 </div>
             </div>
@@ -202,8 +202,8 @@
                 },
                 '/providers': {
                     get: {
-                        summary: 'Get All Providers',
-                        tags: ['Providers'],
+                        summary: 'Get All Vendors',
+                        tags: ['Vendors'],
                         parameters: [{
                             name: 'search',
                             in: 'query',
@@ -294,13 +294,13 @@
         const providerSpec = {
             openapi: '3.0.0',
             info: {
-                title: 'OFYS Provider API',
+                title: 'OFYS Vendor API',
                 version: '1.0.0',
                 description: 'API endpoints for provider operations'
             },
             servers: [{
                 url: '{{ url("/api/provider") }}',
-                description: 'Provider API Server'
+                description: 'Vendor API Server'
             }],
             paths: {
                 '/activities': {

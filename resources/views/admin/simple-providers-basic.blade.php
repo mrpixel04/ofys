@@ -8,13 +8,13 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
                     <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
-                        Providers Management
+                        Vendors Management
                     </h1>
                     <p class="text-gray-600 text-lg flex items-center">
                         <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
-                        Manage all provider accounts on the platform
+                        Manage all vendor accounts on the platform
                     </p>
                 </div>
                 <div class="mt-4 md:mt-0">
@@ -22,7 +22,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        New Provider
+                        New Vendor
                     </a>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                         </svg>
-                        Search & Filter Providers
+                        Search & Filter Vendors
                     </h2>
                     <form id="searchForm" action="{{ route('admin.simple-providers-basic') }}" method="GET" class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                         <!-- Enhanced Search Input -->
@@ -77,7 +77,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
-                                <input type="search" id="search" name="search" value="{{ request('search') }}" class="block w-full pl-12 pr-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-xl text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300" placeholder="Search providers by name, email, username...">
+                                <input type="search" id="search" name="search" value="{{ request('search') }}" class="block w-full pl-12 pr-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-xl text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300" placeholder="Search vendors by name, email, username...">
                             </div>
                         </div>
 
@@ -123,7 +123,7 @@
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                             </svg>
-                                            Provider
+                                            Vendor
                                         </div>
                                     </th>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">
@@ -237,7 +237,7 @@
                                                 <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                                                 </svg>
-                                                <p class="text-gray-500 text-lg font-semibold">No providers found</p>
+                                                <p class="text-gray-500 text-lg font-semibold">No vendors found</p>
                                                 <p class="text-gray-400 text-sm mt-1">Try adjusting your search or filter criteria</p>
                                             </div>
                                         </td>
@@ -353,9 +353,9 @@
             const originalText = $button.html();
             $button.html('<i class="fas fa-spinner fa-spin mr-2"></i> Deleting...').prop('disabled', true);
 
-            // Send delete request to the API
+            // Send delete request
             $.ajax({
-                url: `/api/providers/${providerId}`,
+                url: `/admin/providers/${providerId}`,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -370,7 +370,7 @@
                             <div id="success-message" class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-sm" role="alert">
                                 <div class="flex items-center">
                                     <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                    <p>Provider deleted successfully.</p>
+                                    <p>Vendor deleted successfully.</p>
                                 </div>
                             </div>
                         `;
@@ -391,7 +391,7 @@
 
                         // Hide modal and show error
                         $('#deleteConfirmationModal').addClass('hidden');
-                        alert('Error deleting provider: ' + response.message);
+                        alert('Error deleting vendor: ' + response.message);
                     }
                 },
                 error: function(error) {
@@ -400,8 +400,8 @@
 
                     // Hide modal and show error
                     $('#deleteConfirmationModal').addClass('hidden');
-                    console.error('Error deleting provider:', error);
-                    alert('Error deleting provider. Please try again.');
+                    console.error('Error deleting vendor:', error);
+                    alert('Error deleting vendor. Please try again.');
                 }
             });
         });
@@ -424,12 +424,12 @@
                         <i class="fas fa-exclamation-triangle text-red-600"></i>
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Delete Provider</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Delete Vendor</h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">
-                                Are you sure you want to delete this provider? <span id="providerToDeleteName" class="font-medium"></span>
+                                Are you sure you want to delete this vendor? <span id="providerToDeleteName" class="font-medium"></span>
                                 <br><br>
-                                This action cannot be undone. All provider data, including shop information and activities will be permanently removed.
+                                This action cannot be undone. All vendor data, including shop information and activities will be permanently removed.
                             </p>
                         </div>
                     </div>

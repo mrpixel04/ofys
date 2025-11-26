@@ -37,6 +37,10 @@ class ShopInfo extends Model
         'facebook',
         'instagram',
         'twitter',
+        'ssm_number',
+        'einvoice_number',
+        'bank_account_number',
+        'bank_name',
         'is_verified',
         'is_featured',
         // Activities
