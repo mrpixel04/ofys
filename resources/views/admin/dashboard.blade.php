@@ -31,7 +31,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500 font-medium">Total Providers</p>
+                        <p class="text-sm text-gray-500 font-medium">Total Vendors</p>
                         <p class="text-2xl font-bold text-gray-800">{{ \App\Models\User::where('role', 'PROVIDER')->count() }}</p>
                     </div>
                 </div>

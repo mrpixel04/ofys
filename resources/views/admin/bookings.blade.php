@@ -117,9 +117,9 @@
                             </div>
                         </div>
 
-                        <!-- Provider Filter -->
+                        <!-- Vendor Filter -->
                         <div>
-                            <label for="provider" class="block text-sm font-medium text-gray-700 mb-1">Provider</label>
+                            <label for="provider" class="block text-sm font-medium text-gray-700 mb-1">Vendor</label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

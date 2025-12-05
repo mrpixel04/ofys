@@ -12,8 +12,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
-                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">Payment Successful!</h1>
-                <p class="text-xl text-gray-600">Your booking has been confirmed</p>
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">{{ __('Pembayaran Berjaya!') }}</h1>
+                <p class="text-xl text-gray-600">{{ __('Tempahan anda telah disahkan') }}</p>
             </div>
 
             <!-- Main Success Card -->
@@ -22,16 +22,16 @@
                 <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-6">
                     <div class="flex items-center justify-between text-white">
                         <div>
-                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">Booking Reference</p>
+                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">{{ __('Rujukan Tempahan') }}</p>
                             <p class="text-3xl font-bold mt-1">{{ $booking->booking_reference }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">Payment Status</p>
+                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">{{ __('Status Pembayaran') }}</p>
                             <span class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-bold mt-1 backdrop-blur-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                PAID
+                                {{ __('DIBAYAR') }}
                             </span>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                         <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
-                        Booking Details
+                        {{ __('Butiran Tempahan') }}
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -55,7 +55,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Activity</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Aktiviti') }}</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $booking->activity->name }}</p>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Date & Time</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Tarikh & Masa') }}</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $booking->booking_date->format('M d, Y') }}</p>
                                 <p class="text-sm text-gray-600">{{ $booking->start_time->format('h:i A') }}</p>
                             </div>
@@ -82,8 +82,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Participants</p>
-                                <p class="text-lg font-bold text-gray-900">{{ $booking->participants }} {{ Str::plural('Person', $booking->participants) }}</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Peserta') }}</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $booking->participants }} {{ __('orang') }}</p>
                             </div>
                         </div>
 
@@ -95,7 +95,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Total Paid</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Jumlah Dibayar') }}</p>
                                 <p class="text-2xl font-extrabold text-green-600">RM {{ number_format($booking->total_price, 2) }}</p>
                             </div>
                         </div>
@@ -107,24 +107,24 @@
                             <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                             </svg>
-                            Payment Information
+                            {{ __('Maklumat Pembayaran') }}
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-xl p-6">
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Transaction ID</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('ID Transaksi') }}</p>
                                 <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_transaction_id ?? 'Processing...' }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Payment Method</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('Kaedah Pembayaran') }}</p>
                                 <p class="text-sm font-semibold text-gray-900">{{ ucfirst($booking->payment_method ?? 'Billplz') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Payment Date</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('Tarikh Pembayaran') }}</p>
                                 <p class="text-sm font-semibold text-gray-900">{{ $booking->billplz_paid_at ? $booking->billplz_paid_at->format('M d, Y h:i A') : now()->format('M d, Y h:i A') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Bill ID</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('ID Bil') }}</p>
                                 <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_bill_id }}</p>
                             </div>
                         </div>
@@ -138,20 +138,20 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            View Receipt
+                            {{ __('Lihat Resit') }}
                         </a>
                         <a href="{{ route('customer.bookings.show', $booking->id) }}" class="inline-flex items-center justify-center px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold rounded-xl border-2 border-gray-300 transform hover:scale-105 transition-all duration-300">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
-                            View Booking
+                            {{ __('Lihat Tempahan') }}
                         </a>
                         <a href="{{ route('customer.dashboard') }}" class="inline-flex items-center justify-center px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold rounded-xl border-2 border-gray-300 transform hover:scale-105 transition-all duration-300">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                             </svg>
-                            Dashboard
+                            {{ __('Papan Pemuka') }}
                         </a>
                     </div>
                 </div>
@@ -164,31 +164,31 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <h4 class="text-lg font-bold text-blue-900 mb-2">What's Next?</h4>
+                        <h4 class="text-lg font-bold text-blue-900 mb-2">{{ __('Langkah Seterusnya') }}</h4>
                         <ul class="space-y-2 text-sm text-blue-800">
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                A confirmation email has been sent to <strong>{{ $booking->user->email }}</strong>
+                                {{ __('E-mel pengesahan telah dihantar ke') }} <strong>{{ $booking->user->email }}</strong>
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                Please arrive 15 minutes before your scheduled time
+                                {{ __('Sila tiba 15 minit sebelum masa dijadualkan') }}
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                Bring your booking reference number: <strong>{{ $booking->booking_reference }}</strong>
+                                {{ __('Bawa nombor rujukan tempahan anda:') }} <strong>{{ $booking->booking_reference }}</strong>
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                For any questions, contact us at support@ofys.com
+                                {{ __('Jika ada sebarang soalan, hubungi kami di support@ofys.com') }}
                             </li>
                         </ul>
                     </div>

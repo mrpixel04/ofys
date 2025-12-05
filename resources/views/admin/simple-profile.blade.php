@@ -27,7 +27,7 @@
                 </div>
                 <p class="ml-3 font-semibold">{{ session('success') }}</p>
             </div>
-        </div>
+            </div>
         @endif
 
         @if(isset($error))
@@ -40,7 +40,7 @@
                 </div>
                 <p class="ml-3 font-semibold">{{ $error }}</p>
             </div>
-        </div>
+            </div>
         @endif
 
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden mb-8 border border-purple-100">
@@ -253,7 +253,7 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
 </div>
 
 <!-- Animations & Styles -->

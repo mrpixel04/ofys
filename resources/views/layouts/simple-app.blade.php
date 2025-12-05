@@ -154,33 +154,33 @@
                     <!-- Navigation Links on right side -->
                     <div class="hidden sm:flex sm:items-center sm:space-x-8" id="desktop-menu">
                         <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : 'text-gray-600 hover:text-gray-900' }}">
-                            Utama
+                            {{ __('Utama') }}
                         </a>
                         <a href="{{ route('activities.index') }}" class="nav-link {{ request()->routeIs('activities.*') ? 'active' : 'text-gray-600 hover:text-gray-900' }}">
-                            Aktiviti
+                            {{ __('Aktiviti') }}
                         </a>
                         <a href="{{ route('about') }}" class="nav-link {{ request()->routeIs('about') ? 'active' : 'text-gray-600 hover:text-gray-900' }}">
-                            Tentang Kami
+                            {{ __('Tentang Kami') }}
                         </a>
                         <a href="{{ route('contact') }}" class="nav-link {{ request()->routeIs('contact') ? 'active' : 'text-gray-600 hover:text-gray-900' }}">
-                            Hubungi
+                            {{ __('Hubungi') }}
                         </a>
 
                         <!-- Language Switcher -->
                         <div class="relative ml-4 dropdown">
                             <button type="button" class="dropdown-trigger flex items-center text-gray-600 hover:text-gray-900 focus:outline-none font-medium">
-                                <span class="text-sm">MS <i class="fas fa-chevron-down text-xs ml-1"></i></span>
+                                <span class="text-sm">{{ strtoupper(app()->getLocale() === 'ms' ? 'MS' : 'EN') }} <i class="fas fa-chevron-down text-xs ml-1"></i></span>
                             </button>
                             <div class="dropdown-content">
                                 <div class="py-1">
                                     <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         <div class="flex items-center">
-                                            <span>English</span>
+                                            <span>{{ __('English') }}</span>
                                         </div>
                                     </a>
                                     <a href="{{ route('language.switch', 'ms') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         <div class="flex items-center">
-                                            <span>Bahasa Melayu</span>
+                                            <span>{{ __('Bahasa Melayu') }}</span>
                                         </div>
                                     </a>
                                 </div>
@@ -189,15 +189,15 @@
 
                         @guest
                             <a href="{{ route('login') }}" class="btn-login text-gray-600 hover:text-gray-900 ml-4">
-                                Log Masuk
+                                {{ __('Log Masuk') }}
                             </a>
                             <a href="{{ route('register') }}" class="btn-register ml-2">
-                                Daftar
+                                {{ __('Daftar') }}
                             </a>
                         @else
                             <div class="ml-3 relative dropdown">
                                 <button type="button" class="dropdown-trigger flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    <span class="sr-only">Open user menu</span>
+                                    <span class="sr-only">{{ __('Buka menu pengguna') }}</span>
                                     <div class="h-9 w-9 rounded-full bg-yellow-500 flex items-center justify-center text-white">
                                         {{ substr(Auth::user()->name, 0, 1) }}
                                     </div>
@@ -208,16 +208,16 @@
                                             {{ Auth::user()->name }}
                                         </div>
                                         @if(Auth::user()->role === 'admin')
-                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin Dashboard</a>
+                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Papan Pemuka Admin') }}</a>
                                         @elseif(Auth::user()->role === 'provider')
-                                            <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Provider Dashboard</a>
+                                            <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Papan Pemuka Penyedia') }}</a>
                                         @else
-                                            <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Dashboard</a>
+                                            <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Papan Pemuka Saya') }}</a>
                                         @endif
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Tetapan') }}</a>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</button>
+                                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Log Keluar') }}</button>
                                         </form>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@
                         <button type="button" id="mobile-menu-button"
                                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
                                 aria-expanded="false">
-                            <span class="sr-only">Open main menu</span>
+                            <span class="sr-only">{{ __('Buka menu utama') }}</span>
                             <!-- Icon when menu is closed -->
                             <svg id="mobile-menu-icon-open" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -248,26 +248,26 @@
             <div class="mobile-menu sm:hidden" id="mobile-menu-panel">
                 <div class="pt-2 pb-3 space-y-1">
                     <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        Utama
+                        {{ __('Utama') }}
                     </a>
                     <a href="{{ route('activities.index') }}" class="{{ request()->routeIs('activities.*') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        Aktiviti
+                        {{ __('Aktiviti') }}
                     </a>
                     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        Tentang Kami
+                        {{ __('Tentang Kami') }}
                     </a>
                     <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        Hubungi
+                        {{ __('Hubungi') }}
                     </a>
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-200">
                     @guest
                         <div class="flex items-center px-4">
                             <a href="{{ route('login') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
-                                Log Masuk
+                                {{ __('Log Masuk') }}
                             </a>
                             <a href="{{ route('register') }}" class="ml-4 block px-4 py-2 text-base font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-md">
-                                Daftar
+                                {{ __('Daftar') }}
                             </a>
                         </div>
                     @else
@@ -284,16 +284,16 @@
                         </div>
                         <div class="mt-3 space-y-1">
                             @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Admin Dashboard</a>
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Papan Pemuka Admin') }}</a>
                             @elseif(Auth::user()->role === 'provider')
-                                <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Provider Dashboard</a>
+                                <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Papan Pemuka Penyedia') }}</a>
                             @else
-                                <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">My Dashboard</a>
+                                <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Papan Pemuka Saya') }}</a>
                             @endif
-                            <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Settings</a>
+                            <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Tetapan') }}</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Log Out</button>
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Log Keluar') }}</button>
                             </form>
                         </div>
                     @endguest
@@ -329,22 +329,22 @@
 
                     <!-- Quick Links -->
                     <div>
-                        <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
+                        <h3 class="text-white font-semibold text-lg mb-4">{{ __('Pautan Pantas') }}</h3>
                         <ul class="space-y-2">
-                            <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-white">Home</a></li>
-                            <li><a href="{{ route('activities.index') }}" class="text-gray-300 hover:text-white">Activities</a></li>
-                            <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-white">About Us</a></li>
-                            <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-white">Contact</a></li>
+                            <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-white">{{ __('Utama') }}</a></li>
+                            <li><a href="{{ route('activities.index') }}" class="text-gray-300 hover:text-white">{{ __('Aktiviti') }}</a></li>
+                            <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-white">{{ __('Tentang Kami') }}</a></li>
+                            <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-white">{{ __('Hubungi') }}</a></li>
                         </ul>
                     </div>
 
                     <!-- Contact Info -->
                     <div>
-                        <h3 class="text-white font-semibold text-lg mb-4">Contact Us</h3>
+                        <h3 class="text-white font-semibold text-lg mb-4">{{ __('Hubungi Kami') }}</h3>
                         <ul class="space-y-2">
                             <li class="text-gray-300 flex items-start">
                                 <i class="fas fa-map-marker-alt mt-1 mr-2"></i>
-                                <span>123 Adventure St, Kuala Lumpur, Malaysia</span>
+                                <span>{{ __('123 Jalan Pengembaraan, Kuala Lumpur, Malaysia') }}</span>
                             </li>
                             <li class="text-gray-300 flex items-start">
                                 <i class="fas fa-phone-alt mt-1 mr-2"></i>
@@ -359,7 +359,7 @@
                 </div>
 
                 <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                    <p class="text-gray-400">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. All rights reserved.</p>
+                    <p class="text-gray-400">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. {{ __('Semua hak terpelihara.') }}</p>
                 </div>
             </div>
         </footer>

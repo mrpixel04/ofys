@@ -1,6 +1,6 @@
 @extends('layouts.simple-admin')
 
-@section('title', 'Provider Details')
+@section('title', 'Vendor Details')
 
 @section('content')
 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -8,13 +8,13 @@
     <div class="mb-8 border-b border-gray-200 pb-5">
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">Provider Details</h1>
-                <p class="mt-1 text-sm text-gray-500">View detailed information about this provider</p>
+                <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">Vendor Details</h1>
+                <p class="mt-1 text-sm text-gray-500">View detailed information about this vendor</p>
             </div>
             <div class="flex space-x-3">
                 <a href="{{ route('admin.providers.edit', $provider->id) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                     <i class="fas fa-pencil-alt mr-2"></i>
-                    Edit Provider
+                    Edit Vendor
                 </a>
                 <a href="{{ route('admin.simple-providers-basic') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                     <i class="fas fa-arrow-left mr-2"></i>
@@ -44,7 +44,7 @@
     @endif
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <!-- Provider Profile Card -->
+        <!-- Vendor Profile Card -->
         <div class="lg:col-span-1">
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-purple-600 h-24 flex items-end justify-center">
@@ -96,7 +96,7 @@
                 <div class="border-t border-gray-200 p-5 space-y-3">
                     <a href="{{ route('admin.providers.edit', $provider->id) }}" class="flex items-center text-sm text-amber-600 hover:text-amber-800">
                         <i class="fas fa-pencil-alt w-5 h-5 mr-2"></i>
-                        Edit Provider
+                        Edit Vendor
                     </a>
 
                     @if(isset($provider->shopInfo->id))
@@ -108,13 +108,13 @@
 
                     <button id="delete-provider-btn" data-id="{{ $provider->id }}" data-name="{{ $provider->name }}" class="flex items-center text-sm text-red-600 hover:text-red-800">
                         <i class="fas fa-trash-alt w-5 h-5 mr-2"></i>
-                        Delete Provider
+                        Delete Vendor
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Provider Information Tabs -->
+        <!-- Vendor Information Tabs -->
         <div class="lg:col-span-2">
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <!-- Tabs -->
@@ -154,6 +154,22 @@
                                         <h4 class="text-sm font-medium text-gray-500">Business Type</h4>
                                         <p class="mt-1 text-sm text-gray-900">{{ $provider->shopInfo->business_type ?? 'Not specified' }}</p>
                                     </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-500">No. SSM</h4>
+                                    <p class="mt-1 text-sm text-gray-900">{{ $provider->shopInfo->ssm_number ?? 'Not provided' }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-500">No. E-Invoice</h4>
+                                    <p class="mt-1 text-sm text-gray-900">{{ $provider->shopInfo->einvoice_number ?? 'Not provided' }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-500">Bank Account</h4>
+                                    <p class="mt-1 text-sm text-gray-900">{{ $provider->shopInfo->bank_account_number ?? 'Not provided' }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-500">Bank Name</h4>
+                                    <p class="mt-1 text-sm text-gray-900">{{ $provider->shopInfo->bank_name ?? 'Not provided' }}</p>
+                                </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-500">Verification Status</h4>
                                         <p class="mt-1">
@@ -254,7 +270,7 @@
                         <div class="text-center py-10">
                             <i class="fas fa-store text-gray-300 text-5xl mb-3"></i>
                             <h3 class="text-lg font-medium text-gray-900">No Company Information</h3>
-                            <p class="mt-1 text-sm text-gray-500">This provider hasn't set up their company information yet.</p>
+                            <p class="mt-1 text-sm text-gray-500">This vendor hasn't set up their company information yet.</p>
                             <div class="mt-5">
                                 <a href="{{ route('admin.providers.edit', $provider->id) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                                     <i class="fas fa-plus-circle mr-2"></i>
@@ -310,7 +326,7 @@
                         <div class="text-center py-10">
                             <i class="fas fa-calendar-alt text-gray-300 text-5xl mb-3"></i>
                             <h3 class="text-lg font-medium text-gray-900">No Activities</h3>
-                            <p class="mt-1 text-sm text-gray-500">This provider hasn't added any activities or services yet.</p>
+                            <p class="mt-1 text-sm text-gray-500">This vendor hasn't added any activities or services yet.</p>
                         </div>
                     @endif
                 </div>
@@ -332,7 +348,7 @@
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Delete Provider
+                            Delete Vendor
                         </h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">
@@ -383,7 +399,7 @@
             $('#success-message, #error-message').fadeOut(500);
         }, 5000);
 
-        // Delete provider modal
+        // Delete vendor modal
         $('#delete-provider-btn').on('click', function() {
             const providerId = $(this).data('id');
             const providerName = $(this).data('name');
@@ -432,7 +448,7 @@
 
                         // Hide modal and show error
                         $('#deleteConfirmationModal').addClass('hidden');
-                        alert('Error deleting provider: ' + response.message);
+                        alert('Error deleting vendor: ' + response.message);
                     }
                 },
                 error: function(error) {
@@ -441,8 +457,8 @@
 
                     // Hide modal and show error
                     $('#deleteConfirmationModal').addClass('hidden');
-                    console.error('Error deleting provider:', error);
-                    alert('Error deleting provider. Please try again.');
+                    console.error('Error deleting vendor:', error);
+                    alert('Error deleting vendor. Please try again.');
                 }
             });
         });

@@ -365,16 +365,14 @@
                                 </div>
                             </div>
 
-                            <div class="mt-6 grid grid-cols-2 gap-3">
+                            <div class="mt-6 grid grid-cols-1 gap-3">
                                 <a href="#" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-700">
-                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-
-                                <a href="#" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-800">
-                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="#EA4335" d="M12.24 10.2v3.72h5.3c-.21 1.32-.58 2.29-1.18 3.04-.75.95-1.92 1.97-4.12 1.97-3.63 0-6.49-2.94-6.49-6.56 0-3.62 2.86-6.56 6.49-6.56 1.96 0 3.28.83 4.04 1.52l2.76-2.66C17.77 2.45 15.35 1.5 12.24 1.5 6.74 1.5 2.25 6.04 2.25 11.62S6.74 21.75 12.24 21.75c3.41 0 5.9-1.11 7.35-3.17 1.34-1.86 1.78-4.23 1.78-6.23 0-.62-.04-1.2-.13-1.75H12.24z"/>
+                                        <path fill="#4285F4" d="M3.45 7.52l3.2 2.35c.87-2.17 2.79-3.51 5.59-3.51 1.96 0 3.28.83 4.04 1.52l2.76-2.66C17.77 2.45 15.35 1.5 12.24 1.5 8.31 1.5 5 3.78 3.45 7.52z"/>
+                                        <path fill="#FBBC05" d="M12.24 21.75c2.31 0 4.22-.76 5.62-2.08l-3.1-2.51c-.73.52-1.67.88-2.52.88-2.2 0-4.07-1.48-4.75-3.52l-3.2 2.5c1.53 3.73 4.84 5.73 7.95 5.73z"/>
+                                        <path fill="#34A853" d="M3.71 16.02l3.2-2.5c-.21-.65-.33-1.35-.33-2.12 0-.77.12-1.47.33-2.12l-3.2-2.35C2.94 8.3 2.49 9.91 2.49 11.4c0 1.49.45 3.11 1.22 4.62z"/>
+                                        <path fill="none" d="M3.71 16.02l3.2-2.5"/>
                                     </svg>
                                 </a>
                             </div>

@@ -18,8 +18,8 @@
             <div class="absolute inset-0 bg-gray-900 opacity-60"></div>
         </div>
         <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Discover Amazing<br><span class="text-yellow-400">Local Adventures</span></h1>
-            <p class="mt-6 text-xl text-gray-300 max-w-3xl">Book outdoor activities, workshops, and adventures. No account needed to explore – just search, browse, and discover!</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">{{ __('Discover Amazing') }}<br><span class="text-yellow-400">{{ __('Local Adventures') }}</span></h1>
+            <p class="mt-6 text-xl text-gray-300 max-w-3xl">{{ __('Book outdoor activities, workshops, and adventures. No account needed to explore – just search, browse, and discover!') }}</p>
 
             <!-- Search Form -->
             <div class="mt-10 max-w-xl">
@@ -66,9 +66,9 @@
     <div class="bg-white py-12 sm:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Featured Activities</h2>
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900">{{ __('Featured Activities') }}</h2>
                 <a href="{{ route('activities.index') }}" class="inline-flex items-center text-yellow-500 hover:text-yellow-600 font-medium transition-colors">
-                    View all
+                    {{ __('View all') }}
                     <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
@@ -120,7 +120,7 @@
                                     <span class="ml-1 text-xs text-gray-500">/ {{ $activity->getPriceTypeFormattedAttribute() }}</span>
                                 </div>
                                 <a href="{{ route('activities.show', $activity->id) }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 transition-colors">
-                                    Details
+                                    {{ __('Details') }}
                                 </a>
                             </div>
                         </div>
@@ -134,9 +134,9 @@
     <div class="bg-white py-16 sm:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Explore by Category</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">{{ __('Explore by Category') }}</h2>
                 <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                    Find the perfect outdoor activity for your adventure.
+                    {{ __('Find the perfect outdoor activity for your adventure.') }}
                 </p>
             </div>
 
@@ -151,7 +151,7 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-6">
                                 <h3 class="text-xl font-bold text-white">{{ $label }}</h3>
-                                <p class="mt-1 text-sm text-gray-300">Explore activities</p>
+                                <p class="mt-1 text-sm text-gray-300">{{ __('Explore activities') }}</p>
                             </div>
                         </div>
                     </a>
@@ -172,7 +172,7 @@
     <!-- Popular Locations -->
     <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 mb-8">Popular Locations</h2>
+            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 mb-8">{{ __('Popular Locations') }}</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($popularLocations as $location)
@@ -185,7 +185,7 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
                             <div class="absolute bottom-0 left-0 p-4">
                                 <h3 class="text-xl font-semibold text-white">{{ $location }}</h3>
-                                <p class="text-sm text-gray-200">Explore activities</p>
+                                <p class="text-sm text-gray-200">{{ __('Explore activities') }}</p>
                             </div>
                         </div>
                     </a>
@@ -198,9 +198,9 @@
     <section class="bg-gray-50 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">What Our Customers Say</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">{{ __('What Our Customers Say') }}</h2>
                 <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                    Real experiences from adventure seekers like you.
+                    {{ __('Real experiences from adventure seekers like you.') }}
                 </p>
             </div>
 
@@ -223,7 +223,7 @@
                         </div>
                     </div>
                     <blockquote class="mt-2 text-gray-600">
-                        "Amazing experience with the kayaking tour. The guides were knowledgeable and friendly. Will definitely book again!"
+                        {{ __('\"Amazing experience with the kayaking tour. The guides were knowledgeable and friendly. Will definitely book again!\"') }}
                     </blockquote>
                 </div>
 
@@ -245,7 +245,7 @@
                         </div>
                     </div>
                     <blockquote class="mt-2 text-gray-600">
-                        "The camping trip was well organized. The site was clean and the equipment provided was top-notch. Looking forward to trying more activities."
+                        {{ __('\"The camping trip was well organized. The site was clean and the equipment provided was top-notch. Looking forward to trying more activities.\"') }}
                     </blockquote>
                 </div>
 
@@ -267,7 +267,7 @@
                         </div>
                     </div>
                     <blockquote class="mt-2 text-gray-600">
-                        "Booking was incredibly easy and the hiking tour exceeded my expectations. The views were breathtaking and our guide made sure everyone was comfortable and safe."
+                        {{ __('\"Booking was incredibly easy and the hiking tour exceeded my expectations. The views were breathtaking and our guide made sure everyone was comfortable and safe.\"') }}
                     </blockquote>
                 </div>
             </div>
@@ -280,22 +280,22 @@
             <div class="px-6 py-6 md:py-12 md:px-12 lg:py-16 lg:px-16 xl:flex xl:items-center">
                 <div class="xl:w-0 xl:flex-1">
                     <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                        Want adventure updates?
+                        {{ __('Want adventure updates?') }}
                     </h2>
                     <p class="mt-3 max-w-3xl text-lg leading-6 text-yellow-200">
-                        Sign up for our newsletter to get the latest on new activities and special offers.
+                        {{ __('Sign up for our newsletter to get the latest on new activities and special offers.') }}
                     </p>
                 </div>
                 <div class="mt-8 sm:w-full sm:max-w-md xl:mt-0 xl:ml-8">
                     <form class="sm:flex">
-                        <label for="email-address" class="sr-only">Email address</label>
-                        <input id="email-address" name="email" type="email" required class="w-full rounded-md border-white px-5 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-700" placeholder="Enter your email">
+                        <label for="email-address" class="sr-only">{{ __('Email address') }}</label>
+                        <input id="email-address" name="email" type="email" required class="w-full rounded-md border-white px-5 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-700" placeholder="{{ __('Enter your email') }}">
                         <button type="submit" class="mt-3 flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-600 px-5 py-3 text-base font-medium text-white shadow hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-700 sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0">
-                            Subscribe
+                            {{ __('Subscribe') }}
                         </button>
                     </form>
                     <p class="mt-3 text-sm text-yellow-200">
-                        We care about your data. Read our <a href="#" class="font-medium text-white underline">Privacy Policy</a>.
+                        {{ __('We care about your data.') }} <a href="#" class="font-medium text-white underline">{{ __('Privacy Policy') }}</a>.
                     </p>
                 </div>
             </div>

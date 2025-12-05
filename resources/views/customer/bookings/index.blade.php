@@ -2,8 +2,8 @@
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900">My Bookings</h1>
-                <p class="mt-2 text-sm text-gray-600">View and manage your activity bookings.</p>
+                <h1 class="text-3xl font-extrabold text-gray-900">{{ __('Tempahan Saya') }}</h1>
+                <p class="mt-2 text-sm text-gray-600">{{ __('Lihat dan urus tempahan aktiviti anda.') }}</p>
             </div>
 
             @if(isset($error))
@@ -15,7 +15,7 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Error</h3>
+                            <h3 class="text-sm font-medium text-red-800">{{ __('Ralat') }}</h3>
                             <div class="mt-2 text-sm text-red-700">
                                 <p>{{ $error }}</p>
                             </div>
@@ -46,11 +46,11 @@
                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                             </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">No bookings found</h3>
-                            <p class="mt-1 text-sm text-gray-500">You haven't made any bookings yet.</p>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada tempahan ditemui') }}</h3>
+                            <p class="mt-1 text-sm text-gray-500">{{ __('Anda belum membuat sebarang tempahan.') }}</p>
                             <div class="mt-6">
                                 <a href="{{ route('activities.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    Explore Activities
+                                    {{ __('Terokai Aktiviti') }}
                                 </a>
                             </div>
                         </div>
@@ -59,12 +59,12 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participants</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Aktiviti') }}</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh & Masa') }}</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Peserta') }}</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah') }}</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -73,11 +73,11 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        {{ $booking->activity_details['name'] ?? 'N/A' }}
+                                                        {{ $booking->activity_details['name'] ?? __('Tiada') }}
                                                     </div>
                                                 </div>
                                                 <div class="text-sm text-gray-500">
-                                                    {{ $booking->activity_details['location'] ?? 'N/A' }}
+                                                    {{ $booking->activity_details['location'] ?? __('Tiada') }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
@@ -89,24 +89,24 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $booking->participants }} {{ $booking->participants === 1 ? 'person' : 'people' }}
+                                                {{ $booking->participants }} {{ $booking->participants === 1 ? __('orang') : __('orang') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if($booking->status === 'pending')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                        Pending
+                                                        {{ __('Tertunda') }}
                                                     </span>
                                                 @elseif($booking->status === 'confirmed')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                        Confirmed
+                                                        {{ __('Disahkan') }}
                                                     </span>
                                                 @elseif($booking->status === 'completed')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                        Completed
+                                                        {{ __('Selesai') }}
                                                     </span>
                                                 @elseif($booking->status === 'cancelled')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                        Cancelled
+                                                        {{ __('Dibatalkan') }}
                                                     </span>
                                                 @else
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
@@ -118,13 +118,13 @@
                                                 RM{{ number_format($booking->total_price, 2) }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('customer.bookings.show', $booking->id) }}" class="text-yellow-500 hover:text-yellow-600">View</a>
+                                                <a href="{{ route('customer.bookings.show', $booking->id) }}" class="text-yellow-500 hover:text-yellow-600">{{ __('Lihat') }}</a>
 
                                                 @if($booking->status !== 'cancelled' && $booking->status !== 'completed')
-                                                    <form action="{{ route('customer.bookings.cancel', $booking->id) }}" method="POST" class="inline-block ml-3" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                                    <form action="{{ route('customer.bookings.cancel', $booking->id) }}" method="POST" class="inline-block ml-3" onsubmit="return confirm('{{ __('Adakah anda pasti mahu membatalkan tempahan ini?') }}');">
                                                         @csrf
                                                         <input type="hidden" name="cancelation_reason" value="Customer requested cancellation">
-                                                        <button type="submit" class="text-red-500 hover:text-red-600">Cancel</button>
+                                                        <button type="submit" class="text-red-500 hover:text-red-600">{{ __('Batal') }}</button>
                                                     </form>
                                                 @endif
                                             </td>

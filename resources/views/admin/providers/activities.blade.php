@@ -16,7 +16,7 @@
                         <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
-                        View and manage all activities created by providers on your platform
+                        View and manage all activities created by vendors on your platform
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
@@ -30,7 +30,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        Provider List
+                        Vendors List
                     </a>
                 </div>
             </div>
@@ -92,16 +92,16 @@
                         </div>
                     </div>
 
-                    <!-- Provider Name Search -->
+                    <!-- Vendor Name Search -->
                     <div>
-                        <label for="providerSearch" class="block text-sm font-medium text-gray-700 mb-1">Provider Name/Email</label>
+                        <label for="providerSearch" class="block text-sm font-medium text-gray-700 mb-1">Vendor Name/Email</label>
                         <div class="relative rounded-md shadow-sm">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-user text-gray-400"></i>
                             </div>
                             <input type="search" name="providerSearch" id="providerSearch" value="{{ request('providerSearch') }}"
                                 class="focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 py-3 h-12 text-base border-gray-300 rounded-lg"
-                                placeholder="Search by provider...">
+                                placeholder="Search by vendor...">
                         </div>
                     </div>
 

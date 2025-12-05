@@ -180,12 +180,12 @@
                     @endif
                 </div>
 
-                <!-- Provider Info -->
+                <!-- Vendor Info -->
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-medium text-gray-800">Provider</h2>
+                        <h2 class="text-lg font-medium text-gray-800">Vendor</h2>
                         @if($booking->activity && $booking->activity->shopInfo)
-                            <a href="{{ route('admin.providers') }}" class="text-purple-600 hover:text-purple-900 text-sm">View Provider</a>
+                            <a href="{{ route('admin.providers') }}" class="text-purple-600 hover:text-purple-900 text-sm">View Vendor</a>
                         @endif
                     </div>
 
@@ -207,7 +207,7 @@
                             </div>
                         @endif
                     @else
-                        <p class="text-sm text-gray-500">Provider information not available.</p>
+                        <p class="text-sm text-gray-500">Vendor information not available.</p>
                     @endif
                 </div>
 

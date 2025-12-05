@@ -11,8 +11,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </div>
-                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">Payment Failed</h1>
-                <p class="text-xl text-gray-600">We couldn't process your payment</p>
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">{{ __('Pembayaran Gagal') }}</h1>
+                <p class="text-xl text-gray-600">{{ __('Kami tidak dapat memproses pembayaran anda') }}</p>
             </div>
 
             <!-- Main Failed Card -->
@@ -21,16 +21,16 @@
                 <div class="bg-gradient-to-r from-red-500 to-orange-600 px-8 py-6">
                     <div class="flex items-center justify-between text-white">
                         <div>
-                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">Booking Reference</p>
+                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">{{ __('Rujukan Tempahan') }}</p>
                             <p class="text-3xl font-bold mt-1">{{ $booking->booking_reference }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">Payment Status</p>
+                            <p class="text-sm font-semibold uppercase tracking-wide opacity-90">{{ __('Status Pembayaran') }}</p>
                             <span class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-bold mt-1 backdrop-blur-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
-                                FAILED
+                                {{ __('GAGAL') }}
                             </span>
                         </div>
                     </div>
@@ -44,9 +44,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div>
-                                <h3 class="text-lg font-bold text-red-900 mb-2">Why did this happen?</h3>
+                                <h3 class="text-lg font-bold text-red-900 mb-2">{{ __('Mengapa perkara ini berlaku?') }}</h3>
                                 <p class="text-sm text-red-800 mb-3">
-                                    {{ $errorMessage ?? 'Your payment could not be completed. This might be due to insufficient funds, incorrect card details, or a network issue.' }}
+                                    {{ $errorMessage ?? __('Pembayaran anda tidak dapat diselesaikan. Ini mungkin disebabkan baki tidak mencukupi, butiran kad salah, atau isu rangkaian.') }}
                                 </p>
                                 @if(isset($booking->payment_gateway_response['error_description']))
                                     <p class="text-sm text-red-700 font-semibold">
@@ -61,7 +61,7 @@
                         <svg class="w-6 h-6 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
-                        Booking Details
+                        {{ __('Butiran Tempahan') }}
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -73,7 +73,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Activity</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Aktiviti') }}</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $booking->activity->name }}</p>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Date & Time</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Tarikh & Masa') }}</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $booking->booking_date->format('M d, Y') }}</p>
                                 <p class="text-sm text-gray-600">{{ $booking->start_time->format('h:i A') }}</p>
                             </div>
@@ -100,8 +100,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Participants</p>
-                                <p class="text-lg font-bold text-gray-900">{{ $booking->participants }} {{ Str::plural('Person', $booking->participants) }}</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Peserta') }}</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $booking->participants }} {{ __('orang') }}</p>
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-semibold mb-1">Amount Due</p>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">{{ __('Jumlah Perlu Dibayar') }}</p>
                                 <p class="text-2xl font-extrabold text-red-600">RM {{ number_format($booking->total_price, 2) }}</p>
                             </div>
                         </div>
@@ -125,24 +125,24 @@
                             <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Payment Attempt Details
+                            {{ __('Butiran Cubaan Pembayaran') }}
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-xl p-6">
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Bill ID</p>
-                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_bill_id ?? 'N/A' }}</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('ID Bil') }}</p>
+                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_bill_id ?? __('Tiada') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Last Attempt</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ $booking->last_payment_attempt ? $booking->last_payment_attempt->format('M d, Y h:i A') : 'Just now' }}</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('Cubaan Terakhir') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $booking->last_payment_attempt ? $booking->last_payment_attempt->format('M d, Y h:i A') : __('Baru sahaja') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Total Attempts</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ $booking->payment_attempts }} {{ Str::plural('attempt', $booking->payment_attempts) }}</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('Jumlah Cubaan') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $booking->payment_attempts }} {{ __('cubaan') }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 mb-1">Booking Status</p>
+                                <p class="text-sm text-gray-500 mb-1">{{ __('Status Tempahan') }}</p>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">
                                     {{ strtoupper($booking->status) }}
                                 </span>
@@ -160,20 +160,20 @@
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
-                                Retry Payment
+                                {{ __('Cuba Semula Pembayaran') }}
                             </button>
                         </form>
                         <a href="{{ route('payment.status', $booking->id) }}" class="inline-flex items-center justify-center px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold rounded-xl border-2 border-gray-300 transform hover:scale-105 transition-all duration-300">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
-                            Check Status
+                            {{ __('Semak Status') }}
                         </a>
                         <a href="{{ route('customer.dashboard') }}" class="inline-flex items-center justify-center px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-bold rounded-xl border-2 border-gray-300 transform hover:scale-105 transition-all duration-300">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                             </svg>
-                            Dashboard
+                            {{ __('Papan Pemuka') }}
                         </a>
                     </div>
                 </div>
@@ -186,31 +186,31 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <h4 class="text-lg font-bold text-yellow-900 mb-2">Need Help?</h4>
+                        <h4 class="text-lg font-bold text-yellow-900 mb-2">Perlukan Bantuan?</h4>
                         <ul class="space-y-2 text-sm text-yellow-800">
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Check your card details and ensure you have sufficient funds
+                                Semak butiran kad anda dan pastikan baki mencukupi
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Try using a different payment method (FPX, Credit Card, E-Wallet)
+                                Cuba gunakan kaedah pembayaran lain (FPX, Kad Kredit, E-Wallet)
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Contact your bank if the issue persists
+                                Hubungi bank anda jika masalah berterusan
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Contact our support team at <strong>support@ofys.com</strong> or call <strong>+60 12-345-6789</strong>
+                                Hubungi pasukan sokongan kami di <strong>support@ofys.com</strong> atau telefon <strong>+60 12-345-6789</strong>
                             </li>
                         </ul>
                     </div>
@@ -224,10 +224,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <h4 class="text-lg font-bold text-blue-900 mb-2">Your Booking is Still Reserved</h4>
+                        <h4 class="text-lg font-bold text-blue-900 mb-2">Tempahan Anda Masih Dipegang</h4>
                         <p class="text-sm text-blue-800">
-                            Don't worry! Your booking <strong>{{ $booking->booking_reference }}</strong> is still reserved for you.
-                            You can retry the payment anytime before the activity date. The slot will be held for you for the next 24 hours.
+                            Jangan risau! Tempahan anda <strong>{{ $booking->booking_reference }}</strong> masih disimpan untuk anda.
+                            Anda boleh cuba bayar semula pada bila-bila masa sebelum tarikh aktiviti. Slot ini akan dipegang untuk anda dalam tempoh 24 jam akan datang.
                         </p>
                     </div>
                 </div>

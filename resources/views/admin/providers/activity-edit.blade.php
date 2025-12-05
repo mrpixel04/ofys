@@ -56,9 +56,9 @@
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Provider Info (Read-only) -->
+                <!-- Vendor Info (Read-only) -->
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Provider</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Vendor</label>
                     <div class="mt-1 flex items-center bg-gray-50 p-3 rounded-md border border-gray-200">
                         <i class="fas fa-store text-gray-500 mr-2"></i>
                         <span class="text-gray-700">{{ $activity->shopInfo->company_name ?? $activity->shopInfo->user->name }} ({{ $activity->shopInfo->user->email }})</span>

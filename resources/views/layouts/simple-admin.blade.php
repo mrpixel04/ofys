@@ -97,17 +97,17 @@
                     {{ __('Bookings') }}
                 </a>
 
-                <!-- Providers Dropdown -->
+                <!-- Vendors Dropdown -->
                 <div class="dropdown-menu">
                     <button class="dropdown-toggle flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers*') ? 'menu-active' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        {{ __('Providers') }}
+                        {{ __('Vendors') }}
                         <svg class="w-4 h-4 ml-auto transition-transform duration-200 dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="submenu pl-4 pr-2 mt-2 space-y-1 rounded-md {{ request()->routeIs('admin.providers*') ? 'active' : '' }}">
                         <a href="{{ route('admin.simple-providers-basic') }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.simple-providers-basic') ? 'menu-active' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            {{ __('Providers List') }}
+                            {{ __('Vendors List') }}
                         </a>
                         <a href="{{ route('admin.providers.activities') ?? '#' }}" class="flex items-center py-2 px-4 text-white hover:bg-purple-600/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.providers.activities') ? 'menu-active' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                <!-- Developers Dropdown -->
+                {{-- Developers Dropdown temporarily hidden
                 <div class="dropdown-menu">
                     <button class="dropdown-toggle flex items-center w-full px-6 py-3 text-white hover:bg-purple-700/50 rounded-md transition-all duration-200 {{ request()->routeIs('admin.developers*') || request()->routeIs('admin.whatsapp*') ? 'menu-active' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
@@ -160,6 +160,7 @@
                         </a>
                     </div>
                 </div>
+                --}}
             </nav>
 
             <!-- Admin Profile & Logout Section -->
