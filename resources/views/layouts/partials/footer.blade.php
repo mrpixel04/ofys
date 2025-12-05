@@ -4,7 +4,7 @@
             <!-- Company Info -->
             <div class="col-span-1">
                 <h3 class="text-xl font-bold text-yellow-400 mb-4">OFYS</h3>
-                <p class="text-gray-300 mb-4">Outdoor For Your Soul - Your gateway to adventure and exploration.</p>
+                <p class="text-gray-300 mb-4">Outdoor For Your Soul - Gerbang anda ke dunia pengembaraan dan eksplorasi.</p>
                 <div class="flex space-x-4">
                     <a href="#" class="text-gray-400 hover:text-yellow-400 transition-colors duration-300">
                         <span class="sr-only">Facebook</span>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="mt-8 pt-8 border-t border-gray-800">
-            <p class="text-gray-400 text-center">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. All rights reserved.</p>
+            <p class="text-gray-400 text-center">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. Semua hak terpelihara.</p>
         </div>
     </div>
 </footer>

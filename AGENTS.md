@@ -8,7 +8,19 @@
 
 ## 📢 RECENT SESSION UPDATES
 
-### November 26, 2025 - Midday Session (LATEST)
+### November 26, 2025 - Evening Session (LATEST)
+**What was completed:**
+1. ✅ **Pengalaman Pelanggan dalam Bahasa Melayu**
+   - Diterjemah semua label statik pelanggan (papan pemuka, aliran tempahan, pembayaran/resit) ke BM merangkumi 12 paparan Blade tanpa mengubah struktur UI/animasi.
+   - Selaraskan navigasi/header/footer (menu, modal log keluar, hak cipta) ke BM supaya penukaran bahasa memaparkan label tempatan.
+   - Tambah sokongan penukaran EN/MS melalui fail `resources/lang/en.json` dan `resources/lang/ms.json` dengan pembungkus `__()` pada label statik.
+   - ❗ **Outstanding:** Guest landing/nav still not fully toggling EN↔BM via switcher; locale route/middleware present but labels not swapping at runtime—needs further investigation.
+
+2. ✅ **Railway Deployment Guide**
+   - Disediakan checklist ringkas untuk deploy Laravel ke Railway (env vars, build/run commands, storage link, domain, migrations).
+   - Menambah semakan tugas dalam `NEW-DONE-TASKS.md` untuk paparan yang disentuh.
+
+### November 26, 2025 - Midday Session
 **What was completed:**
 1. ✅ **Vendor Onboarding Flow Fixes**
    - Restored proper create-vs-update handling so the "new vendor" form works via `admin.providers.update('new')`.

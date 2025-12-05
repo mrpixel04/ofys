@@ -9,51 +9,51 @@
                         <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <h1 class="mt-4 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Booking Confirmed!</h1>
+                        <h1 class="mt-4 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">{{ __('Tempahan Disahkan!') }}</h1>
                         <p class="mt-2 text-lg text-gray-500">
-                            Your booking reference is <span class="font-medium text-yellow-600">{{ $booking->booking_reference }}</span>
+                            {{ __('Rujukan tempahan anda ialah') }} <span class="font-medium text-yellow-600">{{ $booking->booking_reference }}</span>
                         </p>
                     </div>
 
                     <div class="max-w-3xl mx-auto">
                         <!-- Booking Details -->
                         <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                            <h2 class="text-lg font-medium text-gray-900 mb-4">Booking Details</h2>
+                            <h2 class="text-lg font-medium text-gray-900 mb-4">{{ __('Butiran Tempahan') }}</h2>
 
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Activity</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['name'] ?? 'N/A' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Aktiviti') }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['name'] ?? __('Tiada') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Provider</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['provider'] ?? 'N/A' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Penyedia') }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['provider'] ?? __('Tiada') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Date</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tarikh') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $booking->booking_date->format('F j, Y') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Time</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Masa') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $booking->start_time->format('g:i A') }} - {{ $booking->end_time->format('g:i A') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Participants</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->participants }} {{ $booking->participants === 1 ? 'person' : 'people' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Peserta') }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->participants }} {{ $booking->participants === 1 ? __('orang') : __('orang') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Location</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['location'] ?? 'N/A' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Lokasi') }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $booking->activity_details['location'] ?? __('Tiada') }}</dd>
                                 </div>
 
                                 @if(isset($booking->activity_details['lot']))
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Camping Lot</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tapak Perkhemahan') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         Lot {{ $booking->activity_details['lot']['id'] }}
                                         @if(!empty($booking->activity_details['lot']['name']))
@@ -67,12 +67,12 @@
                                 @endif
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Total Price</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Jumlah Bayaran') }}</dt>
                                     <dd class="mt-1 text-sm font-bold text-gray-900">RM{{ number_format($booking->total_price, 2) }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Status</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Status') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                             {{ ucfirst($booking->status) }}
@@ -88,7 +88,7 @@
                                 <svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                 </svg>
-                                Complete Your Payment
+                                {{ __('Selesaikan Pembayaran Anda') }}
                             </h2>
 
                             <div class="bg-white rounded-lg p-5 mb-5 shadow-sm">
@@ -99,12 +99,12 @@
                                         </svg>
                                     </div>
                                     <div class="ml-3 flex-1">
-                                        <h3 class="text-sm font-semibold text-gray-900 mb-1">Payment Required</h3>
+                                        <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ __('Pembayaran Diperlukan') }}</h3>
                                         <p class="text-sm text-gray-700 mb-3">
-                                            Your booking has been created successfully! Please complete the payment to confirm your reservation.
+                                            {{ __('Tempahan anda telah berjaya dibuat! Sila selesaikan pembayaran untuk mengesahkan tempahan.') }}
                                         </p>
                                         <div class="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                                            <span class="text-sm font-medium text-gray-600">Payment Status:</span>
+                                            <span class="text-sm font-medium text-gray-600">{{ __('Status Pembayaran:') }}</span>
                                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-300">
                                                 {{ strtoupper($booking->payment_status) }}
                                             </span>
@@ -120,7 +120,7 @@
                                         <svg class="-ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                         </svg>
-                                        Pay Now with Billplz
+                                        {{ __('Bayar Sekarang dengan Billplz') }}
                                         <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                         </svg>
@@ -128,26 +128,26 @@
                                 </a>
 
                                 <div class="bg-white rounded-lg p-4 shadow-sm">
-                                    <p class="text-xs text-center text-gray-600 mb-2 font-semibold">Secure Payment Methods Available:</p>
+                                    <p class="text-xs text-center text-gray-600 mb-2 font-semibold">{{ __('Kaedah Pembayaran Selamat Disediakan:') }}</p>
                                     <div class="flex items-center justify-center space-x-4 text-xs text-gray-500">
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 mr-1 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
                                                 <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
                                             </svg>
-                                            <span>FPX Banking</span>
+                                            <span>{{ __('Perbankan FPX') }}</span>
                                         </div>
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 mr-1 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
                                             </svg>
-                                            <span>Credit/Debit Card</span>
+                                            <span>{{ __('Kad Kredit/Debit') }}</span>
                                         </div>
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 mr-1 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                             </svg>
-                                            <span>E-Wallets</span>
+                                            <span>{{ __('Dompet Elektronik') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -158,12 +158,12 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <div>
-                                            <h3 class="text-lg font-bold text-green-800">Payment Completed!</h3>
-                                            <p class="text-sm text-green-700">Your booking is confirmed and paid.</p>
+                                            <h3 class="text-lg font-bold text-green-800">{{ __('Pembayaran Selesai!') }}</h3>
+                                            <p class="text-sm text-green-700">{{ __('Tempahan anda telah disahkan dan dibayar.') }}</p>
                                         </div>
                                     </div>
                                     <a href="{{ route('payment.receipt', $booking->id) }}" class="mt-4 block w-full text-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
-                                        View Receipt
+                                        {{ __('Lihat Resit') }}
                                     </a>
                                 </div>
                             @endif
@@ -175,16 +175,16 @@
                                 <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                 </svg>
-                                Print Confirmation
+                                {{ __('Cetak Pengesahan') }}
                             </button>
 
                             <div class="flex space-x-4">
                                 <a href="{{ route('customer.dashboard', ['tab' => 'bookings']) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    View My Bookings
+                                    {{ __('Lihat Tempahan Saya') }}
                                 </a>
 
                                 <a href="{{ route('activities.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    Browse More Activities
+                                    {{ __('Lihat Lagi Aktiviti') }}
                                 </a>
                             </div>
                         </div>

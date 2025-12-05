@@ -12,25 +12,25 @@
                 <!-- Navigation Links -->
                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                     <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                        Utama
+                        {{ __('Utama') }}
                     </a>
                     <a href="{{ route('activities.index') }}" class="{{ request()->routeIs('activities.*') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                        Aktiviti
+                        {{ __('Aktiviti') }}
                     </a>
                     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                        Tentang Kami
+                        {{ __('Tentang Kami') }}
                     </a>
                     @auth
                         @php($role = Auth::user()->role)
                         @if(!in_array($role, ['admin','provider','ADMIN','PROVIDER']))
                             <a href="{{ route('customer.dashboard') }}" class="{{ request()->routeIs('customer.dashboard') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Customer Dashboard
+                                {{ __('Papan Pemuka Pelanggan') }}
                             </a>
                         @endif
                     @endauth
 
                     <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'border-yellow-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                        Hubungi
+                        {{ __('Hubungi') }}
                     </a>
                 </div>
             </div>
@@ -63,10 +63,10 @@
 
                 @guest
                     <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                        Log Masuk
+                        {{ __('Log Masuk') }}
                     </a>
                     <a href="{{ route('register') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm font-medium ml-2">
-                        Daftar
+                        {{ __('Daftar') }}
                     </a>
                 @else
                     <div class="ml-3 relative user-dropdown">
@@ -84,14 +84,14 @@
                                 {{ Auth::user()->name }}
                             </div>
                             @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Admin Dashboard</a>
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{{ __('Papan Pemuka Admin') }}</a>
                             @elseif(Auth::user()->role === 'provider')
-                                <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Provider Dashboard</a>
+                                <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{{ __('Papan Pemuka Penyedia') }}</a>
                             @endif
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{{ __('Tetapan') }}</a>
                             <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                 @csrf
-                                <button type="button" onclick="confirmLogout('logout-form-desktop')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Log Out</button>
+                                <button type="button" onclick="confirmLogout('logout-form-desktop')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">{{ __('Log Keluar') }}</button>
                             </form>
                         </div>
                     </div>
@@ -132,24 +132,24 @@
             @auth
                 @php($role = Auth::user()->role)
                 @if(!in_array($role, ['admin','provider','ADMIN','PROVIDER']))
-                    <a href="{{ route('customer.dashboard') }}" class="{{ request()->routeIs('customer.dashboard') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        Customer Dashboard
+                        <a href="{{ route('customer.dashboard') }}" class="{{ request()->routeIs('customer.dashboard') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                        {{ __('Papan Pemuka Pelanggan') }}
                     </a>
                 @endif
             @endauth
 
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                Hubungi
+                {{ __('Hubungi') }}
             </a>
         </div>
         <div class="pt-4 pb-3 border-t border-gray-200">
             @guest
                 <div class="flex items-center px-4">
                     <a href="{{ route('login') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
-                        Log Masuk
+                        {{ __('Log Masuk') }}
                     </a>
                     <a href="{{ route('register') }}" class="ml-4 block px-4 py-2 text-base font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-md">
-                        Daftar
+                        {{ __('Daftar') }}
                     </a>
                 </div>
             @else
@@ -166,14 +166,14 @@
                 </div>
                 <div class="mt-3 space-y-1">
                     @if(Auth::user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Admin Dashboard</a>
+                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Papan Pemuka Admin') }}</a>
                     @elseif(Auth::user()->role === 'provider')
-                        <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Provider Dashboard</a>
+                        <a href="{{ route('provider.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Papan Pemuka Penyedia') }}</a>
                     @endif
-                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Settings</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Tetapan') }}</a>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                         @csrf
-                        <button type="button" onclick="confirmLogout('logout-form-mobile')" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Log Out</button>
+                        <button type="button" onclick="confirmLogout('logout-form-mobile')" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">{{ __('Log Keluar') }}</button>
                     </form>
                 </div>
             @endguest
@@ -190,18 +190,18 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-2">Confirm Logout</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-2">{{ __('Sahkan Log Keluar') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500">
-                    Are you sure you want to log out? You will need to sign in again to access your account.
+                    {{ __('Adakah anda pasti mahu log keluar? Anda perlu log masuk semula untuk akses akaun anda.') }}
                 </p>
             </div>
             <div class="flex justify-center gap-4 mt-4">
                 <button id="cancel-logout" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Cancel
+                    {{ __('Batal') }}
                 </button>
                 <button id="confirm-logout" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                    Yes, Log Out
+                    {{ __('Ya, Log Keluar') }}
                 </button>
             </div>
         </div>
