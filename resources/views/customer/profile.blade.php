@@ -22,12 +22,14 @@
 
                     <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-6">
                         <h2 class="text-lg font-medium text-gray-900 mb-4">{{ __('Maklumat Peribadi') }}</h2>
-                        <form>
+                        <form method="POST" action="{{ route('customer.profile.update') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Nama Penuh') }}</label>
                                     <div class="mt-1">
-                                        <input type="text" name="name" id="name" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ $user->name }}">
+                                        <input type="text" name="name" id="name" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ old('name', $user->name) }}">
                                     </div>
                                 </div>
                                 <div>
@@ -37,15 +39,37 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700">{{ __('Nombor Telefon') }}</label>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">{{ __('No Tel') }}</label>
                                     <div class="mt-1">
-                                        <input type="tel" name="phone" id="phone" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" placeholder="{{ __('Masukkan nombor telefon anda') }}">
+                                        <input type="tel" name="phone" id="phone" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ old('phone', $user->phone) }}" placeholder="{{ __('Masukkan nombor telefon anda') }}">
                                     </div>
                                 </div>
                                 <div>
                                     <label for="username" class="block text-sm font-medium text-gray-700">{{ __('Nama Pengguna') }}</label>
                                     <div class="mt-1">
                                         <input type="text" name="username" id="username" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ $user->username ?? '' }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label for="address" class="block text-sm font-medium text-gray-700">{{ __('Alamat') }}</label>
+                                    <div class="mt-1">
+                                        <textarea name="address" id="address" rows="3" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" placeholder="{{ __('Masukkan alamat anda') }}">{{ old('address', $user->address) }}</textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="date_of_birth" class="block text-sm font-medium text-gray-700">{{ __('Tarikh Lahir') }}</label>
+                                    <div class="mt-1">
+                                        <input type="date" name="date_of_birth" id="date_of_birth" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ old('date_of_birth', $user->date_of_birth ? \Illuminate\Support\Carbon::parse($user->date_of_birth)->format('Y-m-d') : '') }}">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="gender" class="block text-sm font-medium text-gray-700">{{ __('Jantina') }}</label>
+                                    <div class="mt-1">
+                                        <select name="gender" id="gender" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md">
+                                            <option value="">{{ __('Pilih Jantina') }}</option>
+                                            <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>{{ __('Lelaki') }}</option>
+                                            <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>{{ __('Perempuan') }}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

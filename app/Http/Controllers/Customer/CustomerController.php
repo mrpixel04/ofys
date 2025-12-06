@@ -32,11 +32,19 @@ class CustomerController extends Controller
         $tab = $request->query('tab', 'profile');
         $user = Auth::user();
 
-        // Fetch recent bookings for the bookings tab
-        $bookings = \App\Models\Booking::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->limit(20)
-            ->get();
+        // Fetch bookings grouped by status
+        $bookingsQuery = \App\Models\Booking::where('user_id', $user->id)
+            ->orderBy('booking_date', 'desc')
+            ->limit(100);
+
+        $bookings = $bookingsQuery->get()->groupBy(function ($booking) {
+            return match ($booking->status) {
+                'pending', 'active', 'confirmed' => 'active',
+                'completed' => 'past',
+                'cancelled' => 'cancelled',
+                default => 'other',
+            };
+        });
 
         return view('customer.dashboard', [
             'user' => $user,
@@ -86,6 +94,9 @@ class CustomerController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'phone' => 'nullable|string|max:20',
+                'address' => 'nullable|string|max:255',
+                'date_of_birth' => 'nullable|date',
+                'gender' => 'nullable|in:male,female',
                 'profile_image' => 'nullable|image|max:2048', // 2MB max
             ]);
 
@@ -93,6 +104,9 @@ class CustomerController extends Controller
             $userData = [
                 'name' => $validated['name'],
                 'phone' => $validated['phone'] ?? $user->phone,
+                'address' => $validated['address'] ?? $user->address,
+                'date_of_birth' => $validated['date_of_birth'] ?? $user->date_of_birth,
+                'gender' => $validated['gender'] ?? $user->gender,
             ];
 
             // Handle profile image upload if provided

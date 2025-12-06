@@ -17,7 +17,9 @@
                         </nav>
                     </div>
 
-                    @php($currentTab = $activeTab ?? $tab ?? 'profile')
+                    @php
+                        $currentTab = $activeTab ?? $tab ?? 'profile';
+                    @endphp
 
                     <!-- Profile Section -->
                     @if($currentTab === 'profile')
@@ -42,7 +44,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label for="phone" class="block text-sm font-medium text-gray-700">{{ __('Nombor Telefon') }}</label>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700">{{ __('No Tel') }}</label>
                                         <div class="mt-1">
                                             <input type="tel" name="phone" id="phone" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ old('phone', $user->phone) }}" placeholder="{{ __('Masukkan nombor telefon anda') }}">
                                         </div>
@@ -50,6 +52,28 @@
                                     <div>
                                         <label for="profile_image" class="block text-sm font-medium text-gray-700">{{ __('Imej Profil') }}</label>
                                         <input type="file" name="profile_image" id="profile_image" class="mt-1 block w-full text-sm text-gray-600" accept="image/*">
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label for="address" class="block text-sm font-medium text-gray-700">{{ __('Alamat') }}</label>
+                                        <div class="mt-1">
+                                            <textarea name="address" id="address" rows="3" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" placeholder="{{ __('Masukkan alamat anda') }}">{{ old('address', $user->address) }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="date_of_birth" class="block text-sm font-medium text-gray-700">{{ __('Tarikh Lahir') }}</label>
+                                        <div class="mt-1">
+                                            <input type="date" name="date_of_birth" id="date_of_birth" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md" value="{{ old('date_of_birth', $user->date_of_birth ? \Illuminate\Support\Carbon::parse($user->date_of_birth)->format('Y-m-d') : '') }}">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="gender" class="block text-sm font-medium text-gray-700">{{ __('Jantina') }}</label>
+                                        <div class="mt-1">
+                                            <select name="gender" id="gender" class="py-2 px-3 block w-full shadow-sm focus:ring-yellow-500 focus:border-yellow-500 border-gray-300 rounded-md">
+                                                <option value="">{{ __('Pilih Jantina') }}</option>
+                                                <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>{{ __('Lelaki') }}</option>
+                                                <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>{{ __('Perempuan') }}</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mt-6">
@@ -93,9 +117,38 @@
                     @if($currentTab === 'bookings')
                     <div class="mb-8">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-6 border-b border-gray-200 pb-2">{{ __('Tempahan Anda') }}</h2>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                            <h2 class="text-lg font-medium text-gray-900 mb-4">{{ __('Tempahan Anda') }}</h2>
-                            @if(isset($bookings) && count($bookings) > 0)
+                        @php
+                            $bookingGroups = ($bookings ?? null) instanceof \Illuminate\Support\Collection
+                                ? $bookings
+                                : collect($bookings ?? []);
+                            $bookingSections = [
+                                'active' => [
+                                    'title' => __('Active Bookings'),
+                                    'items' => $bookingGroups->get('active', collect()),
+                                ],
+                                'past' => [
+                                    'title' => __('Past Bookings'),
+                                    'items' => $bookingGroups->get('past', collect()),
+                                ],
+                                'cancelled' => [
+                                    'title' => __('Cancelled Bookings'),
+                                    'items' => $bookingGroups->get('cancelled', collect()),
+                                ],
+                            ];
+                        @endphp
+
+                        @foreach($bookingSections as $sectionKey => $section)
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-6 last:mb-0">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">{{ $section['title'] }}</h2>
+                                @if($section['items']->isNotEmpty())
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">
+                                        {{ $section['items']->count() }} {{ __('Tempahan') }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            @if($section['items']->isNotEmpty())
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
@@ -109,7 +162,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
-                                            @foreach($bookings as $booking)
+                                            @foreach($section['items'] as $booking)
                                                 <tr>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <div class="text-sm font-medium text-gray-900">{{ $booking->activity->name ?? ($booking->activity_details['name'] ?? __('Tiada')) }}</div>
@@ -121,7 +174,11 @@
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->participants }}</td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $booking->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }} {{ $booking->status === 'confirmed' ? 'bg-green-100 text-green-800' : '' }} {{ $booking->status === 'completed' ? 'bg-blue-100 text-blue-800' : '' }} {{ $booking->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                            {{ in_array($booking->status, ['pending', 'active']) ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                            {{ $booking->status === 'confirmed' ? 'bg-green-100 text-green-800' : '' }}
+                                                            {{ $booking->status === 'completed' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                            {{ $booking->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}">
                                                             {{ ucfirst($booking->status) }}
                                                         </span>
                                                     </td>
@@ -136,13 +193,16 @@
                                 </div>
                             @else
                                 <div class="text-center py-8">
-                                    <p class="text-gray-500">{{ __('Tiada tempahan ditemui.') }}</p>
+                                    <p class="text-gray-500">{{ __('No bookings found in this section.') }}</p>
+                                    @if($sectionKey === 'active')
                                     <div class="mt-4">
                                         <a href="{{ route('activities.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">{{ __('Terokai Aktiviti') }}</a>
                                     </div>
+                                    @endif
                                 </div>
                             @endif
                         </div>
+                        @endforeach
                     </div>
                     @endif
 

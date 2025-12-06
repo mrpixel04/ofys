@@ -77,7 +77,7 @@ class AuthController extends Controller
                         ->with('success', 'Selamat datang kembali, Provider! Anda telah berjaya log masuk.');
                 } else {
                     // Default redirect for customers and other roles
-                    return redirect()->route('customer.dashboard')
+                    return redirect()->route('home')
                         ->with('success', 'Selamat datang kembali! Anda telah berjaya log masuk.');
                 }
             }
