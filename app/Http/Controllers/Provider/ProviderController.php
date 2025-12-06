@@ -9,10 +9,12 @@ use App\Models\ActivityLot;
 use App\Models\Booking;
 use App\Models\ShopInfo;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ProviderController extends Controller
@@ -161,7 +163,7 @@ class ProviderController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function bookings()
+    public function bookings(Request $request)
     {
         $user = Auth::user();
         $shopInfo = ShopInfo::where('user_id', $user->id)->first();
@@ -171,12 +173,31 @@ class ProviderController extends Controller
                 ->with('error', 'Please complete your shop information before managing bookings.');
         }
 
+        $validated = $request->validate([
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+        ]);
+
+        $startDate = $validated['start_date'] ?? null;
+        $endDate = $validated['end_date'] ?? null;
+
         // Get all bookings for this provider
-        $bookings = Booking::whereHas('activity', function($query) use ($shopInfo) {
+        $bookingsQuery = Booking::whereHas('activity', function($query) use ($shopInfo) {
                 $query->where('shop_info_id', $shopInfo->id);
             })
-            ->with(['user', 'activity', 'lot'])
-            ->orderBy('created_at', 'desc')
+            ->with(['user', 'activity', 'lot']);
+
+        if ($startDate) {
+            $bookingsQuery->whereDate('booking_date', '>=', Carbon::parse($startDate)->startOfDay());
+        }
+
+        if ($endDate) {
+            $bookingsQuery->whereDate('booking_date', '<=', Carbon::parse($endDate)->endOfDay());
+        }
+
+        $bookings = $bookingsQuery
+            ->orderBy('booking_date', 'desc')
+            ->orderBy('start_time', 'desc')
             ->get();
 
         // Count bookings by status
@@ -190,7 +211,11 @@ class ProviderController extends Controller
             'pendingBookings' => $pendingBookings,
             'confirmedBookings' => $confirmedBookings,
             'completedBookings' => $completedBookings,
-            'totalBookings' => $totalBookings
+            'totalBookings' => $totalBookings,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ],
         ]);
     }
 
@@ -202,7 +227,249 @@ class ProviderController extends Controller
      */
     public function showBooking(Booking $booking)
     {
-        return view('provider.simple-booking-details', compact('booking'));
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        // Ensure the booking belongs to this provider
+        if (
+            !$shopInfo ||
+            !$booking->activity ||
+            $booking->activity->shop_info_id !== $shopInfo->id
+        ) {
+            abort(403, 'You do not have permission to view this booking.');
+        }
+
+        $booking->load(['user', 'activity.shopInfo.user', 'lot']);
+
+        $customer = $booking->user;
+        $providerShop = $booking->activity?->shopInfo;
+
+        return view('provider.simple-booking-details', compact('booking', 'customer', 'providerShop'));
+    }
+
+    /**
+     * Show the form to create a walk-in booking.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function createWalkInBooking()
+    {
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        if (!$shopInfo) {
+            return redirect()->route('provider.shop-info')
+                ->with('error', 'Please complete your shop information before creating bookings.');
+        }
+
+        $activities = Activity::where('shop_info_id', $shopInfo->id)
+            ->with(['lots' => function ($query) {
+                $query->orderBy('name');
+            }])
+            ->orderBy('name')
+            ->get();
+
+        if ($activities->isEmpty()) {
+            return redirect()->route('provider.activities')
+                ->with('error', 'Add at least one activity before creating a booking.');
+        }
+
+        $activityMeta = $activities->mapWithKeys(function ($activity) {
+            return [
+                $activity->id => [
+                    'name' => $activity->name,
+                    'location' => $activity->location,
+                    'min' => $activity->min_participants ?? 1,
+                    'max' => $activity->max_participants,
+                    'price' => (float) $activity->price,
+                    'price_type' => $activity->price_type,
+                ],
+            ];
+        })->toArray();
+
+        return view('provider.bookings-create', [
+            'shopInfo' => $shopInfo,
+            'activities' => $activities,
+            'activityMeta' => $activityMeta,
+        ]);
+    }
+
+    /**
+     * Store a newly created walk-in booking.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeWalkInBooking(Request $request)
+    {
+        $user = Auth::user();
+        $shopInfo = ShopInfo::where('user_id', $user->id)->first();
+
+        if (!$shopInfo) {
+            return redirect()->route('provider.shop-info')
+                ->with('error', 'Please complete your shop information before creating bookings.');
+        }
+
+        $validated = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'nullable|email|max:255',
+            'customer_phone' => 'nullable|string|max:30',
+            'customer_notes' => 'nullable|string|max:500',
+            'activity_id' => [
+                'required',
+                Rule::exists('activities', 'id')->where(function ($query) use ($shopInfo) {
+                    return $query->where('shop_info_id', $shopInfo->id);
+                }),
+            ],
+            'lot_id' => [
+                'nullable',
+                'integer',
+            ],
+            'booking_date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i|after_or_equal:start_time',
+            'participants' => 'required|integer|min:1|max:500',
+            'total_price' => 'nullable|numeric|min:0',
+            'status' => ['required', Rule::in(['pending', 'confirmed', 'completed', 'cancelled'])],
+            'payment_status' => ['required', Rule::in(['pending', 'processing', 'done', 'refunded', 'failed'])],
+            'payment_method' => 'nullable|string|max:100',
+            'special_requests' => 'nullable|string|max:500',
+        ]);
+
+        $activity = Activity::where('shop_info_id', $shopInfo->id)
+            ->with('lots')
+            ->findOrFail($validated['activity_id']);
+
+        $lot = null;
+        if (!empty($validated['lot_id'])) {
+            $lot = ActivityLot::where('activity_id', $activity->id)
+                ->where('id', $validated['lot_id'])
+                ->first();
+
+            if (!$lot) {
+                return back()->withInput()->withErrors([
+                    'lot_id' => 'The selected lot is not available for this activity.',
+                ]);
+            }
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $customerUser = null;
+            if (!empty($validated['customer_email'])) {
+                $customerUser = User::where('email', $validated['customer_email'])->first();
+            }
+
+            if (!$customerUser) {
+                $email = $validated['customer_email'] ?? $this->generatePlaceholderEmail();
+
+                $customerUser = User::create([
+                    'name' => $validated['customer_name'],
+                    'email' => $email,
+                    'username' => null,
+                    'password' => Hash::make(Str::random(16)),
+                    'role' => 'CUSTOMER',
+                    'phone' => $validated['customer_phone'] ?? null,
+                    'status' => 'active',
+                ]);
+
+                $customerUser->email_verified_at = now();
+                $customerUser->save();
+            } else {
+                $customerUser->update([
+                    'phone' => $validated['customer_phone'] ?? $customerUser->phone,
+                    'name' => $validated['customer_name'],
+                ]);
+            }
+
+            $startDateTime = Carbon::parse($validated['booking_date'] . ' ' . $validated['start_time']);
+            $bookingDate = Carbon::parse($validated['booking_date']);
+            $endDateTime = !empty($validated['end_time'])
+                ? Carbon::parse($validated['booking_date'] . ' ' . $validated['end_time'])
+                : $startDateTime->copy()->addHours(2);
+
+            $calculatedPrice = $validated['total_price'] ?? $activity->price;
+            if (
+                !$validated['total_price'] &&
+                in_array($activity->price_type, ['per_person', 'per_pack'])
+            ) {
+                $calculatedPrice = $activity->price * $validated['participants'];
+            }
+
+            $booking = Booking::create([
+                'booking_reference' => $this->generateBookingReference(),
+                'user_id' => $customerUser->id,
+                'activity_id' => $activity->id,
+                'lot_id' => $lot->id ?? null,
+                'booking_date' => $bookingDate,
+                'start_time' => $startDateTime,
+                'end_time' => $endDateTime,
+                'participants' => $validated['participants'],
+                'total_price' => $calculatedPrice,
+                'status' => $validated['status'],
+                'payment_status' => $validated['payment_status'],
+                'payment_method' => $validated['payment_method'] ?? 'walk_in',
+                'special_requests' => $validated['special_requests'] ?? null,
+                'customer_details' => [
+                    'name' => $validated['customer_name'],
+                    'email' => $validated['customer_email'] ?? $customerUser->email,
+                    'phone' => $validated['customer_phone'] ?? null,
+                    'notes' => $validated['customer_notes'] ?? null,
+                    'type' => 'walk_in',
+                    'captured_by' => $user->id,
+                    'captured_at' => now()->toDateTimeString(),
+                ],
+                'activity_details' => [
+                    'name' => $activity->name,
+                    'location' => $activity->location,
+                    'activity_type' => $activity->activity_type,
+                    'price' => $activity->price,
+                    'price_type' => $activity->price_type,
+                ],
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('provider.bookings.show', $booking->id)
+                ->with('success', 'Walk-in booking created successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Unable to create booking. Please try again.');
+        }
+    }
+
+    /**
+     * Generate a unique booking reference.
+     *
+     * @return string
+     */
+    protected function generateBookingReference(): string
+    {
+        do {
+            $reference = 'BK-' . strtoupper(Str::random(8));
+        } while (Booking::where('booking_reference', $reference)->exists());
+
+        return $reference;
+    }
+
+    /**
+     * Generate a placeholder email when a customer email is not provided.
+     *
+     * @return string
+     */
+    protected function generatePlaceholderEmail(): string
+    {
+        do {
+            $email = 'walkin+' . now()->format('YmdHis') . Str::random(4) . '@ofys.local';
+        } while (User::where('email', $email)->exists());
+
+        return $email;
     }
 
     /**

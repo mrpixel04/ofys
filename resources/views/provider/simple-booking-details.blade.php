@@ -6,6 +6,11 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto">
+    @php
+        $customer = $customer ?? $booking->user;
+        $providerShop = $providerShop ?? ($booking->activity->shopInfo ?? null);
+    @endphp
+
     {{-- Back Button --}}
     <div class="mb-6">
         <a href="{{ route('provider.bookings') }}" class="inline-flex items-center text-teal-600 hover:text-teal-700">
@@ -161,6 +166,7 @@
                 </div>
             </div>
 
+            @if($customer)
             <div class="bg-white shadow rounded-lg overflow-hidden mt-6">
                 <div class="p-4 border-b border-gray-200 bg-teal-50">
                     <h3 class="text-lg font-medium text-gray-900 flex items-center">
@@ -178,20 +184,94 @@
                             </svg>
                         </div>
                         <div>
-                            <div class="font-medium">{{ $booking->user->name ?? 'ALI BN SAMAD' }}</div>
-                            <div class="text-sm text-gray-500">Customer since {{ $booking->user->created_at ? date('M Y', strtotime($booking->user->created_at)) : 'Apr 2023' }}</div>
+                            <div class="font-medium">{{ $customer->name ?? 'Customer' }}</div>
+                            <div class="text-sm text-gray-500">
+                                Customer since {{ $customer->created_at ? date('M Y', strtotime($customer->created_at)) : 'N/A' }}
+                            </div>
                         </div>
                     </div>
-                    <div class="flex justify-between mb-3">
-                        <div class="text-sm text-gray-500">Email</div>
-                        <div class="font-medium">{{ $booking->user->email ?? 'ali@gmail.com' }}</div>
-                    </div>
-                    <div class="flex justify-between">
-                        <div class="text-sm text-gray-500">Phone</div>
-                        <div class="font-medium">{{ $booking->user->phone ?? 'N/A' }}</div>
+
+                    @php
+                        $customerPhone = $customer->phone ?? null;
+                        $sanitizedPhone = $customerPhone ? preg_replace('/\D+/', '', $customerPhone) : null;
+                    @endphp
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-500">Email</div>
+                            <div class="font-medium text-right">
+                                @if($customer->email)
+                                    <a href="mailto:{{ $customer->email }}" class="text-teal-600 hover:underline">{{ $customer->email }}</a>
+                                @else
+                                    <span class="text-gray-500">Not provided</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-500">Phone</div>
+                            <div class="font-medium text-right">
+                                @if($sanitizedPhone)
+                                    <a href="tel:{{ $sanitizedPhone }}" class="text-teal-600 hover:underline">{{ $customerPhone }}</a>
+                                @else
+                                    <span class="text-gray-500">Not provided</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="bg-white shadow rounded-lg overflow-hidden mt-6">
+                <div class="p-4 border-b border-gray-200 bg-slate-50">
+                    <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Customer Profile Details
+                    </h3>
+                </div>
+                <div class="p-4">
+                    @php
+                        $formattedDob = $customer->date_of_birth
+                            ? \Illuminate\Support\Carbon::parse($customer->date_of_birth)->format('d M Y')
+                            : null;
+                        $genderLabel = $customer->gender ? ucfirst($customer->gender) : null;
+                    @endphp
+                    <dl class="divide-y divide-gray-100">
+                        <div class="py-3 flex items-start justify-between">
+                            <dt class="text-sm text-gray-500">Address</dt>
+                            <dd class="text-sm text-gray-900 text-right w-2/3">
+                                {{ $customer->address ?? 'Not provided' }}
+                            </dd>
+                        </div>
+                        <div class="py-3 flex items-start justify-between">
+                            <dt class="text-sm text-gray-500">Date of Birth</dt>
+                            <dd class="text-sm text-gray-900">
+                                {{ $formattedDob ?? 'Not provided' }}
+                            </dd>
+                        </div>
+                        <div class="py-3 flex items-start justify-between">
+                            <dt class="text-sm text-gray-500">Gender</dt>
+                            <dd class="text-sm text-gray-900">
+                                {{ $genderLabel ?? 'Not provided' }}
+                            </dd>
+                        </div>
+                        <div class="py-3 flex items-start justify-between">
+                            <dt class="text-sm text-gray-500">Account Created</dt>
+                            <dd class="text-sm text-gray-900">
+                                {{ $customer->created_at ? $customer->created_at->format('d M Y') : 'N/A' }}
+                            </dd>
+                        </div>
+                        <div class="py-3 flex items-start justify-between">
+                            <dt class="text-sm text-gray-500">Last Updated</dt>
+                            <dd class="text-sm text-gray-900">
+                                {{ $customer->updated_at ? $customer->updated_at->format('d M Y, g:i A') : 'N/A' }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Update Status --}}
@@ -223,6 +303,85 @@
                     </form>
                 </div>
             </div>
+
+            @if($providerShop)
+            @php
+                $providerAddressParts = array_filter([
+                    $providerShop->address,
+                    $providerShop->city,
+                    $providerShop->state,
+                    $providerShop->postal_code,
+                    $providerShop->country,
+                ]);
+                $providerAddress = $providerAddressParts ? implode(', ', $providerAddressParts) : null;
+                $providerContact = optional($providerShop->user)->name ?? ($providerShop->company_name ?? 'Provider');
+                $providerPhone = $providerShop->phone ?? optional($providerShop->user)->phone;
+                $providerEmail = $providerShop->company_email ?? optional($providerShop->user)->email;
+                $providerPhoneSanitized = $providerPhone ? preg_replace('/\D+/', '', $providerPhone) : null;
+            @endphp
+            <div class="bg-white shadow rounded-lg overflow-hidden mt-6">
+                <div class="p-4 border-b border-gray-200 bg-purple-50">
+                    <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v4a1 1 0 001 1h3V7H4a1 1 0 00-1 1zM9 7v4a1 1 0 001 1h3V7h-3a1 1 0 00-1 1zM15 7v4a1 1 0 001 1h3V7h-3a1 1 0 00-1 1zM4 15h3a1 1 0 011 1v4H5a1 1 0 01-1-1v-4zm7 0h3a1 1 0 011 1v4h-5v-4a1 1 0 011-1zm7 0h3a1 1 0 011 1v4h-5v-4a1 1 0 011-1z" />
+                        </svg>
+                        Vendor Contact Details
+                    </h3>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500">Company</p>
+                        <p class="font-medium text-gray-900">{{ $providerShop->company_name ?? 'Not provided' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Primary Contact</p>
+                        <p class="font-medium text-gray-900">{{ $providerContact }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Email</p>
+                        @if($providerEmail)
+                            <a href="mailto:{{ $providerEmail }}" class="font-medium text-teal-600 hover:underline">{{ $providerEmail }}</a>
+                        @else
+                            <p class="text-sm text-gray-500">Not provided</p>
+                        @endif
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Phone</p>
+                        @if($providerPhoneSanitized)
+                            <a href="tel:{{ $providerPhoneSanitized }}" class="font-medium text-teal-600 hover:underline">{{ $providerPhone }}</a>
+                        @else
+                            <p class="text-sm text-gray-500">Not provided</p>
+                        @endif
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Address</p>
+                        <p class="font-medium text-gray-900">
+                            {{ $providerAddress ?? 'Not provided' }}
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 gap-3">
+                        @if($providerShop->ssm_number)
+                        <div>
+                            <p class="text-sm text-gray-500">SSM Number</p>
+                            <p class="font-medium text-gray-900">{{ $providerShop->ssm_number }}</p>
+                        </div>
+                        @endif
+                        @if($providerShop->einvoice_number)
+                        <div>
+                            <p class="text-sm text-gray-500">E-Invoice Number</p>
+                            <p class="font-medium text-gray-900">{{ $providerShop->einvoice_number }}</p>
+                        </div>
+                        @endif
+                        @if($providerShop->bank_account_number)
+                        <div>
+                            <p class="text-sm text-gray-500">Bank Account</p>
+                            <p class="font-medium text-gray-900">{{ $providerShop->bank_account_number }} @if($providerShop->bank_name) <span class="text-gray-500">({{ $providerShop->bank_name }})</span> @endif</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 </div>

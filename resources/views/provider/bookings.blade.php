@@ -16,6 +16,10 @@
 @endsection
 
 @section('content')
+    @php
+        $filters = $filters ?? ['start_date' => null, 'end_date' => null];
+        $hasDateFilters = !empty($filters['start_date']) || !empty($filters['end_date']);
+    @endphp
     <div class="space-y-8">
         @if(session('success'))
         <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
@@ -124,15 +128,37 @@
 
         <!-- Bookings List Section -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex flex-col md:flex-row md:items-center md:justify-between">
-                <h2 class="text-lg font-medium text-gray-900 mb-2 md:mb-0">Bookings</h2>
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <div class="relative">
-                        <input id="search-bookings" type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Search bookings...">
-                        <div class="absolute left-3 top-2.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div class="space-y-1">
+                    <h2 class="text-lg font-medium text-gray-900">Bookings</h2>
+                    <p class="text-sm text-gray-500">View online reservations and add walk-in customers.</p>
+                    @if($hasDateFilters)
+                        <p class="text-xs text-teal-600">
+                            Showing results
+                            @if($filters['start_date'])
+                                from <span class="font-semibold">{{ \Carbon\Carbon::parse($filters['start_date'])->format('d M Y') }}</span>
+                            @endif
+                            @if($filters['end_date'])
+                                to <span class="font-semibold">{{ \Carbon\Carbon::parse($filters['end_date'])->format('d M Y') }}</span>
+                            @endif
+                        </p>
+                    @endif
+                </div>
+                <div class="flex flex-col gap-2 w-full md:w-auto">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <a href="{{ route('provider.bookings.walk-in.create') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
+                            Walk-In Booking
+                        </a>
+                        <div class="relative flex-1">
+                            <input id="search-bookings" type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Search bookings...">
+                            <div class="absolute left-3 top-2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
                     <div class="relative">
@@ -145,6 +171,29 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="px-6 py-4 border-b border-gray-100 bg-white">
+                <form method="GET" action="{{ route('provider.bookings') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label for="start_date" class="block text-sm font-medium text-gray-600">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ $filters['start_date'] }}" class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-600">End Date</label>
+                        <input type="date" id="end_date" name="end_date" value="{{ $filters['end_date'] }}" class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                    </div>
+                    <div class="md:col-span-2 flex gap-2">
+                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                            Apply Filter
+                        </button>
+                        @if($hasDateFilters)
+                        <a href="{{ route('provider.bookings') }}" class="inline-flex items-center justify-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50">
+                            Reset
+                        </a>
+                        @endif
+                    </div>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
@@ -248,13 +297,26 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
-                                    {{ $booking->date ? date('M d, Y', strtotime($booking->date)) : 'N/A' }}
+                                    {{
+                                        $booking->booking_date
+                                            ? \Carbon\Carbon::parse($booking->booking_date)->format('M d, Y')
+                                            : 'N/A'
+                                    }}
                                 </div>
                                 <div class="text-sm text-gray-500 flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    {{ $booking->time ?? 'N/A' }}
+                                    @if($booking->start_time)
+                                        {{
+                                            \Carbon\Carbon::parse($booking->start_time)->format('g:i A')
+                                        }}
+                                        @if($booking->end_time)
+                                            – {{ \Carbon\Carbon::parse($booking->end_time)->format('g:i A') }}
+                                        @endif
+                                    @else
+                                        N/A
+                                    @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

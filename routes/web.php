@@ -159,6 +159,8 @@ Route::middleware(['auth', 'verified', 'role:PROVIDER'])->name('provider.')->pre
 
     // Bookings
     Route::get('/bookings', [ProviderController::class, 'bookings'])->name('bookings');
+    Route::get('/bookings/walk-in/create', [ProviderController::class, 'createWalkInBooking'])->name('bookings.walk-in.create');
+    Route::post('/bookings/walk-in', [ProviderController::class, 'storeWalkInBooking'])->name('bookings.walk-in.store');
     Route::get('/bookings/{booking}', [ProviderController::class, 'showBooking'])->name('bookings.show');
     Route::post('/bookings/{booking}/status', [ProviderController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
 
