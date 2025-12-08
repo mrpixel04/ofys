@@ -8,23 +8,23 @@
                     <div class="sm:text-center lg:text-left">
                         <!-- Animated Title -->
                         <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-                            <span class="block xl:inline hero-text-slide-up opacity-0" style="animation-delay: 0.2s">Welcome to</span>
+                            <span class="block xl:inline hero-text-slide-up opacity-0" style="animation-delay: 0.2s">{{ __('Welcome to') }}</span>
                             <span class="block text-yellow-500 xl:inline hero-text-slide-up opacity-0" style="animation-delay: 0.4s">OFYS</span>
                         </h1>
 
                         <!-- Auto-Rotating Marketing Subtitle -->
                         <div class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 hero-text-fade-in opacity-0 relative" style="animation-delay: 0.6s; min-height: 80px;">
                             <p class="marketing-text absolute inset-0 transition-all duration-1000 active">
-                                Discover amazing local adventures and experiences in Malaysia. Connect with nature, culture, and community through our curated outdoor activities.
+                                {{ __('Discover amazing local adventures and experiences in Malaysia. Connect with nature, culture, and community through our curated outdoor activities.') }}
                             </p>
                             <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
-                                From Langkawi's beaches to Cameron Highlands' tea plantations - explore Malaysia's hidden gems with trusted local providers and unforgettable experiences.
+                                {{ __("From Langkawi's beaches to Cameron Highlands' tea plantations - explore Malaysia's hidden gems with trusted local providers and unforgettable experiences.") }}
                             </p>
                             <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
-                                Book authentic Malaysian outdoor adventures - jungle trekking, island hopping, cultural tours, and eco-camping. Your next adventure starts here!
+                                {{ __('Book authentic Malaysian outdoor adventures - jungle trekking, island hopping, cultural tours, and eco-camping. Your next adventure starts here!') }}
                             </p>
                             <p class="marketing-text absolute inset-0 transition-all duration-1000 opacity-0">
-                                Join thousands of adventurers discovering Malaysia's natural wonders. Safe, verified activities from passionate local experts across the nation.
+                                {{ __("Join thousands of adventurers discovering Malaysia's natural wonders. Safe, verified activities from passionate local experts across the nation.") }}
                             </p>
                         </div>
 
@@ -39,7 +39,7 @@
                                 </div>
                                 <div>
                                     <p class="text-2xl font-bold text-white counter" data-target="50">0</p>
-                                    <p class="text-sm text-gray-400">Destinations</p>
+                                    <p class="text-sm text-gray-400">{{ __('Destinations') }}</p>
                                 </div>
                             </div>
 
@@ -51,7 +51,7 @@
                                 </div>
                                 <div>
                                     <p class="text-2xl font-bold text-white counter" data-target="100">0</p>
-                                    <p class="text-sm text-gray-400">Activities</p>
+                                    <p class="text-sm text-gray-400">{{ __('Activities') }}</p>
                                 </div>
                             </div>
 
@@ -63,7 +63,7 @@
                                 </div>
                                 <div>
                                     <p class="text-2xl font-bold text-white counter" data-target="500">0</p>
-                                    <p class="text-sm text-gray-400">Happy Customers</p>
+                                    <p class="text-sm text-gray-400">{{ __('Happy Customers') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -377,37 +377,37 @@
             <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
                 <form action="{{ route('activities.index') }}" method="GET" id="search-activities-form" class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <div>
-                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Activity</label>
-                        <input type="text" id="search" name="search" placeholder="What would you like to do?"
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Activity') }}</label>
+                        <input type="text" id="search" name="search" placeholder="{{ __('What would you like to do?') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500">
                     </div>
                     <div>
-                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                        <input type="text" id="location" name="location" placeholder="Where?"
+                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Location') }}</label>
+                        <input type="text" id="location" name="location" placeholder="{{ __('Where?') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500">
                     </div>
                     <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Activity Type</label>
+                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Activity Type') }}</label>
                         <select id="type" name="type"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500">
-                            <option value="">Any Type</option>
+                            <option value="">{{ __('Any Type') }}</option>
                             @foreach(App\Models\Activity::getActivityTypes() as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
-                        <label for="price_range" class="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+                        <label for="price_range" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Price Range') }}</label>
                         <div class="flex space-x-2">
-                            <input type="number" id="min_price" name="min_price" placeholder="Min" min="0"
+                            <input type="number" id="min_price" name="min_price" placeholder="{{ __('Min') }}" min="0"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500">
-                            <input type="number" id="max_price" name="max_price" placeholder="Max" min="0"
+                            <input type="number" id="max_price" name="max_price" placeholder="{{ __('Max') }}" min="0"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500">
                         </div>
                     </div>
                     <div class="flex items-end">
                         <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out">
-                            <i class="fas fa-search mr-2"></i>Search
+                            <i class="fas fa-search mr-2"></i>{{ __('Search') }}
                         </button>
                     </div>
                 </form>
@@ -419,8 +419,8 @@
     <div class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-extrabold text-gray-900">Featured Activities</h2>
-                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Explore our most popular outdoor adventures</p>
+                <h2 class="text-3xl font-extrabold text-gray-900">{{ __('Featured Activities') }}</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">{{ __('Explore our most popular outdoor adventures') }}</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="featured-activities">
@@ -439,7 +439,7 @@
                                 <img src="{{ asset('storage/' . $activity->images[0]) }}" alt="{{ $activity->name }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                    <span>No Image</span>
+                                    <span>{{ __('No Image') }}</span>
                                 </div>
                             @endif
                             <div class="absolute top-0 right-0 m-2 px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded">
@@ -455,7 +455,7 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-yellow-600 font-bold">RM {{ number_format($activity->price, 2) }}</span>
                                 <a href="{{ route('activities.show', $activity->id) }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                    View Details <i class="fas fa-arrow-right ml-1"></i>
+                                    {{ __('View Details') }} <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -465,7 +465,7 @@
 
             <div class="mt-10 text-center">
                 <a href="{{ route('activities.index') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 transition duration-150 ease-in-out">
-                    View All Activities <i class="fas fa-chevron-right ml-2"></i>
+                    {{ __('View All Activities') }} <i class="fas fa-chevron-right ml-2"></i>
                 </a>
             </div>
         </div>
@@ -475,12 +475,12 @@
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:text-center">
-                <h2 class="text-base text-yellow-500 font-semibold tracking-wide uppercase">Our Features</h2>
+                <h2 class="text-base text-yellow-500 font-semibold tracking-wide uppercase">{{ __('Our Features') }}</h2>
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    Experience Malaysia Like Never Before
+                    {{ __('Experience Malaysia Like Never Before') }}
                 </p>
                 <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                    OFYS provides curated outdoor experiences that connect you with Malaysia's natural beauty, rich culture, and local communities.
+                    {{ __('OFYS provides curated outdoor experiences that connect you with Malaysia\'s natural beauty, rich culture, and local communities.') }}
                 </p>
             </div>
 
@@ -493,10 +493,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Diverse Experiences</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">{{ __('Diverse Experiences') }}</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            From jungle trekking to cultural immersions, OFYS offers a wide range of activities for every adventurer.
+                            {{ __('From jungle trekking to cultural immersions, OFYS offers a wide range of activities for every adventurer.') }}
                         </dd>
                     </div>
 
@@ -507,10 +507,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Expert Local Guides</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">{{ __('Expert Local Guides') }}</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            All our activities are led by experienced local guides who are passionate about sharing their knowledge and culture.
+                            {{ __('All our activities are led by experienced local guides who are passionate about sharing their knowledge and culture.') }}
                         </dd>
                     </div>
 
@@ -521,10 +521,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Easy Booking</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">{{ __('Easy Booking') }}</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Simple, secure booking process with flexible options to suit your schedule and preferences.
+                            {{ __('Simple, secure booking process with flexible options to suit your schedule and preferences.') }}
                         </dd>
                     </div>
                 </dl>
@@ -536,12 +536,12 @@
     <div class="py-16 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div class="text-center">
-                <h2 class="text-base text-yellow-500 font-semibold tracking-wide uppercase">Discover Malaysia</h2>
+                <h2 class="text-base text-yellow-500 font-semibold tracking-wide uppercase">{{ __('Discover Malaysia') }}</h2>
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    Popular Destinations
+                    {{ __('Popular Destinations') }}
                 </p>
                 <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-                    Explore breathtaking activities in Malaysia's most stunning locations
+                    {{ __('Explore breathtaking activities in Malaysia\'s most stunning locations') }}
                 </p>
             </div>
         </div>
@@ -616,7 +616,7 @@
                                 <p class="text-sm font-medium text-yellow-400 mb-2">{{ $destination['description'] }}</p>
                                 <h3 class="text-3xl font-bold mb-2">{{ $destination['name'] }}</h3>
                                 <div class="flex items-center text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="mr-2">Explore Activities</span>
+                                    <span class="mr-2">{{ __('Explore Activities') }}</span>
                                     <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                     </svg>
@@ -642,7 +642,7 @@
                                 <p class="text-sm font-medium text-yellow-400 mb-2">{{ $destination['description'] }}</p>
                                 <h3 class="text-3xl font-bold mb-2">{{ $destination['name'] }}</h3>
                                 <div class="flex items-center text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span class="mr-2">Explore Activities</span>
+                                    <span class="mr-2">{{ __('Explore Activities') }}</span>
                                     <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                     </svg>
@@ -758,9 +758,9 @@
                     if ($('#no-results-message').length === 0) {
                         $('#featured-activities').append(
                             '<div id="no-results-message" class="col-span-full text-center py-8">' +
-                            '<p class="text-gray-700">No activities found matching your criteria.</p>' +
+                            '<p class="text-gray-700">{{ __('No activities found matching your criteria.') }}</p>' +
                             '<button id="clear-filters" class="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">' +
-                            'Clear Filters</button>' +
+                            '{{ __('Clear Filters') }}</button>' +
                             '</div>'
                         );
 

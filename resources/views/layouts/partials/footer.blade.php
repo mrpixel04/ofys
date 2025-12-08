@@ -4,7 +4,7 @@
             <!-- Company Info -->
             <div class="col-span-1">
                 <h3 class="text-xl font-bold text-yellow-400 mb-4">OFYS</h3>
-                <p class="text-gray-300 mb-4">Outdoor For Your Soul - Gerbang anda ke dunia pengembaraan dan eksplorasi.</p>
+                <p class="text-gray-300 mb-4">{{ __('Outdoor For Your Soul - Your gateway to the world of adventure and exploration.') }}</p>
                 <div class="flex space-x-4">
                     <a href="#" class="text-gray-400 hover:text-yellow-400 transition-colors duration-300">
                         <span class="sr-only">Facebook</span>
@@ -23,41 +23,41 @@
 
             <!-- Quick Links -->
             <div class="col-span-1">
-                <h3 class="text-lg font-semibold mb-4">Menu</h3>
+                <h3 class="text-lg font-semibold mb-4">{{ __('Menu') }}</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Utama</a></li>
-                    <li><a href="{{ route('activities.index') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Aktiviti</a></li>
-                    <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Tentang Kami</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Hubungi</a></li>
+                    <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Home') }}</a></li>
+                    <li><a href="{{ route('activities.index') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Activities') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('About Us') }}</a></li>
+                    <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Contact') }}</a></li>
                 </ul>
             </div>
 
             <!-- Activities -->
             <div class="col-span-1">
-                <h3 class="text-lg font-semibold mb-4">Aktiviti</h3>
+                <h3 class="text-lg font-semibold mb-4">{{ __('Activities') }}</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Berkhemah</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Mendaki</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Berkayak</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">Snorkeling</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Camping') }}</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Hiking') }}</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Kayaking') }}</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors duration-300">{{ __('Snorkeling') }}</a></li>
                 </ul>
             </div>
 
             <!-- Newsletter -->
             <div class="col-span-1">
-                <h3 class="text-lg font-semibold mb-4">Surat Berita</h3>
-                <p class="text-gray-300 mb-4">Dapatkan maklumat terkini tentang aktiviti dan promosi kami.</p>
+                <h3 class="text-lg font-semibold mb-4">{{ __('Newsletter') }}</h3>
+                <p class="text-gray-300 mb-4">{{ __('Get the latest updates on our activities and promotions.') }}</p>
                 <form class="flex flex-col sm:flex-row gap-2">
-                    <input type="email" placeholder="E-mel anda" class="px-4 py-2 rounded-md bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    <input type="email" placeholder="{{ __('Your email') }}" class="px-4 py-2 rounded-md bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
                     <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-colors duration-300">
-                        Langgan
+                        {{ __('Subscribe') }}
                     </button>
                 </form>
             </div>
         </div>
 
         <div class="mt-8 pt-8 border-t border-gray-800">
-            <p class="text-gray-400 text-center">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. Semua hak terpelihara.</p>
+            <p class="text-gray-400 text-center">&copy; {{ date('Y') }} OFYS - Outdoor For Your Soul. {{ __('All rights reserved.') }}</p>
         </div>
     </div>
 </footer>

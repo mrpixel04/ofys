@@ -4,13 +4,13 @@
             <!-- Breadcrumb -->
             <div class="mb-6">
                 <nav class="flex items-center space-x-2 text-sm font-medium text-gray-500">
-                    <a href="{{ route('home') }}" class="hover:text-gray-700">Home</a>
+                    <a href="{{ route('home') }}" class="hover:text-gray-700">{{ __('Home') }}</a>
                     <span class="text-gray-400">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </span>
-                    <a href="{{ route('activities.index') }}" class="hover:text-gray-700">Activities</a>
+                    <a href="{{ route('activities.index') }}" class="hover:text-gray-700">{{ __('Activities') }}</a>
                     <span class="text-gray-400">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -34,7 +34,7 @@
                                 >
                             @else
                                 <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                                    <span class="text-gray-400">No image available</span>
+                                    <span class="text-gray-400">{{ __('No image available') }}</span>
                                 </div>
                             @endif
                         </div>
@@ -53,7 +53,7 @@
 
                             @for($i = count($activity->images ?? []) - 1; $i < 4; $i++)
                                 <div class="bg-gray-200 rounded-lg flex items-center justify-center">
-                                    <span class="text-gray-400 text-sm">No image</span>
+                                    <span class="text-gray-400 text-sm">{{ __('No Image') }}</span>
                                 </div>
                             @endfor
                         </div>
@@ -72,7 +72,7 @@
                                     </span>
                                     @if(!$activity->is_active)
                                         <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium uppercase ml-2">
-                                            Not Available
+                                            {{ __('Not Available') }}
                                         </span>
                                     @endif
                                 </div>
@@ -111,46 +111,46 @@
                                 </svg>
                                 <span>
                                     @if($activity->shopInfo && $activity->shopInfo->company_name)
-                                        Hosted by {{ $activity->shopInfo->company_name }}
+                                        {{ __('Hosted by') }} {{ $activity->shopInfo->company_name }}
                                     @elseif($activity->shopInfo && $activity->shopInfo->user)
-                                        Hosted by {{ $activity->shopInfo->user->name }}
+                                        {{ __('Hosted by') }} {{ $activity->shopInfo->user->name }}
                                     @else
-                                        Hosted by OFYS
+                                        {{ __('Hosted by') }} OFYS
                                     @endif
                                 </span>
                             </div>
 
                             <div class="mt-8">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">Description</h2>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Description') }}</h2>
                                 <div class="prose max-w-none text-gray-600">
                                     {!! nl2br(e($activity->description)) !!}
                                 </div>
                             </div>
 
                             <div class="mt-8">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">What to expect</h2>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('What to expect') }}</h2>
                                 <div class="prose max-w-none text-gray-600">
                                     {!! nl2br(e($activity->what_to_expect)) !!}
                                 </div>
                             </div>
 
                             <div class="mt-8">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">Additional Information</h2>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Additional Information') }}</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="flex items-start">
                                         <svg class="h-6 w-6 text-gray-400 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <div>
-                                            <h3 class="text-sm font-medium text-gray-900">Duration</h3>
+                                            <h3 class="text-sm font-medium text-gray-900">{{ __('Duration') }}</h3>
                                             <p class="text-sm text-gray-600">
                                                 @if(isset($activity->duration_minutes))
-                                                    {{ floor($activity->duration_minutes / 60) }} {{ Str::plural('hour', floor($activity->duration_minutes / 60)) }}
+                                                    {{ floor($activity->duration_minutes / 60) }} {{ __('hrs') }}
                                                     @if($activity->duration_minutes % 60 > 0)
-                                                        {{ $activity->duration_minutes % 60 }} {{ Str::plural('minute', $activity->duration_minutes % 60) }}
+                                                        {{ $activity->duration_minutes % 60 }} {{ __('mins') }}
                                                     @endif
                                                 @else
-                                                    Duration not specified
+                                                    {{ __('Duration not specified') }}
                                                 @endif
                                             </p>
                                         </div>
@@ -161,7 +161,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                         </svg>
                                         <div>
-                                            <h3 class="text-sm font-medium text-gray-900">Pricing</h3>
+                                            <h3 class="text-sm font-medium text-gray-900">{{ __('Pricing') }}</h3>
                                             <p class="text-sm text-gray-600">RM{{ number_format($activity->price, 2) }} / {{ $activity->getPriceTypeFormattedAttribute() }}</p>
                                         </div>
                                     </div>
@@ -171,8 +171,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                         <div>
-                                            <h3 class="text-sm font-medium text-gray-900">Group Size</h3>
-                                            <p class="text-sm text-gray-600">Up to {{ $activity->max_participants }} participants</p>
+                                            <h3 class="text-sm font-medium text-gray-900">{{ __('Group Size') }}</h3>
+                                            <p class="text-sm text-gray-600">{{ __('Up to') }} {{ $activity->max_participants }} {{ __('participants') }}</p>
                                         </div>
                                     </div>
 
@@ -181,18 +181,18 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                         </svg>
                                         <div>
-                                            <h3 class="text-sm font-medium text-gray-900">Safety Guidelines</h3>
-                                            <p class="text-sm text-gray-600">{{ $activity->safety_guidelines ?: 'None provided' }}</p>
+                                            <h3 class="text-sm font-medium text-gray-900">{{ __('Safety Guidelines') }}</h3>
+                                            <p class="text-sm text-gray-600">{{ $activity->safety_guidelines ?: __('None provided') }}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mt-8">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">Location</h2>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Location') }}</h2>
                                 <div class="bg-gray-100 rounded-lg p-4">
                                     <p class="text-gray-600">{{ $activity->location }}</p>
-                                    <p class="text-sm text-gray-500 mt-1">Exact location details will be provided after booking.</p>
+                                    <p class="text-sm text-gray-500 mt-1">{{ __('Exact location details will be provided after booking.') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -200,28 +200,28 @@
                         <!-- Booking Card -->
                         <div class="lg:col-span-1">
                             <div class="bg-gray-50 rounded-lg shadow-md p-6 sticky top-6">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">Book This Activity</h2>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Book This Activity') }}</h2>
 
                                 <div class="bg-white rounded-md shadow-sm p-4 mb-6">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-600">Price</span>
+                                        <span class="text-gray-600">{{ __('Price') }}</span>
                                         <span class="text-gray-900 font-bold">RM{{ number_format($activity->price, 2) }}</span>
                                     </div>
-                                    <div class="text-xs text-gray-500 mt-1">Per {{ $activity->getPriceTypeFormattedAttribute() }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">{{ __('Per') }} {{ $activity->getPriceTypeFormattedAttribute() }}</div>
                                 </div>
 
                                 @if($activity->is_active)
                                     <a href="{{ route('customer.bookings.create', $activity->id) }}" class="block w-full bg-yellow-500 text-white text-center font-medium py-3 rounded-md hover:bg-yellow-600 transition">
-                                        Book Now
+                                        {{ __('Book Now') }}
                                     </a>
                                 @else
                                     <button disabled class="block w-full bg-gray-300 text-gray-500 text-center font-medium py-3 rounded-md cursor-not-allowed">
-                                        Currently Unavailable
+                                        {{ __('Currently Unavailable') }}
                                     </button>
                                 @endif
 
                                 <div class="text-xs text-gray-500 text-center mt-4">
-                                    You won't be charged yet
+                                    {{ __('You won\'t be charged yet') }}
                                 </div>
 
                                 <div class="mt-6 flex items-center justify-center">
@@ -229,7 +229,7 @@
                                         <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                                         </svg>
-                                        Share this activity
+                                        {{ __('Share this activity') }}
                                     </button>
                                 </div>
                             </div>
