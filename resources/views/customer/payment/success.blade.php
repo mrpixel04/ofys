@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 py-12">
     <div class="container mx-auto px-4">
         <!-- Success Animation -->
@@ -113,19 +111,19 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-xl p-6">
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('ID Transaksi') }}</p>
-                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_transaction_id ?? 'Processing...' }}</p>
+                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $payment->transaction_id ?? 'Processing...' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('Kaedah Pembayaran') }}</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ ucfirst($booking->payment_method ?? 'Billplz') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ ucfirst($payment->gateway ?? 'Billplz') }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('Tarikh Pembayaran') }}</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ $booking->billplz_paid_at ? $booking->billplz_paid_at->format('M d, Y h:i A') : now()->format('M d, Y h:i A') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $payment->paid_at ? $payment->paid_at->format('M d, Y h:i A') : now()->format('M d, Y h:i A') }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('ID Bil') }}</p>
-                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_bill_id }}</p>
+                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $payment->bill_id }}</p>
                             </div>
                         </div>
                     </div>
@@ -264,4 +262,4 @@
         animation: fadeIn 0.6s ease-out 0.4s both;
     }
 </style>
-@endsection
+</x-app-layout>

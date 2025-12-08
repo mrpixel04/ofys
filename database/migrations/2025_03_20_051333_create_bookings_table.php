@@ -24,7 +24,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['pending', 'processing', 'done', 'refunded', 'failed'])->default('pending');
             $table->string('payment_method')->nullable();
-            $table->string('payment_id')->nullable();
             $table->text('special_requests')->nullable();
             $table->text('cancelation_reason')->nullable();
             $table->json('customer_details')->nullable();

@@ -22,23 +22,10 @@ class Booking extends Model
         'status',
         'payment_status',
         'payment_method',
-        'payment_id',
         'special_requests',
         'cancelation_reason',
         'customer_details',
         'activity_details',
-        // Billplz fields
-        'billplz_bill_id',
-        'billplz_collection_id',
-        'billplz_url',
-        'billplz_transaction_id',
-        'billplz_transaction_status',
-        'billplz_paid_at',
-        'billplz_paid_amount',
-        'billplz_x_signature',
-        'payment_gateway_response',
-        'payment_attempts',
-        'last_payment_attempt',
     ];
 
     protected $casts = [
@@ -48,9 +35,6 @@ class Booking extends Model
         'customer_details' => 'array',
         'activity_details' => 'array',
         'total_price' => 'decimal:2',
-        'billplz_paid_at' => 'datetime',
-        'last_payment_attempt' => 'datetime',
-        'payment_gateway_response' => 'array',
     ];
 
     /**
@@ -75,6 +59,22 @@ class Booking extends Model
     public function lot()
     {
         return $this->belongsTo(ActivityLot::class, 'lot_id');
+    }
+
+    /**
+     * Get the payment record for this booking.
+     */
+    public function payment()
+    {
+        return $this->hasOne(Payment::class)->latest();
+    }
+
+    /**
+     * Get all payment records for this booking (including retries).
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**
@@ -155,7 +155,7 @@ class Booking extends Model
     }
 
     /**
-     * Get total price in cents (for Billplz)
+     * Get total price in cents (for payment gateways)
      */
     public function getTotalPriceInCents()
     {
@@ -163,43 +163,27 @@ class Booking extends Model
     }
 
     /**
-     * Mark payment as processing
+     * Create or get existing payment record
      */
-    public function markAsProcessing()
+    public function getOrCreatePayment(string $gateway = 'billplz'): Payment
     {
-        $this->update([
-            'payment_status' => 'processing',
-            'payment_attempts' => $this->payment_attempts + 1,
-            'last_payment_attempt' => now(),
-        ]);
-    }
+        // Check for existing pending/processing payment
+        $existingPayment = $this->payments()
+            ->whereIn('status', ['pending', 'processing'])
+            ->latest()
+            ->first();
 
-    /**
-     * Mark payment as successful
-     */
-    public function markAsPaid($transactionData = [])
-    {
-        $this->update([
-            'payment_status' => 'done',
-            'status' => 'confirmed',
-            'billplz_transaction_status' => 'paid',
-            'billplz_paid_at' => now(),
-            'payment_gateway_response' => $transactionData,
-        ]);
-    }
+        if ($existingPayment) {
+            return $existingPayment;
+        }
 
-    /**
-     * Mark payment as failed
-     */
-    public function markAsFailed($reason = null)
-    {
-        $this->update([
-            'payment_status' => 'failed',
-            'billplz_transaction_status' => 'failed',
-            'payment_gateway_response' => array_merge(
-                $this->payment_gateway_response ?? [],
-                ['failure_reason' => $reason, 'failed_at' => now()->toIso8601String()]
-            ),
+        // Create new payment
+        return $this->payments()->create([
+            'payment_reference' => Payment::generateReference(),
+            'gateway' => $gateway,
+            'status' => 'pending',
+            'amount' => $this->total_price,
+            'currency' => 'MYR',
         ]);
     }
 

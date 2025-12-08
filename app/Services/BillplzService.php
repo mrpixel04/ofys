@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use App\Models\Payment;
 
 class BillplzService
 {
@@ -25,9 +26,10 @@ class BillplzService
      * Create a bill in Billplz
      *
      * @param Booking $booking
+     * @param Payment $payment
      * @return array
      */
-    public function createBill(Booking $booking)
+    public function createBill(Booking $booking, Payment $payment)
     {
         try {
             // Prepare bill data
@@ -35,16 +37,16 @@ class BillplzService
                 'collection_id' => $this->collectionId,
                 'email' => $booking->user->email,
                 'name' => $booking->user->name,
-                'amount' => $booking->getTotalPriceInCents(), // Amount in cents
+                'amount' => $payment->getAmountInCents(), // Amount in cents
                 'callback_url' => route('payment.callback'),
                 'description' => $this->generateBillDescription($booking),
-                'reference_1_label' => 'Booking Reference',
-                'reference_1' => $booking->booking_reference,
+                'reference_1_label' => 'Payment Reference',
+                'reference_1' => $payment->payment_reference,
                 'reference_2_label' => 'Activity',
                 'reference_2' => $booking->activity->name ?? 'N/A',
             ];
 
-            // Add redirect URL if needed
+            // Add redirect URL
             $billData['redirect_url'] = route('payment.return');
 
             // Make API request to Billplz
@@ -55,17 +57,23 @@ class BillplzService
             if ($response->successful()) {
                 $data = $response->json();
 
-                // Update booking with Billplz data
+                // Update payment with Billplz data
+                $payment->update([
+                    'bill_id' => $data['id'],
+                    'collection_id' => $data['collection_id'],
+                    'bill_url' => $data['url'],
+                    'status' => 'processing',
+                ]);
+
+                // Update booking payment method
                 $booking->update([
-                    'billplz_bill_id' => $data['id'],
-                    'billplz_collection_id' => $data['collection_id'],
-                    'billplz_url' => $data['url'],
                     'payment_method' => 'billplz',
                     'payment_status' => 'processing',
                 ]);
 
                 Log::info('Billplz bill created successfully', [
                     'booking_id' => $booking->id,
+                    'payment_id' => $payment->id,
                     'bill_id' => $data['id'],
                 ]);
 
@@ -80,6 +88,7 @@ class BillplzService
             // Log error
             Log::error('Billplz bill creation failed', [
                 'booking_id' => $booking->id,
+                'payment_id' => $payment->id,
                 'response' => $response->body(),
                 'status' => $response->status(),
             ]);
@@ -93,6 +102,7 @@ class BillplzService
         } catch (\Exception $e) {
             Log::error('Billplz bill creation exception', [
                 'booking_id' => $booking->id,
+                'payment_id' => $payment->id,
                 'error' => $e->getMessage(),
             ]);
 
@@ -219,48 +229,52 @@ class BillplzService
     public function processCallback($callbackData)
     {
         try {
-            // Find booking by Billplz bill ID
-            $booking = Booking::where('billplz_bill_id', $callbackData['id'])->first();
+            // Find payment by Billplz bill ID
+            $payment = Payment::where('bill_id', $callbackData['id'])->first();
 
-            if (!$booking) {
-                Log::warning('Billplz callback: Booking not found', [
+            if (!$payment) {
+                Log::warning('Billplz callback: Payment not found', [
                     'bill_id' => $callbackData['id'],
                 ]);
 
                 return [
                     'success' => false,
-                    'message' => 'Booking not found',
+                    'message' => 'Payment not found',
                 ];
             }
 
+            $booking = $payment->booking;
+
             // Check if payment is already processed
-            if ($booking->isPaid()) {
+            if ($payment->isPaid()) {
                 Log::info('Billplz callback: Payment already processed', [
-                    'booking_id' => $booking->id,
+                    'payment_id' => $payment->id,
                     'bill_id' => $callbackData['id'],
                 ]);
 
                 return [
                     'success' => true,
                     'message' => 'Payment already processed',
+                    'payment' => $payment,
                     'booking' => $booking,
                 ];
             }
 
-            // Update booking with transaction data
-            $booking->update([
-                'billplz_transaction_id' => $callbackData['transaction_id'] ?? null,
-                'billplz_transaction_status' => $callbackData['transaction_status'] ?? null,
-                'billplz_paid_amount' => $callbackData['amount'] ?? null,
-                'payment_gateway_response' => $callbackData,
+            // Update payment with transaction data
+            $payment->update([
+                'transaction_id' => $callbackData['transaction_id'] ?? null,
+                'transaction_status' => $callbackData['transaction_status'] ?? null,
+                'paid_amount' => $callbackData['amount'] ?? null,
+                'gateway_response' => $callbackData,
             ]);
 
             // Check payment status
             if (isset($callbackData['paid']) && $callbackData['paid'] === 'true') {
                 // Payment successful
-                $booking->markAsPaid($callbackData);
+                $payment->markAsPaid($callbackData);
 
                 Log::info('Billplz callback: Payment successful', [
+                    'payment_id' => $payment->id,
                     'booking_id' => $booking->id,
                     'bill_id' => $callbackData['id'],
                     'transaction_id' => $callbackData['transaction_id'] ?? null,
@@ -269,14 +283,16 @@ class BillplzService
                 return [
                     'success' => true,
                     'message' => 'Payment successful',
+                    'payment' => $payment,
                     'booking' => $booking,
                     'paid' => true,
                 ];
             } else {
                 // Payment failed
-                $booking->markAsFailed('Payment not completed');
+                $payment->markAsFailed('Payment not completed');
 
                 Log::warning('Billplz callback: Payment failed', [
+                    'payment_id' => $payment->id,
                     'booking_id' => $booking->id,
                     'bill_id' => $callbackData['id'],
                 ]);
@@ -284,6 +300,7 @@ class BillplzService
                 return [
                     'success' => true,
                     'message' => 'Payment failed',
+                    'payment' => $payment,
                     'booking' => $booking,
                     'paid' => false,
                 ];
