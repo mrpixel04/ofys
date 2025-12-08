@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 py-12">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto">
@@ -48,9 +46,13 @@
                                 <p class="text-sm text-red-800 mb-3">
                                     {{ $errorMessage ?? __('Pembayaran anda tidak dapat diselesaikan. Ini mungkin disebabkan baki tidak mencukupi, butiran kad salah, atau isu rangkaian.') }}
                                 </p>
-                                @if(isset($booking->payment_gateway_response['error_description']))
+                                @if($payment && isset($payment->gateway_response['error_description']))
                                     <p class="text-sm text-red-700 font-semibold">
-                                        Error: {{ $booking->payment_gateway_response['error_description'] }}
+                                        Error: {{ $payment->gateway_response['error_description'] }}
+                                    </p>
+                                @elseif($payment && $payment->failure_reason)
+                                    <p class="text-sm text-red-700 font-semibold">
+                                        Error: {{ $payment->failure_reason }}
                                     </p>
                                 @endif
                             </div>
@@ -131,15 +133,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-xl p-6">
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('ID Bil') }}</p>
-                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $booking->billplz_bill_id ?? __('Tiada') }}</p>
+                                <p class="text-sm font-mono font-semibold text-gray-900">{{ $payment->bill_id ?? __('Tiada') }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('Cubaan Terakhir') }}</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ $booking->last_payment_attempt ? $booking->last_payment_attempt->format('M d, Y h:i A') : __('Baru sahaja') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $payment && $payment->last_attempt_at ? $payment->last_attempt_at->format('M d, Y h:i A') : __('Baru sahaja') }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('Jumlah Cubaan') }}</p>
-                                <p class="text-sm font-semibold text-gray-900">{{ $booking->payment_attempts }} {{ __('cubaan') }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $payment->attempts ?? 0 }} {{ __('cubaan') }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">{{ __('Status Tempahan') }}</p>
@@ -297,4 +299,4 @@
         animation: fadeIn 0.6s ease-out 0.4s both;
     }
 </style>
-@endsection
+</x-app-layout>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Services\BillplzService;
 
 class PaymentController extends Controller
@@ -15,7 +16,8 @@ class PaymentController extends Controller
 
     public function __construct(BillplzService $billplz)
     {
-        $this->middleware('auth');
+        // Auth middleware except for callback (webhook) and return (redirect from Billplz)
+        $this->middleware('auth')->except(['callback', 'return']);
         $this->billplz = $billplz;
     }
 
@@ -41,16 +43,19 @@ class PaymentController extends Controller
                     ->with('info', 'This booking has already been paid.');
             }
 
-            // Check if payment is already processing
-            if ($booking->payment_status === 'processing' && $booking->billplz_url) {
-                return redirect($booking->billplz_url);
+            // Get or create payment record
+            $payment = $booking->getOrCreatePayment('billplz');
+
+            // Check if payment is already processing with a valid URL
+            if ($payment->isProcessing() && $payment->bill_url) {
+                return redirect($payment->bill_url);
             }
 
             // Mark as processing
-            $booking->markAsProcessing();
+            $payment->markAsProcessing();
 
             // Create bill in Billplz
-            $result = $this->billplz->createBill($booking);
+            $result = $this->billplz->createBill($booking, $payment);
 
             if ($result['success']) {
                 // Redirect to Billplz payment page
@@ -58,7 +63,7 @@ class PaymentController extends Controller
             }
 
             // If failed, mark as failed and show error
-            $booking->markAsFailed('Failed to create payment bill');
+            $payment->markAsFailed('Failed to create payment bill');
 
             return redirect()
                 ->route('customer.bookings.show', $booking->id)
@@ -72,7 +77,7 @@ class PaymentController extends Controller
             ]);
 
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'An error occurred while initiating payment.');
         }
     }
@@ -145,14 +150,16 @@ class PaymentController extends Controller
                 'paid' => $paid,
             ]);
 
-            // Find booking
-            $booking = Booking::where('billplz_bill_id', $billplzBillId)->first();
+            // Find payment by bill ID
+            $payment = Payment::where('bill_id', $billplzBillId)->first();
 
-            if (!$booking) {
+            if (!$payment) {
                 return redirect()
-                    ->route('customer.bookings.index')
-                    ->with('error', 'Booking not found.');
+                    ->route('customer.bookings')
+                    ->with('error', 'Payment not found.');
             }
+
+            $booking = $payment->booking;
 
             // Verify X Signature if present
             if ($xSignature) {
@@ -170,11 +177,35 @@ class PaymentController extends Controller
                 }
             }
 
-            // Check payment status
+            // Check payment status and update records
             if ($paid === 'true') {
+                // Update payment status if not already paid (callback might not reach localhost)
+                if (!$payment->isPaid()) {
+                    $payment->markAsPaid(
+                        $billplzBillId, // transaction_id
+                        $payment->amount * 100 // paid_amount in cents
+                    );
+
+                    // Update booking status
+                    $booking->update([
+                        'payment_status' => 'done',
+                        'status' => 'confirmed',
+                    ]);
+
+                    Log::info('Payment marked as paid via return URL', [
+                        'payment_id' => $payment->id,
+                        'booking_id' => $booking->id,
+                    ]);
+                }
+
                 // Payment successful - redirect to success page
                 return redirect()->route('payment.success', $booking->id);
             } else {
+                // Update payment as failed if not already
+                if (!$payment->isFailed()) {
+                    $payment->markAsFailed('Payment was not completed');
+                }
+
                 // Payment failed - redirect to failed page
                 return redirect()->route('payment.failed', $booking->id);
             }
@@ -186,7 +217,7 @@ class PaymentController extends Controller
             ]);
 
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'An error occurred while processing your payment.');
         }
     }
@@ -202,14 +233,16 @@ class PaymentController extends Controller
         try {
             $booking = Booking::where('id', $bookingId)
                 ->where('user_id', Auth::id())
-                ->with(['activity', 'user'])
+                ->with(['activity', 'user', 'payment'])
                 ->firstOrFail();
 
-            return view('customer.payment.success', compact('booking'));
+            $payment = $booking->payment;
+
+            return view('customer.payment.success', compact('booking', 'payment'));
 
         } catch (\Exception $e) {
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'Booking not found.');
         }
     }
@@ -225,14 +258,16 @@ class PaymentController extends Controller
         try {
             $booking = Booking::where('id', $bookingId)
                 ->where('user_id', Auth::id())
-                ->with(['activity', 'user'])
+                ->with(['activity', 'user', 'payment'])
                 ->firstOrFail();
 
-            return view('customer.payment.failed', compact('booking'));
+            $payment = $booking->payment;
+
+            return view('customer.payment.failed', compact('booking', 'payment'));
 
         } catch (\Exception $e) {
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'Booking not found.');
         }
     }
@@ -248,7 +283,7 @@ class PaymentController extends Controller
         try {
             $booking = Booking::where('id', $bookingId)
                 ->where('user_id', Auth::id())
-                ->with(['activity', 'user'])
+                ->with(['activity', 'user', 'payment'])
                 ->firstOrFail();
 
             // Check if booking is paid
@@ -258,11 +293,13 @@ class PaymentController extends Controller
                     ->with('error', 'Payment not completed yet.');
             }
 
-            return view('customer.payment.receipt', compact('booking'));
+            $payment = $booking->payment;
+
+            return view('customer.payment.receipt', compact('booking', 'payment'));
 
         } catch (\Exception $e) {
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'Booking not found.');
         }
     }
@@ -278,23 +315,25 @@ class PaymentController extends Controller
         try {
             $booking = Booking::where('id', $bookingId)
                 ->where('user_id', Auth::id())
-                ->with(['activity', 'user'])
+                ->with(['activity', 'user', 'payment', 'payments'])
                 ->firstOrFail();
+
+            $payment = $booking->payment;
 
             // Get bill details from Billplz if bill ID exists
             $billDetails = null;
-            if ($booking->billplz_bill_id) {
-                $result = $this->billplz->getBill($booking->billplz_bill_id);
+            if ($payment && $payment->bill_id) {
+                $result = $this->billplz->getBill($payment->bill_id);
                 if ($result['success']) {
                     $billDetails = $result['data'];
                 }
             }
 
-            return view('customer.payment.status', compact('booking', 'billDetails'));
+            return view('customer.payment.status', compact('booking', 'payment', 'billDetails'));
 
         } catch (\Exception $e) {
             return redirect()
-                ->route('customer.bookings.index')
+                ->route('customer.bookings')
                 ->with('error', 'Booking not found.');
         }
     }
@@ -310,6 +349,7 @@ class PaymentController extends Controller
         try {
             $booking = Booking::where('id', $bookingId)
                 ->where('user_id', Auth::id())
+                ->with('payment')
                 ->firstOrFail();
 
             // Check if booking is already paid
@@ -319,19 +359,17 @@ class PaymentController extends Controller
                     ->with('info', 'This booking has already been paid.');
             }
 
+            $payment = $booking->payment;
+
             // Delete old bill if exists
-            if ($booking->billplz_bill_id) {
-                $this->billplz->deleteBill($booking->billplz_bill_id);
+            if ($payment && $payment->bill_id) {
+                $this->billplz->deleteBill($payment->bill_id);
             }
 
-            // Reset payment fields
-            $booking->update([
-                'billplz_bill_id' => null,
-                'billplz_url' => null,
-                'billplz_transaction_id' => null,
-                'billplz_transaction_status' => null,
-                'payment_status' => 'pending',
-            ]);
+            // Reset payment for retry or create new one
+            if ($payment) {
+                $payment->resetForRetry();
+            }
 
             // Redirect to initiate payment
             return redirect()->route('payment.initiate', $booking->id);
