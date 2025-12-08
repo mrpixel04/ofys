@@ -65,8 +65,8 @@
              style="background-image: url('https://images.unsplash.com/photo-1533240332313-0db49b459ad6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');">
             <div class="h-full w-full bg-gradient-to-r from-yellow-500/70 to-yellow-700/50 flex items-center justify-center p-12">
                 <div class="text-white max-w-md">
-                    <h1 class="text-4xl font-bold mb-6">Sertai Komuniti OFYS</h1>
-                    <p class="text-xl">Daftar untuk meneroka pengembaraan luar yang menakjubkan di Malaysia.</p>
+                    <h1 class="text-4xl font-bold mb-6">{{ __('Join the OFYS Community') }}</h1>
+                    <p class="text-xl">{{ __('Register to explore amazing outdoor adventures in Malaysia.') }}</p>
                 </div>
             </div>
         </div>
@@ -76,8 +76,8 @@
             <div class="w-full max-w-md">
                 <div class="text-center mb-10">
                     <a href="{{ url('/') }}" class="text-yellow-500 font-bold text-3xl">OFYS</a>
-                    <h2 class="mt-6 text-2xl font-bold text-gray-900">Daftar Akaun Baru</h2>
-                    <p class="mt-2 text-gray-600">Atau <a href="{{ route('login') }}" class="text-yellow-500 hover:text-yellow-600 font-medium">log masuk ke akaun sedia ada</a></p>
+                    <h2 class="mt-6 text-2xl font-bold text-gray-900">{{ __('Create New Account') }}</h2>
+                    <p class="mt-2 text-gray-600">{{ __('Or') }} <a href="{{ route('login') }}" class="text-yellow-500 hover:text-yellow-600 font-medium">{{ __('log in to existing account') }}</a></p>
                 </div>
 
                 @include('guest.auth.register-form_livewire_removed')

@@ -3,8 +3,8 @@
     <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Browse Activities</h1>
-                <p class="text-xl text-yellow-50 max-w-3xl mx-auto">Discover and book amazing outdoor activities, workshops, and adventures.</p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">{{ __('Browse Activities') }}</h1>
+                <p class="text-xl text-yellow-50 max-w-3xl mx-auto">{{ __('Discover and book amazing outdoor activities, workshops, and adventures.') }}</p>
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@
                             <input type="text"
                                    id="search-input"
                                    name="search"
-                                   placeholder="Search activities, locations, or keywords..."
+                                   placeholder="{{ __('Search activities, locations, or keywords...') }}"
                                    class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-gray-900 placeholder-gray-500"
                                    value="{{ request('search') }}">
                             <div class="absolute left-4 top-3.5">
@@ -36,7 +36,7 @@
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
                         </svg>
-                        <span>Filters</span>
+                        <span>{{ __('Filters') }}</span>
                     </button>
                 </div>
 
@@ -44,22 +44,22 @@
                 <div id="advanced-filters" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-gray-200">
                     <!-- Location Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Location') }}</label>
                         <input type="text"
                                id="location-filter"
                                name="location"
-                               placeholder="Any location"
+                               placeholder="{{ __('Any location') }}"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                                value="{{ request('location') }}">
                     </div>
 
                     <!-- Activity Type Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Activity Type</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Activity Type') }}</label>
                         <select id="type-filter"
                                 name="type"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
-                            <option value="">All Types</option>
+                            <option value="">{{ __('All Types') }}</option>
                             @foreach(App\Models\Activity::getActivityTypes() as $value => $label)
                                 <option value="{{ $value }}" {{ request('type') == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
@@ -68,7 +68,7 @@
 
                     <!-- Price Range -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Min Price (RM)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Min Price (RM)') }}</label>
                         <input type="number"
                                id="min-price"
                                name="min_price"
@@ -79,7 +79,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Max Price (RM)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Max Price (RM)') }}</label>
                         <input type="number"
                                id="max-price"
                                name="max_price"
@@ -95,12 +95,12 @@
                     <button type="button"
                             id="apply-filters"
                             class="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition duration-150">
-                        Apply Filters
+                        {{ __('Apply Filters') }}
                     </button>
                     <button type="button"
                             id="clear-filters"
                             class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition duration-150">
-                        Clear All
+                        {{ __('Clear All') }}
                     </button>
                 </div>
             </form>
@@ -114,21 +114,21 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">
-                        <span id="results-count">{{ $activities->total() }}</span> Activities Found
+                        <span id="results-count">{{ $activities->total() }}</span> {{ __('Activities Found') }}
                     </h2>
-                    <p class="text-gray-600 mt-1">Showing {{ $activities->firstItem() ?? 0 }} - {{ $activities->lastItem() ?? 0 }} of {{ $activities->total() }}</p>
+                    <p class="text-gray-600 mt-1">{{ __('Showing') }} {{ $activities->firstItem() ?? 0 }} - {{ $activities->lastItem() ?? 0 }} {{ __('of') }} {{ $activities->total() }}</p>
                 </div>
 
                 <!-- View Toggle & Sort -->
                 <div class="flex items-center gap-4">
                     <!-- Sort Dropdown -->
                     <div class="flex items-center gap-2">
-                        <label class="text-sm font-medium text-gray-700">Sort by:</label>
+                        <label class="text-sm font-medium text-gray-700">{{ __('Sort by:') }}</label>
                         <select id="sort-select" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm">
-                            <option value="newest">Newest First</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name">Name: A-Z</option>
+                            <option value="newest">{{ __('Newest First') }}</option>
+                            <option value="price-low">{{ __('Price: Low to High') }}</option>
+                            <option value="price-high">{{ __('Price: High to Low') }}</option>
+                            <option value="name">{{ __('Name: A-Z') }}</option>
                         </select>
                     </div>
 
@@ -200,12 +200,12 @@
 
                                 <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                                     <div>
-                                        <p class="text-xs text-gray-500 mb-1">Starting from</p>
+                                        <p class="text-xs text-gray-500 mb-1">{{ __('Starting from') }}</p>
                                         <p class="text-2xl font-bold text-yellow-600">RM {{ number_format($activity->price, 2) }}</p>
                                     </div>
                                     <a href="{{ route('activities.show', $activity->id) }}"
                                        class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
-                                        View Details
+                                        {{ __('View Details') }}
                                         <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                         </svg>
@@ -261,12 +261,12 @@
 
                                     <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                                         <div>
-                                            <p class="text-xs text-gray-500 mb-1">Starting from</p>
+                                            <p class="text-xs text-gray-500 mb-1">{{ __('Starting from') }}</p>
                                             <p class="text-3xl font-bold text-yellow-600">RM {{ number_format($activity->price, 2) }}</p>
                                         </div>
                                         <a href="{{ route('activities.show', $activity->id) }}"
                                            class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition duration-150 shadow-md hover:shadow-lg">
-                                            View Details
+                                            {{ __('View Details') }}
                                             <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                             </svg>
@@ -281,10 +281,10 @@
                         <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <h3 class="text-xl font-medium text-gray-900 mb-2">No activities found</h3>
-                        <p class="text-gray-500 mb-6">Try adjusting your search or filter criteria</p>
+                        <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('No activities found') }}</h3>
+                        <p class="text-gray-500 mb-6">{{ __('Try adjusting your search or filter criteria') }}</p>
                         <button id="reset-search" class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition duration-150">
-                            Clear All Filters
+                            {{ __('Clear All Filters') }}
                         </button>
                     </div>
                 @endforelse

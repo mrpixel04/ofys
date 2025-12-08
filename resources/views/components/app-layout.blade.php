@@ -7,39 +7,20 @@
 
         <title>{{ config('app.name', 'OFYS - Outdoor For Your Soul') }}</title>
 
-        <style>
-            [x-cloak] { display: none !important; }
-        </style>
-
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
-
-        <!-- Alpine.js -->
-        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Styles / Scripts -->
         @if(app()->environment('local'))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @else
-            <!-- Tailwind CSS -->
+            <!-- Tailwind CSS CDN for production -->
             <script src="https://cdn.tailwindcss.com"></script>
-            <script>
-                tailwind.config = {
-                    theme: {
-                        extend: {
-                            colors: {
-                                primary: '#3490dc',
-                            }
-                        }
-                    }
-                }
-            </script>
-            <!-- Custom CSS -->
-            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-            <!-- Custom JS -->
-            <script defer src="{{ asset('js/app.js') }}"></script>
         @endif
+
+        <!-- jQuery (needed for some pages) -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     </head>
     <body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
         <!-- Header -->
@@ -52,7 +33,5 @@
 
         <!-- Footer -->
         @include('layouts.partials.footer')
-
-        @livewireScripts
     </body>
 </html>

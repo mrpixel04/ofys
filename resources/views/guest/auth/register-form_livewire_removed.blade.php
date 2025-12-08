@@ -3,7 +3,7 @@
 
     <!-- Name Field -->
     <div>
-        <label for="name" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
+        <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Full Name') }}</label>
         <input type="text"
                id="name"
                name="name"
@@ -17,7 +17,7 @@
 
     <!-- Email Field -->
     <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Alamat E-mel</label>
+        <label for="email" class="block text-sm font-medium text-gray-700">{{ __('Email Address') }}</label>
         <input type="email"
                id="email"
                name="email"
@@ -31,7 +31,7 @@
 
     <!-- Username Field -->
     <div>
-        <label for="username" class="block text-sm font-medium text-gray-700">Nama Pengguna (Pilihan)</label>
+        <label for="username" class="block text-sm font-medium text-gray-700">{{ __('Username (Optional)') }}</label>
         <input type="text"
                id="username"
                name="username"
@@ -44,7 +44,7 @@
 
     <!-- Password Field -->
     <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Kata Laluan</label>
+        <label for="password" class="block text-sm font-medium text-gray-700">{{ __('Password') }}</label>
         <input type="password"
                id="password"
                name="password"
@@ -57,7 +57,7 @@
 
     <!-- Confirm Password Field -->
     <div>
-        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Sahkan Kata Laluan</label>
+        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">{{ __('Confirm Password') }}</label>
         <input type="password"
                id="password_confirmation"
                name="password_confirmation"
@@ -77,10 +77,10 @@
         </div>
         <div class="ml-3 text-sm">
             <label for="terms" class="text-gray-700">
-                Saya bersetuju dengan
-                <a href="{{ route('legal.terms') }}" target="_blank" class="text-yellow-600 hover:text-yellow-500 font-medium">Terma Perkhidmatan</a>
-                dan
-                <a href="{{ route('legal.privacy') }}" target="_blank" class="text-yellow-600 hover:text-yellow-500 font-medium">Dasar Privasi</a>
+                {{ __('I agree to the') }}
+                <a href="{{ route('legal.terms') }}" target="_blank" class="text-yellow-600 hover:text-yellow-500 font-medium">{{ __('Terms of Service') }}</a>
+                {{ __('and') }}
+                <a href="{{ route('legal.privacy') }}" target="_blank" class="text-yellow-600 hover:text-yellow-500 font-medium">{{ __('Privacy Policy') }}</a>
             </label>
             @error('terms')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -92,7 +92,7 @@
     <div>
         <button type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors">
-            Daftar Akaun
+            {{ __('Create Account') }}
         </button>
     </div>
 </form>

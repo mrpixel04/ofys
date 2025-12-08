@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,12 +62,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Language Switcher
-Route::get('/language/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'ms'])) {
-        session(['locale' => $locale]);
-    }
-    return back();
-})->name('language.switch');
+Route::get('/language/{locale}', [LanguageController::class, 'switch'])
+    ->where('locale', 'en|ms')
+    ->name('language.switch');
 
 // Billplz Payment Callback (Public - no auth required)
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');

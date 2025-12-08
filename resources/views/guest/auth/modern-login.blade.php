@@ -198,9 +198,9 @@
                     >
                     <div class="absolute inset-0 flex items-center justify-center p-10">
                         <div class="text-white text-center">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-4 animate-slide-left">Selamat Datang Kembali!</h2>
+                            <h2 class="text-3xl md:text-4xl font-bold mb-4 animate-slide-left">{{ __('Welcome Back!') }}</h2>
                             <div class="w-16 h-1 bg-white mx-auto mb-6 animate-slide-right delay-200"></div>
-                            <p class="text-lg md:text-xl mb-8 animate-slide-left delay-300">Terokai lebih banyak pengembaraan luar yang menakjubkan di Malaysia bersama kami.</p>
+                            <p class="text-lg md:text-xl mb-8 animate-slide-left delay-300">{{ __('Explore more amazing outdoor adventures in Malaysia with us.') }}</p>
                             <div class="space-y-4">
                                 <div class="flex items-center feature-row animate-slide-left delay-400">
                                     <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
@@ -208,7 +208,7 @@
                                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <span class="text-white text-lg">Aktiviti Terjamin Kualiti</span>
+                                    <span class="text-white text-lg">{{ __('Quality Assured Activities') }}</span>
                                 </div>
                                 <div class="flex items-center feature-row animate-slide-left delay-500">
                                     <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
@@ -216,7 +216,7 @@
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <span class="text-white text-lg">Tempahan Selamat & Mudah</span>
+                                    <span class="text-white text-lg">{{ __('Safe & Easy Booking') }}</span>
                                 </div>
                                 <div class="flex items-center feature-row animate-slide-left delay-600">
                                     <div class="rounded-full bg-white/20 p-2 mr-3 feature-icon">
@@ -224,7 +224,7 @@
                                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                                         </svg>
                                     </div>
-                                    <span class="text-white text-lg">Komuniti Peminat Aktiviti Luar</span>
+                                    <span class="text-white text-lg">{{ __('Outdoor Activity Enthusiast Community') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -238,8 +238,8 @@
                             <a href="{{ url('/') }}" class="inline-block mb-4">
                                 <span class="text-yellow-500 font-bold text-4xl form-title animate-pulse">OFYS</span>
                             </a>
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2 animate-slide-up delay-200">Log Masuk ke Akaun Anda</h2>
-                            <p class="text-gray-600 animate-slide-up delay-300">Masukkan maklumat anda untuk akses akaun</p>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2 animate-slide-up delay-200">{{ __('Log In to Your Account') }}</h2>
+                            <p class="text-gray-600 animate-slide-up delay-300">{{ __('Enter your information to access your account') }}</p>
                         </div>
 
                         @if(session('success'))
@@ -250,7 +250,7 @@
 
                         @if($errors->any())
                             <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md animate-slide-up delay-200" role="alert">
-                                <p class="font-medium">Terdapat ralat pada log masuk anda:</p>
+                                <p class="font-medium">{{ __('There was an error with your login:') }}</p>
                                 <ul class="mt-2 list-disc list-inside">
                                     @foreach($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -262,7 +262,7 @@
                         <form action="{{ route('login') }}" method="POST" id="login-form" class="space-y-6">
                             @csrf
                             <div class="animate-slide-up delay-300">
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Alamat E-mel</label>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email Address') }}</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -277,14 +277,14 @@
                                         autocomplete="email"
                                         required
                                         class="pl-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 transition input-field"
-                                        placeholder="contoh@email.com"
+                                        placeholder="example@email.com"
                                         value="{{ old('email') }}"
                                     >
                                 </div>
                             </div>
 
                             <div class="animate-slide-up delay-400">
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Kata Laluan</label>
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -324,12 +324,12 @@
                                         class="h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded transition"
                                     >
                                     <label for="remember_me" class="ml-2 block text-sm text-gray-700">
-                                        Ingat saya
+                                        {{ __('Remember me') }}
                                     </label>
                                 </div>
                                 <div class="text-sm">
                                     <a href="#" class="font-medium text-yellow-600 hover:text-yellow-500 transition">
-                                        Lupa kata laluan?
+                                        {{ __('Forgot password?') }}
                                     </a>
                                 </div>
                             </div>
@@ -340,14 +340,14 @@
                                         <svg class="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                                         </svg>
-                                        Log Masuk
+                                        {{ __('Log In') }}
                                     </span>
                                     <span id="login-loading" class="hidden items-center">
                                         <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        Sedang Masuk...
+                                        {{ __('Logging in...') }}
                                     </span>
                                 </button>
                             </div>
@@ -360,7 +360,7 @@
                                 </div>
                                 <div class="relative flex justify-center text-sm">
                                     <span class="px-2 bg-white text-gray-500">
-                                        Atau masuk dengan
+                                        {{ __('Or sign in with') }}
                                     </span>
                                 </div>
                             </div>
@@ -380,9 +380,9 @@
 
                         <div class="mt-8 text-center animate-slide-up delay-800">
                             <p class="text-gray-600">
-                                Belum mempunyai akaun?
+                                {{ __("Don't have an account?") }}
                                 <a href="{{ route('register') }}" class="font-medium text-yellow-600 hover:text-yellow-500 ml-1 transition">
-                                    Daftar sekarang
+                                    {{ __('Register now') }}
                                 </a>
                             </p>
                         </div>
