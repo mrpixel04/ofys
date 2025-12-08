@@ -1,0 +1,29 @@
+{
+  "_index-h5_rRomJ.js": {
+    "file": "assets/index-h5_rRomJ.js",
+    "name": "index"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-CVwT8Usp.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DeNT5Gpv.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_index-h5_rRomJ.js"
+    ]
+  },
+  "resources/js/provider.js": {
+    "file": "assets/provider-CcYffrfa.js",
+    "name": "provider",
+    "src": "resources/js/provider.js",
+    "isEntry": true,
+    "imports": [
+      "_index-h5_rRomJ.js"
+    ]
+  }
+}
