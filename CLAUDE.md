@@ -1,8 +1,8 @@
 # CLAUDE.md
 
 > **Last Updated**: December 8, 2025
-> **Current Branch**: `develop/fixing-landing-page`
-> **Status**: Language switching fully working on all guest pages
+> **Current Branch**: `main`
+> **Status**: Payment system refactored + Deployed to production
 
 ---
 
@@ -20,6 +20,9 @@ php artisan optimize:clear
 **Test Credentials:**
 - Admin: `admin@gmail.com` / `Passw0rd123`
 - Provider: `tombak@gmail.com` / `Passw0rd123`
+- Customer: `customer@gmail.com` / `Passw0rd123`
+
+**Production URL:** https://gooutdoor.asia
 
 ---
 
@@ -30,6 +33,7 @@ php artisan optimize:clear
 ### Tech Stack
 - **Backend**: Laravel 12, PHP 8.2+, MySQL
 - **Frontend**: Blade + jQuery 3.7.1 + Tailwind CSS 4.0
+- **Payment**: Billplz Payment Gateway (Malaysian)
 - **NO Livewire or Alpine.js** - use jQuery only
 
 ### Role-Based Structure
@@ -49,52 +53,91 @@ Views: resources/views/{admin,customer,provider,guest}/
 
 ### Completed Tasks
 
-1. **Language Switching Fixed** - EN/BM toggle now works on all guest pages
-   - Fixed SetLocale middleware registration in `bootstrap/app.php`
-   - Updated LanguageController to store locale in session + cookie
-   - Updated header/footer with translation keys
+1. **Payment System Refactored**
+   - Created dedicated `payments` table (separated from bookings)
+   - New `Payment` model with status methods
+   - Updated `BillplzService` to work with Payment model
+   - Fixed PaymentController routes
 
-2. **Home Page Translations** - `simple-welcome.blade.php`
-   - Hero section, marketing text, stats counters
-   - Search form labels and placeholders
-   - Featured Activities, Our Features, Popular Destinations sections
-   - JavaScript messages (No results, Clear Filters)
+2. **Payment UI/UX Improvements**
+   - Redesigned receipt page (yellow/blue palette)
+   - Redesigned payment status page with timeline
+   - Print function prints only receipt (not browser UI)
+   - Professional modern design
 
-3. **Activities Page Translations** - `activities/index.blade.php`
-   - Hero section, search bar, filter labels
-   - Sort options, results counter
-   - Activity cards (Starting from, View Details)
-   - Empty state messages
+3. **Customer Dashboard**
+   - Reordered tabs: Bookings → Settings → Profile
+   - Added icons to tabs
 
-4. **Activity Detail Page Translations** - `activities/show.blade.php`
-   - Breadcrumb navigation
-   - All static labels (Description, Duration, Pricing, etc.)
-   - Booking card (Book Now, Price, Share)
-   - Safety guidelines, location info
+4. **Header Dropdown Fix**
+   - Fixed z-index issue (dropdown now works on all pages)
 
-5. **Navigation Menu Redesign**
-   - Better padding and spacing (`px-4 py-2`)
-   - Rounded pill-style buttons
-   - Hover effects with smooth transitions
-   - Professional SaaS-style look
+5. **Missing Components Created**
+   - `application-logo.blade.php`
+   - `nav-link.blade.php`
+   - `dropdown-link.blade.php`
+   - `responsive-nav-link.blade.php`
 
-6. **JSON Translation Files Updated**
-   - `resources/lang/en.json` - 340+ keys
-   - `resources/lang/ms.json` - Full Bahasa Melayu translations
+6. **Deployed to Production**
+   - Shared hosting via cPanel terminal
+   - All migrations run successfully
+   - Assets copied to public_html
 
 ---
 
 ## Key Files Modified
 
 ```
-resources/views/guest/simple-welcome.blade.php
-resources/views/guest/activities/index.blade.php
-resources/views/guest/activities/show.blade.php
+# Payment System
+app/Models/Payment.php (NEW)
+database/migrations/2025_12_08_100000_create_payments_table.php (NEW)
+app/Http/Controllers/Customer/PaymentController.php
+app/Models/Booking.php
+app/Services/BillplzService.php
+
+# Views
+resources/views/customer/payment/receipt.blade.php
+resources/views/customer/payment/status.blade.php
+resources/views/customer/payment/success.blade.php
+resources/views/customer/payment/failed.blade.php
+resources/views/customer/dashboard.blade.php
 resources/views/layouts/partials/header.blade.php
-resources/lang/en.json
-resources/lang/ms.json
-bootstrap/app.php
-app/Http/Controllers/LanguageController.php
+
+# Components
+resources/views/components/application-logo.blade.php
+resources/views/components/nav-link.blade.php
+resources/views/components/dropdown-link.blade.php
+resources/views/components/responsive-nav-link.blade.php
+
+# Deployment Docs
+STEP_TO_DEPLOY.md
+DEPLOY-SHARED-HOSTING.md
+```
+
+---
+
+## Deployment (cPanel Terminal)
+
+```bash
+# Quick Deploy (All-in-One)
+cd ~/public_html/ofys && git pull origin main && composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan optimize:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && chmod -R 755 storage bootstrap/cache && cp -r public/build/* ../build/
+```
+
+See `STEP_TO_DEPLOY.md` for detailed steps.
+
+---
+
+## Billplz Payment Configuration
+
+```env
+# Sandbox (Testing)
+BILLPLZ_API_KEY=your_sandbox_key
+BILLPLZ_API_URL=https://www.billplz-sandbox.com/api
+BILLPLZ_COLLECTION_ID=your_collection_id
+BILLPLZ_X_SIGNATURE_KEY=your_signature_key
+
+# Production
+BILLPLZ_API_URL=https://www.billplz.com/api
 ```
 
 ---
@@ -108,9 +151,8 @@ app/Http/Controllers/LanguageController.php
 ## Example Prompts for Next Session
 
 ```
-"Continue fixing the register page 500 error"
+"Fix the register page 500 error"
 "Add translations to the customer dashboard pages"
-"Add translations to the booking flow pages"
-"Fix any remaining untranslated text on guest pages"
+"Test payment flow on production"
+"Add email notifications for bookings"
 ```
-

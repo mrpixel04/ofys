@@ -9,6 +9,8 @@
 
 **OFYS** = Outdoor Activity Booking Platform (Laravel 12, Malaysia-based)
 
+**Production URL:** https://gooutdoor.asia
+
 ### Development Commands
 ```bash
 php artisan serve          # Start Laravel
@@ -20,6 +22,7 @@ php artisan migrate       # Run migrations
 ### Test Credentials
 - Admin: `admin@gmail.com` / `Passw0rd123`
 - Provider: `tombak@gmail.com` / `Passw0rd123`
+- Customer: `customer@gmail.com` / `Passw0rd123`
 
 ---
 
@@ -28,13 +31,14 @@ php artisan migrate       # Run migrations
 ### Tech Stack
 - Laravel 12 + PHP 8.2+ + MySQL
 - Blade + jQuery 3.7.1 + Tailwind CSS 4.0
+- Billplz Payment Gateway (Malaysian)
 - **NO Livewire or Alpine.js** - converted to jQuery
 
 ### Role-Based Organization
 ```
 Controllers: app/Http/Controllers/{Admin,Customer,Provider,Guest}/
 Views: resources/views/{admin,customer,provider,guest}/
-Models: User, Activity, ActivityLot, Booking, ShopInfo
+Models: User, Activity, ActivityLot, Booking, Payment, ShopInfo
 ```
 
 ### Color Schemes (IMPORTANT)
@@ -72,22 +76,53 @@ Files: `resources/lang/en.json`, `resources/lang/ms.json`
 
 ---
 
+## Payment System
+
+### Models
+- `Booking` - booking details (user, activity, date, participants)
+- `Payment` - payment details (bill_id, status, amount, gateway_response)
+
+### Payment Flow
+1. Customer creates booking → status: `pending`
+2. Initiate payment → redirects to Billplz
+3. Customer pays → Billplz callback/return
+4. Payment confirmed → booking status: `confirmed`
+
+### Key Files
+```
+app/Models/Payment.php
+app/Services/BillplzService.php
+app/Http/Controllers/Customer/PaymentController.php
+```
+
+---
+
 ## Latest Session (December 8, 2025)
 
 ### Completed
-1. **Language Switching** - EN/BM toggle fully working on all guest pages
-2. **Home Page** - All static text translated
-3. **Activities Page** - All static text translated
-4. **Activity Detail Page** - All static text translated
-5. **Navigation Menu** - Professional redesign with proper spacing
-6. **JSON Files** - 340+ translation keys in both EN and MS
+1. **Payment System Refactored** - Separated payments table from bookings
+2. **Payment UI** - Receipt & status pages with yellow/blue palette
+3. **Dashboard Tabs** - Reordered: Bookings → Settings → Profile
+4. **Header Dropdown** - Fixed z-index for all pages
+5. **Missing Components** - Created nav-link, dropdown-link, etc.
+6. **Production Deploy** - Deployed to gooutdoor.asia
 
 ### Files Modified
-- `resources/views/guest/simple-welcome.blade.php`
-- `resources/views/guest/activities/index.blade.php`
-- `resources/views/guest/activities/show.blade.php`
+- `app/Models/Payment.php` (NEW)
+- `app/Http/Controllers/Customer/PaymentController.php`
+- `resources/views/customer/payment/*.blade.php`
+- `resources/views/customer/dashboard.blade.php`
 - `resources/views/layouts/partials/header.blade.php`
-- `resources/lang/en.json` & `ms.json`
+
+---
+
+## Deployment (cPanel)
+
+```bash
+cd ~/public_html/ofys && git pull origin main && composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan optimize:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && chmod -R 755 storage bootstrap/cache && cp -r public/build/* ../build/
+```
+
+See `STEP_TO_DEPLOY.md` for detailed steps.
 
 ---
 
@@ -109,6 +144,7 @@ Files: `resources/lang/en.json`, `resources/lang/ms.json`
 | `/customer/*` | Customer dashboard |
 | `/provider/*` | Provider dashboard |
 | `/admin/*` | Admin dashboard |
+| `/payment/*` | Payment pages |
 
 ---
 
@@ -117,9 +153,8 @@ Files: `resources/lang/en.json`, `resources/lang/ms.json`
 ```
 "Fix the register page 500 error"
 "Add Bahasa Melayu translations to customer dashboard"
-"Add translations to the booking confirmation page"
-"Update the footer with missing translations"
-"Fix any untranslated text on the About or Contact pages"
+"Test payment flow on production"
+"Add email notifications for bookings"
 ```
 
 ---
@@ -136,4 +171,3 @@ php artisan optimize:clear
 # Regenerate autoload
 composer dump-autoload
 ```
-
