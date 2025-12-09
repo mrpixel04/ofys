@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,30 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Verify Your OFYS Account')
+                ->view('emails.auth.verify-email', [
+                    'name' => $notifiable->name ?? 'Explorer',
+                    'actionUrl' => $url,
+                    'supportEmail' => config('mail.from.address'),
+                ]);
+        });
+
+        ResetPassword::toMailUsing(function ($notifiable, $token) {
+            $resetUrl = url(route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+
+            return (new MailMessage)
+                ->subject('Reset Your OFYS Password')
+                ->view('emails.auth.reset-password', [
+                    'name' => $notifiable->name ?? 'Explorer',
+                    'actionUrl' => $resetUrl,
+                    'supportEmail' => config('mail.from.address'),
+                ]);
+        });
 
         // Force HTTPS in production
         if (config('app.env') === 'production') {

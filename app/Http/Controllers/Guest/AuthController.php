@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /**
  * Auth Controller
@@ -58,6 +60,19 @@ class AuthController extends Controller
                 // Get authenticated user
                 $user = Auth::user();
                 $userRole = strtoupper($user->role);
+
+                if (!$user->hasVerifiedEmail()) {
+                    if ($request->wantsJson()) {
+                        Auth::logout();
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Please verify your email address before logging in.'
+                        ], 403);
+                    }
+
+                    return redirect()->route('verification.notice')
+                        ->with('warning', 'Sila sahkan alamat e-mel anda sebelum mengakses sistem.');
+                }
 
                 // API response for mobile app
                 if ($request->wantsJson()) {
@@ -198,19 +213,19 @@ class AuthController extends Controller
                 'role' => 'CUSTOMER',
             ]);
 
+            event(new Registered($user));
+
             // API response for mobile app
             if ($request->wantsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Registration successful',
+                    'message' => 'Registration successful. Please verify your email before logging in.',
                     'user' => $user,
-                    // Note: Token-based authentication requires Laravel Sanctum
-                    // 'token' => $user->createToken('auth_token')->plainTextToken
                 ]);
             }
 
-            // Web response with success message
-            return redirect()->route('login')->with('success', 'Pendaftaran berjaya! Sila log masuk dengan akaun anda.');
+            // Web response with verification notice
+            return redirect()->route('verification.notice')->with('success', 'Pendaftaran berjaya! Sila semak e-mel anda untuk pengesahan sebelum log masuk.');
 
         } catch (\Exception $e) {
             // Error handling
@@ -304,6 +319,55 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => [__($status)]
         ]);
+    }
+
+    /**
+     * Show the email verification notice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function showVerificationNotice(Request $request)
+    {
+        if ($request->user() && $request->user()->hasVerifiedEmail()) {
+            return redirect()->intended(route('home'));
+        }
+
+        return view('guest.auth.verify-email');
+    }
+
+    /**
+     * Mark the authenticated user's email as verified.
+     *
+     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyEmail(EmailVerificationRequest $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('success', 'E-mel anda telah disahkan.');
+        }
+
+        $request->fulfill();
+
+        return redirect()->route('login')->with('success', 'E-mel anda berjaya disahkan! Sila log masuk.');
+    }
+
+    /**
+     * Resend the email verification notification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function sendVerificationEmail(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('home');
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'Pautan pengesahan baharu telah dihantar ke e-mel anda.');
     }
 
     /**
