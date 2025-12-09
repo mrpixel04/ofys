@@ -328,7 +328,7 @@
                                     </label>
                                 </div>
                                 <div class="text-sm">
-                                    <a href="#" class="font-medium text-yellow-600 hover:text-yellow-500 transition">
+                                    <a href="{{ route('password.request') }}" class="font-medium text-yellow-600 hover:text-yellow-500 transition">
                                         {{ __('Forgot password?') }}
                                     </a>
                                 </div>

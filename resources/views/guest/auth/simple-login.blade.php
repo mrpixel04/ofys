@@ -158,7 +158,7 @@
                     </div>
 
                     <div class="text-sm">
-                        <a href="#" class="font-medium text-yellow-500 hover:text-yellow-600">{{ __('auth.forgot_password') }}</a>
+                        <a href="{{ route('password.request') }}" class="font-medium text-yellow-500 hover:text-yellow-600">{{ __('auth.forgot_password') }}</a>
                     </div>
                 </div>
 
