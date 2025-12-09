@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Laravel\Socialite\Facades\Socialite;
 
 /**
  * Auth Controller
@@ -368,6 +369,84 @@ class AuthController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('status', 'Pautan pengesahan baharu telah dihantar ke e-mel anda.');
+    }
+
+    /**
+     * Redirect the user to Google's OAuth page.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')
+            ->scopes(['openid', 'profile', 'email'])
+            ->redirect();
+    }
+
+    /**
+     * Handle Google OAuth callback.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+        } catch (\Throwable $e) {
+            return redirect()->route('login')->with('error', 'Tidak dapat log masuk menggunakan Google. Sila cuba lagi.');
+        }
+
+        $user = User::where('google_id', $googleUser->getId())
+            ->orWhere('email', $googleUser->getEmail())
+            ->first();
+
+        if (!$user) {
+            $usernameBase = $googleUser->getNickname() ?: Str::slug($googleUser->getName() ?? 'ofys-user');
+            if (!$usernameBase) {
+                $usernameBase = 'ofys-user';
+            }
+            $username = $usernameBase;
+            $counter = 1;
+            while (User::where('username', $username)->exists()) {
+                $username = $usernameBase . $counter;
+                $counter++;
+            }
+
+            $user = User::create([
+                'name' => $googleUser->getName() ?? $googleUser->getEmail(),
+                'email' => $googleUser->getEmail(),
+                'username' => $username,
+                'password' => Hash::make(Str::random(32)),
+                'role' => 'CUSTOMER',
+                'status' => 'active',
+                'google_id' => $googleUser->getId(),
+                'google_avatar' => $googleUser->getAvatar(),
+            ]);
+
+            $user->email_verified_at = now();
+            $user->save();
+        } else {
+            $user->google_id = $user->google_id ?: $googleUser->getId();
+            $user->google_avatar = $googleUser->getAvatar() ?: $user->google_avatar;
+
+            if (!$user->email_verified_at) {
+                $user->email_verified_at = now();
+            }
+
+            $user->save();
+        }
+
+        Auth::login($user, true);
+
+        $userRole = strtoupper($user->role);
+
+        if ($userRole === 'ADMIN') {
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali!');
+        } elseif ($userRole === 'PROVIDER') {
+            return redirect()->route('provider.dashboard')->with('success', 'Selamat datang kembali!');
+        }
+
+        return redirect()->route('home')->with('success', 'Log masuk berjaya menggunakan Google.');
     }
 
     /**

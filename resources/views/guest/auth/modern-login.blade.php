@@ -366,7 +366,7 @@
                             </div>
 
                             <div class="mt-6 grid grid-cols-1 gap-3">
-                                <a href="#" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-700">
+                                <a href="{{ route('auth.google.redirect') }}" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200 animate-slide-up delay-700">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                                         <path fill="#EA4335" d="M12.24 10.2v3.72h5.3c-.21 1.32-.58 2.29-1.18 3.04-.75.95-1.92 1.97-4.12 1.97-3.63 0-6.49-2.94-6.49-6.56 0-3.62 2.86-6.56 6.49-6.56 1.96 0 3.28.83 4.04 1.52l2.76-2.66C17.77 2.45 15.35 1.5 12.24 1.5 6.74 1.5 2.25 6.04 2.25 11.62S6.74 21.75 12.24 21.75c3.41 0 5.9-1.11 7.35-3.17 1.34-1.86 1.78-4.23 1.78-6.23 0-.62-.04-1.2-.13-1.75H12.24z"/>
                                         <path fill="#4285F4" d="M3.45 7.52l3.2 2.35c.87-2.17 2.79-3.51 5.59-3.51 1.96 0 3.28.83 4.04 1.52l2.76-2.66C17.77 2.45 15.35 1.5 12.24 1.5 8.31 1.5 5 3.78 3.45 7.52z"/>
@@ -374,6 +374,7 @@
                                         <path fill="#34A853" d="M3.71 16.02l3.2-2.5c-.21-.65-.33-1.35-.33-2.12 0-.77.12-1.47.33-2.12l-3.2-2.35C2.94 8.3 2.49 9.91 2.49 11.4c0 1.49.45 3.11 1.22 4.62z"/>
                                         <path fill="none" d="M3.71 16.02l3.2-2.5"/>
                                     </svg>
+                                    <span class="ml-2">Google</span>
                                 </a>
                             </div>
                         </div>
