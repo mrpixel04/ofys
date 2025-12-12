@@ -3,7 +3,25 @@
 ## Quick Deploy (All-in-One)
 
 ```bash
-cd ~/public_html/ofys && git pull origin main && composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan optimize:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && chmod -R 755 storage bootstrap/cache && cp -r public/build/* ../build/
+cd ~/public_html/ofys && 
+
+git pull origin main
+ && 
+ composer install --no-dev --optimize-autoloader 
+ && 
+ php artisan migrate --force 
+ && 
+ php artisan optimize:clear
+  && 
+  php artisan config:cache 
+  && 
+  php artisan route:cache 
+  && 
+  php artisan view:cache
+   && 
+   chmod -R 755 storage bootstrap/cache
+    && 
+    cp -r public/build/* ../build/
 ```
 
 ---
