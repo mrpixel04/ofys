@@ -122,13 +122,15 @@ class Payment extends Model
     /**
      * Mark payment as successful
      */
-    public function markAsPaid(array $transactionData = []): void
+    public function markAsPaid(array $transactionData = [], ?string $transactionId = null, ?int $paidAmountCents = null): void
     {
         $this->update([
             'status' => 'done',
             'transaction_status' => 'paid',
+            'transaction_id' => $transactionId ?? $this->transaction_id,
+            'paid_amount' => $paidAmountCents ?? $this->paid_amount,
             'paid_at' => now(),
-            'gateway_response' => $transactionData,
+            'gateway_response' => $transactionData ?: $this->gateway_response,
         ]);
 
         // Sync status to booking and confirm it
@@ -141,14 +143,14 @@ class Payment extends Model
     /**
      * Mark payment as failed
      */
-    public function markAsFailed(?string $reason = null): void
+    public function markAsFailed(?string $reason = null, ?array $transactionData = null): void
     {
         $this->update([
             'status' => 'failed',
             'transaction_status' => 'failed',
             'failure_reason' => $reason,
             'gateway_response' => array_merge(
-                $this->gateway_response ?? [],
+                $transactionData ?? $this->gateway_response ?? [],
                 ['failure_reason' => $reason, 'failed_at' => now()->toIso8601String()]
             ),
         ]);

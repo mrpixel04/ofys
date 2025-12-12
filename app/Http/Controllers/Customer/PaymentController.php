@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Services\BillplzService;
+use App\Http\Requests\BillplzCallbackRequest;
+use App\Http\Requests\BillplzReturnRequest;
 
 class PaymentController extends Controller
 {
@@ -88,28 +90,27 @@ class PaymentController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function callback(Request $request)
+    public function callback(BillplzCallbackRequest $request)
     {
         try {
-            // Get callback data
-            $callbackData = $request->all();
+            // Validated callback data
+            $callbackData = $request->validated();
 
             Log::info('Billplz callback received', [
-                'data' => $callbackData,
+                'bill_id' => $callbackData['id'] ?? null,
+                'paid' => $callbackData['paid'] ?? null,
             ]);
 
-            // Verify X Signature if present
-            if ($request->has('x_signature')) {
-                $xSignature = $request->input('x_signature');
-                $dataToVerify = $request->except('x_signature');
+            // Verify X Signature (mandatory)
+            $dataToVerify = $callbackData;
+            unset($dataToVerify['x_signature']);
 
-                if (!$this->billplz->verifyXSignature($dataToVerify, $xSignature)) {
-                    Log::warning('Billplz callback: Invalid X Signature', [
-                        'data' => $callbackData,
-                    ]);
+            if (!$this->billplz->verifyXSignature($dataToVerify, $callbackData['x_signature'])) {
+                Log::warning('Billplz callback: Invalid X Signature', [
+                    'bill_id' => $callbackData['id'] ?? null,
+                ]);
 
-                    return response('Invalid signature', 403);
-                }
+                return response('Invalid signature', 403);
             }
 
             // Process callback
@@ -119,12 +120,12 @@ class PaymentController extends Controller
                 return response('OK', 200);
             }
 
-            return response('Processing failed', 500);
+            return response($result['message'] ?? 'Processing failed', $result['status_code'] ?? 422);
 
         } catch (\Exception $e) {
             Log::error('Billplz callback processing failed', [
                 'error' => $e->getMessage(),
-                'data' => $request->all(),
+                'bill_id' => $request->input('id'),
             ]);
 
             return response('Error', 500);
@@ -137,13 +138,17 @@ class PaymentController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function return(Request $request)
+    public function return(BillplzReturnRequest $request)
     {
         try {
-            // Get bill ID from request
-            $billplzBillId = $request->input('billplz[id]');
-            $paid = $request->input('billplz[paid]');
-            $xSignature = $request->input('billplz[x_signature]');
+            $billplzData = $request->validated();
+
+            $billplzBillId = $billplzData['id'];
+            $paid = $billplzData['paid'];
+            $xSignature = $billplzData['x_signature'];
+            $paidAmountCents = isset($billplzData['paid_amount'])
+                ? (int) $billplzData['paid_amount']
+                : (int) $billplzData['amount'];
 
             Log::info('Billplz return received', [
                 'bill_id' => $billplzBillId,
@@ -161,20 +166,41 @@ class PaymentController extends Controller
 
             $booking = $payment->booking;
 
-            // Verify X Signature if present
-            if ($xSignature) {
-                $dataToVerify = $request->input('billplz');
-                unset($dataToVerify['x_signature']);
+            // Verify X Signature
+            $dataToVerify = $billplzData;
+            unset($dataToVerify['x_signature']);
 
-                if (!$this->billplz->verifyXSignature($dataToVerify, $xSignature)) {
-                    Log::warning('Billplz return: Invalid X Signature', [
-                        'bill_id' => $billplzBillId,
-                    ]);
+            if (!$this->billplz->verifyXSignature($dataToVerify, $xSignature)) {
+                Log::warning('Billplz return: Invalid X Signature', [
+                    'bill_id' => $billplzBillId,
+                ]);
 
-                    return redirect()
-                        ->route('customer.bookings.show', $booking->id)
-                        ->with('error', 'Payment verification failed.');
-                }
+                return redirect()
+                    ->route('customer.bookings.show', $booking->id)
+                    ->with('error', 'Payment verification failed.');
+            }
+
+            // Persist signature and amounts for auditing
+            $payment->update([
+                'x_signature' => $xSignature,
+                'transaction_id' => $billplzData['transaction_id'] ?? $billplzBillId,
+                'paid_amount' => $paidAmountCents,
+                'gateway_response' => $billplzData,
+            ]);
+
+            // Ensure amount matches expected
+            if ($paidAmountCents !== $payment->getAmountInCents()) {
+                Log::warning('Billplz return: Amount mismatch', [
+                    'bill_id' => $billplzBillId,
+                    'expected_cents' => $payment->getAmountInCents(),
+                    'received_cents' => $paidAmountCents,
+                ]);
+
+                $payment->markAsFailed('Paid amount mismatch', $billplzData);
+
+                return redirect()
+                    ->route('customer.bookings.show', $booking->id)
+                    ->with('error', 'Payment verification failed.');
             }
 
             // Check payment status and update records
@@ -182,15 +208,10 @@ class PaymentController extends Controller
                 // Update payment status if not already paid (callback might not reach localhost)
                 if (!$payment->isPaid()) {
                     $payment->markAsPaid(
-                        $billplzBillId, // transaction_id
-                        $payment->amount * 100 // paid_amount in cents
+                        $billplzData,
+                        $billplzData['transaction_id'] ?? $billplzBillId,
+                        $paidAmountCents
                     );
-
-                    // Update booking status
-                    $booking->update([
-                        'payment_status' => 'done',
-                        'status' => 'confirmed',
-                    ]);
 
                     Log::info('Payment marked as paid via return URL', [
                         'payment_id' => $payment->id,
@@ -203,7 +224,7 @@ class PaymentController extends Controller
             } else {
                 // Update payment as failed if not already
                 if (!$payment->isFailed()) {
-                    $payment->markAsFailed('Payment was not completed');
+                    $payment->markAsFailed('Payment was not completed', $billplzData);
                 }
 
                 // Payment failed - redirect to failed page
@@ -213,7 +234,7 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             Log::error('Billplz return processing failed', [
                 'error' => $e->getMessage(),
-                'data' => $request->all(),
+                'bill_id' => $billplzData['id'] ?? null,
             ]);
 
             return redirect()

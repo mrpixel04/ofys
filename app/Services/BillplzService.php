@@ -229,17 +229,32 @@ class BillplzService
     public function processCallback($callbackData)
     {
         try {
+            $billId = $callbackData['id'] ?? null;
+
+            if (!$billId) {
+                Log::warning('Billplz callback: Missing bill ID', [
+                    'callback_data' => array_keys($callbackData),
+                ]);
+
+                return [
+                    'success' => false,
+                    'message' => 'Bill ID missing',
+                    'status_code' => 422,
+                ];
+            }
+
             // Find payment by Billplz bill ID
-            $payment = Payment::where('bill_id', $callbackData['id'])->first();
+            $payment = Payment::where('bill_id', $billId)->first();
 
             if (!$payment) {
                 Log::warning('Billplz callback: Payment not found', [
-                    'bill_id' => $callbackData['id'],
+                    'bill_id' => $billId,
                 ]);
 
                 return [
                     'success' => false,
                     'message' => 'Payment not found',
+                    'status_code' => 404,
                 ];
             }
 
@@ -249,7 +264,7 @@ class BillplzService
             if ($payment->isPaid()) {
                 Log::info('Billplz callback: Payment already processed', [
                     'payment_id' => $payment->id,
-                    'bill_id' => $callbackData['id'],
+                    'bill_id' => $billId,
                 ]);
 
                 return [
@@ -260,23 +275,49 @@ class BillplzService
                 ];
             }
 
+            $expectedAmountCents = $payment->getAmountInCents();
+            $callbackAmountCents = isset($callbackData['amount']) ? (int) $callbackData['amount'] : null;
+            $paidAmountCents = isset($callbackData['paid_amount']) ? (int) $callbackData['paid_amount'] : $callbackAmountCents;
+
+            if ($callbackAmountCents !== null && $callbackAmountCents !== $expectedAmountCents) {
+                Log::warning('Billplz callback: Amount mismatch', [
+                    'payment_id' => $payment->id,
+                    'bill_id' => $billId,
+                    'expected_cents' => $expectedAmountCents,
+                    'received_cents' => $callbackAmountCents,
+                ]);
+
+                $payment->markAsFailed('Paid amount mismatch', $callbackData);
+
+                return [
+                    'success' => false,
+                    'message' => 'Amount mismatch',
+                    'status_code' => 422,
+                ];
+            }
+
             // Update payment with transaction data
             $payment->update([
-                'transaction_id' => $callbackData['transaction_id'] ?? null,
-                'transaction_status' => $callbackData['transaction_status'] ?? null,
-                'paid_amount' => $callbackData['amount'] ?? null,
+                'transaction_id' => $callbackData['transaction_id'] ?? $payment->transaction_id,
+                'transaction_status' => $callbackData['transaction_status'] ?? $payment->transaction_status,
+                'paid_amount' => $paidAmountCents,
+                'x_signature' => $callbackData['x_signature'] ?? $payment->x_signature,
                 'gateway_response' => $callbackData,
             ]);
 
             // Check payment status
             if (isset($callbackData['paid']) && $callbackData['paid'] === 'true') {
                 // Payment successful
-                $payment->markAsPaid($callbackData);
+                $payment->markAsPaid(
+                    $callbackData,
+                    $callbackData['transaction_id'] ?? null,
+                    $paidAmountCents
+                );
 
                 Log::info('Billplz callback: Payment successful', [
                     'payment_id' => $payment->id,
                     'booking_id' => $booking->id,
-                    'bill_id' => $callbackData['id'],
+                    'bill_id' => $billId,
                     'transaction_id' => $callbackData['transaction_id'] ?? null,
                 ]);
 
@@ -289,12 +330,14 @@ class BillplzService
                 ];
             } else {
                 // Payment failed
-                $payment->markAsFailed('Payment not completed');
+                if (!$payment->isFailed()) {
+                    $payment->markAsFailed('Payment not completed', $callbackData);
+                }
 
                 Log::warning('Billplz callback: Payment failed', [
                     'payment_id' => $payment->id,
                     'booking_id' => $booking->id,
-                    'bill_id' => $callbackData['id'],
+                    'bill_id' => $billId,
                 ]);
 
                 return [
@@ -309,13 +352,14 @@ class BillplzService
         } catch (\Exception $e) {
             Log::error('Billplz callback processing exception', [
                 'error' => $e->getMessage(),
-                'callback_data' => $callbackData,
+                'bill_id' => $callbackData['id'] ?? null,
             ]);
 
             return [
                 'success' => false,
                 'message' => 'An error occurred while processing the callback',
                 'error' => $e->getMessage(),
+                'status_code' => 500,
             ];
         }
     }
