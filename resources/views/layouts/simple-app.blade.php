@@ -301,6 +301,38 @@
             </div>
         </header>
 
+        @php
+            $showProfileWarning = auth()->check() && \App\Support\ProfileCompletion::isIncomplete(auth()->user());
+            $profileRoute = null;
+            if ($showProfileWarning) {
+                $role = strtoupper(auth()->user()->role ?? 'CUSTOMER');
+                $profileRoute = match($role) {
+                    'ADMIN' => route('admin.profile'),
+                    'PROVIDER' => route('provider.profile'),
+                    default => route('customer.profile'),
+                };
+            }
+        @endphp
+
+        @if($showProfileWarning)
+            <div class="bg-yellow-50 border-b border-yellow-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-start sm:items-center gap-3 text-yellow-900">
+                        <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1 sm:mt-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-sm">{{ __('Lengkapkan profil anda sebelum meneruskan.') }}</p>
+                            <p class="text-xs text-yellow-800">{{ session('warning') ?? __('Beberapa maklumat penting masih kosong. Sila kemaskini profil anda untuk akses penuh.') }}</p>
+                        </div>
+                    </div>
+                    <a href="{{ $profileRoute }}" class="inline-flex items-center justify-center px-4 py-2 bg-yellow-500 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-yellow-600 transition">
+                        {{ __('Lengkapkan Profil Sekarang') }}
+                    </a>
+                </div>
+            </div>
+        @endif
+
         <!-- Main Content -->
         <main class="flex-grow">
             @yield('content')

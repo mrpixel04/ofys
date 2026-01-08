@@ -15,6 +15,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Laravel\Socialite\Facades\Socialite;
+use App\Support\ProfileCompletion;
 
 /**
  * Auth Controller
@@ -76,14 +77,22 @@ class AuthController extends Controller
                 }
 
                 // API response for mobile app
+                $profileIncomplete = ProfileCompletion::isIncomplete($user);
+
                 if ($request->wantsJson()) {
                     return response()->json([
                         'success' => true,
                         'user' => $user,
                         'role' => $userRole,
+                        'profile_complete' => !$profileIncomplete,
                         // Note: Token-based authentication requires Laravel Sanctum
                         // 'token' => $user->createToken('auth_token')->plainTextToken
                     ]);
+                }
+
+                if ($profileIncomplete) {
+                    return redirect()->route(ProfileCompletion::routeFor($user))
+                        ->with('warning', 'Sila lengkapkan profil anda sebelum meneruskan.');
                 }
 
                 // Web response - redirect based on user role with success message
@@ -437,6 +446,11 @@ class AuthController extends Controller
         }
 
         Auth::login($user, true);
+
+        if (ProfileCompletion::isIncomplete($user)) {
+            return redirect()->route(ProfileCompletion::routeFor($user))
+                ->with('warning', 'Sila lengkapkan profil anda sebelum meneruskan.');
+        }
 
         $userRole = strtoupper($user->role);
 

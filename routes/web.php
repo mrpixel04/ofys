@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Guest\HomeController;
 use App\Http\Controllers\Guest\ActivityController;
 use App\Http\Controllers\Guest\AuthController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\LanguageController;
+use App\Support\ProfileCompletion;
+use App\Http\Middleware\EnsureProfileComplete;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,11 @@ use App\Http\Controllers\LanguageController;
 
 // Home page - using the simple jQuery version
 Route::get('/', function () {
+    if (Auth::check() && ProfileCompletion::isIncomplete(Auth::user())) {
+        return redirect()->route(ProfileCompletion::routeFor(Auth::user()))
+            ->with('warning', 'Sila lengkapkan profil anda sebelum meneruskan.');
+    }
+
     return view('guest.simple-welcome');
 })->name('home');
 
@@ -41,18 +49,30 @@ Route::get('/welcome', function () {
 });
 
 // Activities routes (these don't require authentication)
-Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
-Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
+Route::get('/activities', [ActivityController::class, 'index'])
+    ->middleware(EnsureProfileComplete::class)
+    ->name('activities.index');
+Route::get('/activities/{id}', [ActivityController::class, 'show'])
+    ->middleware(EnsureProfileComplete::class)
+    ->name('activities.show');
 
 // About page
-Route::view('/about', 'guest.about')->name('about');
+Route::view('/about', 'guest.about')
+    ->middleware(EnsureProfileComplete::class)
+    ->name('about');
 
 // Contact page
-Route::view('/contact', 'guest.contact')->name('contact');
+Route::view('/contact', 'guest.contact')
+    ->middleware(EnsureProfileComplete::class)
+    ->name('contact');
 
 // Legal pages (dummy content to be customized later)
-Route::view('/terms', 'guest.legal.terms')->name('legal.terms');
-Route::view('/privacy', 'guest.legal.privacy')->name('legal.privacy');
+Route::view('/terms', 'guest.legal.terms')
+    ->middleware(EnsureProfileComplete::class)
+    ->name('legal.terms');
+Route::view('/privacy', 'guest.legal.privacy')
+    ->middleware(EnsureProfileComplete::class)
+    ->name('legal.privacy');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
