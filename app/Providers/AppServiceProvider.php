@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -52,6 +53,15 @@ class AppServiceProvider extends ServiceProvider
         // Force HTTPS in production
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
+
+            // Guardrails: surface misconfiguration loudly
+            if (config('app.debug')) {
+                Log::critical('APP_DEBUG is enabled in production. Disable debug and clear caches.');
+            }
+
+            if (!config('session.secure')) {
+                Log::critical('SESSION_SECURE_COOKIE is false in production. Enable secure cookies.');
+            }
         }
 
         // Fix Vite manifest path in production
